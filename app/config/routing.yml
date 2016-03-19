@@ -1,0 +1,3 @@
+marcin_admin:
+    resource: "@MarcinAdminBundle/Resources/config/routing.yml"
+    prefix:   /
