@@ -1,3 +1,9 @@
-marcin_admin_homepage:
-    path:     /
-    defaults: { _controller: MarcinAdminBundle:Default:index }
+#marcin_admin_homepage:
+#    path:     /
+#    defaults: { _controller: MarcinAdminBundle:Default:index }
+    
+marcin_admin_dashboard:
+    resource: "@MarcinAdminBundle/Controller/DashboardController.php"
+    type: annotation
+    prefix: /
+    

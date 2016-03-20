@@ -2,10 +2,20 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
+    encoders:
+        Common\UserBundle\Entity\User:
+            algorithm: bcrypt
+
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         in_memory:
             memory: ~
+        our_db_provider:
+            entity:
+                class: CommonUserBundle:User
+                #property: username
+                # if you're using multiple entity managers
+                # manager_name: customer
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -13,8 +23,28 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        #login_firewall:
+        #    pattern:   ^/login$
+        #    anonymous: ~
+        #secured_area:
+        #    pattern:    ^/
+        #    form_login: ~
+
         main:
+            pattern:    ^/
             anonymous: ~
+            http_basic: ~
+            provider: our_db_provider
+            form_login:
+                login_path: login
+                check_path: _check_path
+                default_target_path: marcin_admin_dashboard
+                username_parameter: login[username]
+                password_parameter: login[password]
+            logout:
+                path: _logout
+                target: login
+              
             # activate different ways to authenticate
 
             # http_basic: ~
@@ -22,3 +52,6 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+    access_control:
+    #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/panel, roles: ROLE_ADMIN }
