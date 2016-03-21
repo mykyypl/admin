@@ -1,5 +1,28 @@
 {% extends 'MarcinAdminBundle::base.html.twig' %}
 {% block body %}
     <h1>Strona testowa</h1>
+     {{ pagination.getTotalItemCount }}
+     <br><br>
+    <table>
+        <tr>
+            <th>{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
+            <th>user</th>
+            <th>jakie_zam</th>
+            <th>status</th>
+            <th>utw data</th>
+            <th>send data</th>
+        </tr>
+        
+    {% for article in pagination  %}
+       <tr><th>{{ article.id }}</th> 
+           <th>{{ article.user }}</th>
+        <th>{{ article.jakie_zam }}</th>
+        <th>{{ article.status }}</th>
+       <th>{{ article.createDate | date('m/d/Y') }}</th>
+       <th>{{ article.sendDate | date('m/d/Y') }}</th></tr>
+    {% endfor %}
+        </table>
+    <br>
+    {{ knp_pagination_render(pagination) }}
 {% endblock %}
 
