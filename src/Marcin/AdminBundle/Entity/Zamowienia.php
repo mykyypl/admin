@@ -49,6 +49,41 @@ class Zamowienia {
     private $status;   
 
     /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $nr_fakt; 
+
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $nr_user_zam; 
+
+    /**
+     * @ORM\Column(type="integer")
+     * 
+     * 
+     */
+    private $kwota;  
+
+    /**
+     * @ORM\Column(type="integer")
+     * 
+     * 
+     */
+    private $do_zaplaty;   
+
+    /**
+     * @ORM\Column(type="integer")
+     * 
+     * 
+     */
+    private $zaplacono;  
+
+    /**
      * @ORM\Column(name="data", type="datetime")
      */
     private $createDate;
@@ -68,7 +103,7 @@ class Zamowienia {
         return $this->id;
     }
     /**
-     * Set title
+     * Set user
      *
      * @param string $user
      *
@@ -80,7 +115,7 @@ class Zamowienia {
         return $this;
     }
     /**
-     * Get title
+     * Get user
      *
      * @return string
      */
@@ -89,7 +124,7 @@ class Zamowienia {
         return $this->user;
     }
     /**
-     * Set content
+     * Set jakie_zam
      *
      * @param string $jakie_zam
      *
@@ -101,7 +136,7 @@ class Zamowienia {
         return $this;
     }
     /**
-     * Get content
+     * Get jakie_zam
      *
      * @return string
      */
@@ -111,7 +146,7 @@ class Zamowienia {
     }
     
     /**
-     * Get category
+     * Get status
      *
      * 
      */
@@ -119,6 +154,20 @@ class Zamowienia {
     {
         return $this->status;
     }
+    
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Zamowienia
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+    
     /**
      * Set createDate
      *
@@ -160,6 +209,116 @@ class Zamowienia {
     public function getSendDate()
     {
         return $this->sendDate;
+    }
+
+    /**
+     * Set nr_user_zam
+     *
+     * @param integer $nr_user_zam
+     *
+     * @return Zamowienia
+     */
+    public function setNr_user_zam($nr_user_zam)
+    {
+        $this->nr_user_zam = $nr_user_zam;
+        return $this;
+    }
+    /**
+     * Get nr_user_zam
+     *
+     * @return integer
+     */
+    public function getNr_user_zam()
+    {
+        return $this->nr_user_zam;
+    }
+
+    /**
+     * Set nr_fakt
+     *
+     * @param integer $nr_fakt
+     *
+     * @return Zamowienia
+     */
+    public function setNr_fakt($nr_fakt)
+    {
+        $this->nr_fakt = $nr_fakt;
+        return $this;
+    }
+    /**
+     * Get nr_fakt
+     *
+     * @return integer
+     */
+    public function getNr_fakt()
+    {
+        return $this->nr_fakt;
+    }
+
+    /**
+     * Set kwota
+     *
+     * @param string $kwota
+     *
+     * @return Zamowienia
+     */
+    public function setKwota($kwota)
+    {
+        $this->kwota = $kwota;
+        return $this;
+    }
+    /**
+     * Get kwota
+     *
+     * @return string
+     */
+    public function getKwota()
+    {
+        return $this->kwota;
+    }
+
+    /**
+     * Set dozaplaty
+     *
+     * @param string $do_zaplaty
+     *
+     * @return Zamowienia
+     */
+    public function setDozaplaty($do_zaplaty)
+    {
+        $this->do_zaplaty = $do_zaplaty;
+        return $this;
+    }
+    /**
+     * Get dozaplaty
+     *
+     * @return string
+     */
+    public function getDozaplaty()
+    {
+        return $this->do_zaplaty;
+    }
+
+    /**
+     * Set zaplacono
+     *
+     * @param string $zaplacono
+     *
+     * @return Zamowienia
+     */
+    public function setZaplacono($zaplacono)
+    {
+        $this->zaplacono = $zaplacono;
+        return $this;
+    }
+    /**
+     * Get zaplacono
+     *
+     * @return string
+     */
+    public function getZaplacono()
+    {
+        return $this->zaplacono;
     }
 }
 

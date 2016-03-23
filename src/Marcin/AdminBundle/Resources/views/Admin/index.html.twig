@@ -11,6 +11,9 @@
             <th>status</th>
             <th>utw data</th>
             <th>send data</th>
+            <th>nr-user-zam</th>
+            <th>do zaplaty</th>
+            <th>akcje</th>
         </tr>
         
     {% for article in pagination  %}
@@ -19,7 +22,15 @@
         <th>{{ article.jakie_zam }}</th>
         <th>{{ article.status }}</th>
        <th>{{ article.createDate | date('m/d/Y') }}</th>
-       <th>{{ article.sendDate | date('m/d/Y') }}</th></tr>
+       <th>{{ article.sendDate | date('m/d/Y') }}</th>
+       <th>{{ article.nr_user_zam  }}</th>
+       <th>{{ article.dozaplaty  }}</th>
+       <th>
+                              <div class="btn-group">
+                                  <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
+                                      edycja<span class="glyphicon glyphicon-edit"></span>
+                                  </a></div></th>
+       </tr>
     {% endfor %}
         </table>
     <br>

@@ -5,7 +5,7 @@
  */
 
 
-namespace Tom\AdminBundle\Form\Type;
+namespace Marcin\AdminBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,14 +27,16 @@ class TestType extends AbstractType
                     'autocomplete' => 'off',
                 )
             ))
-            ->add('jakie_zam', 'text', array(
-                'label' => 'jakie zam',
-                'attr' => array(
-                    'class' => 'tinymce'
-                )
+            ->add('status', 'choice', array(
+                'choices'   => array('przesłane do realizacji' => 'przesłane do realizacji', 'przyjęte do realizacji' => 'przyjęte do realizacji', 'w realizacji' => 'w realizacji', 'zrealizowane' => 'zrealizowane', 'odebrane' => 'odebrane'),
+                'required'  => false,
+                'empty_value'       => 'Proszę wybrać status',
             ))
-            ->add('$status', 'file', array(
-                'label' => 'Zdjęcie'
+            ->add('do_zaplaty', 'text', array(
+                'label' => 'Kwota'
+            ))
+            ->add('zaplacono', 'text', array(
+                'label' => 'Zaplacono'
             ))
             ->add('save', 'submit', array(
                 'label' => 'Zapisz',
@@ -48,7 +50,7 @@ class TestType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Tom\SiteBundle\Entity\Slider'
+            'data_class' => 'Marcin\AdminBundle\Entity\Zamowienia'
         ));
     }
 }

@@ -16,6 +16,49 @@ use Marcin\AdminBundle\Entity\Zamowienia;
 use Marcin\AdminBundle\Form\Type\TestType;
 
 class DashboardController extends Controller {
+    
+        
+    /**
+     * @Route(
+     *      "/form/{id}", 
+     *      name="marcin_admin_dashboard_form",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=NULL}
+     * )
+     * 
+     * @Template()
+     */
+    public function formAction(Request $Request, Zamowienia $Zamowienia = NULL) {
+        if(null == $Zamowienia){
+            $Zamowienia = new Zamowienia();
+            $newZamowieniaForm = TRUE;
+        }
+        
+        $form = $this->createForm(new TestType(), $Zamowienia);
+        
+        $form->handleRequest($Request);
+        if($form->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($Zamowienia);
+            $em->flush();
+            $message = (isset($newZamowieniaForm)) ? 'Poprawnie dodano.': 'Zamowienie zostało zaktualizowane.';
+            $this->addFlash('success', $message);
+            return $this->redirect($this->generateUrl('marcin_admin_dashboard_form', array(
+                'id' => $Zamowienia->getId()
+            )));
+        }
+        
+        return $this->render('MarcinAdminBundle:Admin:form.html.twig',
+            array(
+            'pageTitle' => (isset($newZamowieniaForm) ? 'Zamowienia <small>utwórz nowy</small>' : 'Zamowienia <small>edycja zamowienia</small>'),
+            'currPage' => 'zamowienia',
+            'form' => $form->createView(),
+            'zamowienia' => $Zamowienia,
+                )
+        );
+    }
+    
+    
     /**
      * @Route(
      *       "/{status}/{page}",
@@ -96,6 +139,7 @@ class DashboardController extends Controller {
             'statistics' => $statistics,
             'pagination' => $pagination,
             'currStatus' => $status,
+            'csrfProvider' => $this->get('form.csrf_provider')
                 )
         );
     }
