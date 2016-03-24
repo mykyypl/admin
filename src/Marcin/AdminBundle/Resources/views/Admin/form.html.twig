@@ -9,12 +9,8 @@
      {{ form_rest(form) }}
     {{ form_row(form.save) }} 
     {{ form_end(form) }}
-    <button onclick="goBack()">Wstecz</button>
+    <a href="../../panel">Wstecz</a>   
 {% endblock %}
 {% block javascripts %}
-<script>
-function goBack() {
-    window.history.back();
-}
-</script>
+
 {% endblock %}

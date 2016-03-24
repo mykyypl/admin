@@ -77,7 +77,7 @@ class Zamowienia {
     private $do_zaplaty;   
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="boolean")
      * 
      * 
      */

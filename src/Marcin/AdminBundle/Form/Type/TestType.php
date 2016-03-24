@@ -35,9 +35,10 @@ class TestType extends AbstractType
             ->add('do_zaplaty', 'text', array(
                 'label' => 'Kwota'
             ))
-            ->add('zaplacono', 'text', array(
-                'label' => 'Zaplacono'
-            ))
+            ->add('zaplacono', 'checkbox', array(
+             'label'     => 'zaplacono?',
+              'required'  => false
+ ))
             ->add('save', 'submit', array(
                 'label' => 'Zapisz',
                 'attr' => array(

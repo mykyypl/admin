@@ -6,30 +6,28 @@
     <table>
         <tr>
             <th>{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
-            <th>user</th>
             <th>jakie_zam</th>
             <th>status</th>
-            <th>utw data</th>
             <th>send data</th>
             <th>nr-user-zam</th>
             <th>do zaplaty</th>
+            <thpdf</th>
             <th>akcje</th>
         </tr>
         
     {% for article in pagination  %}
        <tr><th>{{ article.id }}</th> 
-           <th>{{ article.user }}</th>
         <th>{{ article.jakie_zam }}</th>
         <th>{{ article.status }}</th>
-       <th>{{ article.createDate | date('m/d/Y') }}</th>
        <th>{{ article.sendDate | date('m/d/Y') }}</th>
        <th>{{ article.nr_user_zam  }}</th>
-       <th>{{ article.dozaplaty  }}</th>
+       <th>{% if article.zaplacono == '0' %} {{ article.dozaplaty  }} {% else %} zapłacono {% endif %}</th>
        <th>
                               <div class="btn-group">
                                   <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
                                       edycja<span class="glyphicon glyphicon-edit"></span>
                                   </a></div></th>
+                                  <th><a href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf">pdf</a></th>
        </tr>
     {% endfor %}
         </table>
