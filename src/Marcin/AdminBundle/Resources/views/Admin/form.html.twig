@@ -16,6 +16,11 @@
 
         <!-- Main content -->
         <section class="content">
+            <div class="box box-default color-palette-box">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-tag"></i> Edycja zamówienia</h3>
+            </div>
+            <div class="box-body">
      {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
     {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
      {{ form_row(form.status) }}
@@ -25,7 +30,9 @@
      {{ form_rest(form) }}
     {{ form_row(form.save) }} 
     {{ form_end(form) }}
-    <a href="../../panel">Wstecz</a>   
+    <a href="{{ path('marcin_admin_dashboard') }}">Wstecz</a> 
+            </div>
+            </div>
 </section>
         {% endblock %}
 {% block javascripts %}

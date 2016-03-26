@@ -12,6 +12,8 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/bootstrap/css/bootstrap.min.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/dist/css/AdminLTE.min.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/dist/css/skins/skin-blue.min.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/plugins/datatables/dataTables.bootstrap.css') }}" />
+        
          <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -28,7 +30,7 @@
       <header class="main-header">
 
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="{{ path('marcin_admin_dashboard') }}" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>GM</b></span>
           <!-- logo for regular state and mobile devices -->
@@ -141,10 +143,10 @@
       <footer class="main-footer">
         <!-- To the right -->
         <div class="pull-right hidden-xs">
-          Anything you want
+          Marcin Kukliński
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2016 <a href="{{ path('marcin_admin_dashboard') }}">GrupaMAGNUM</a>.</strong> Wszystkie prawa zastrzeżone.
       </footer>
 
       <!-- Control Sidebar -->
@@ -214,6 +216,9 @@
         <script type="text/javascript" src="{{ asset('bundles/marcinadmin/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/marcinadmin/bootstrap/js/bootstrap.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/marcinadmin/dist/js/app.min.js') }}"></script>
+        <!-- DataTables -->
+        <script type="text/javascript" src="{{ asset('bundles/marcinadmin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/marcinadmin/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
         {% endblock %}
     </body>
 </html>

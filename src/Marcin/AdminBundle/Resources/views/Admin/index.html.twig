@@ -16,20 +16,76 @@
 
         <!-- Main content -->
         <section class="content">
-    <h1>Strona testowa</h1>
-     {{ pagination.getTotalItemCount }}
-     <br><br>
-    <table>
-        <tr>
-            <th>{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
-            <th>jakie_zam</th>
-            <th>status</th>
-            <th>send data</th>
-            <th>nr-user-zam</th>
-            <th>do zaplaty</th>
-            <thpdf</th>
-            <th>akcje</th>
-        </tr>
+            <div class="row">
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3>??</h3>
+                  <p>Zamówień</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3>??<sup style="font-size: 20px">%</sup></h3>
+                  <p>Zamówień w realizacji</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>??</h3>
+                  <p>Użytkowników</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-person-add"></i>
+                </div>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>{{ pagination.getTotalItemCount }}</h3>
+                  <p>Wszystkich zamówień</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+                </div>
+              </div>
+            </div><!-- ./col -->
+          </div>
+            <div class="box box-default color-palette-box">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">jakie_zam</th>
+                                    <th>status</th>
+                                    <th>send data</th>
+                                    <th>nr-user-zam</th>
+                                    <th>do zaplaty</th>
+                                    <thpdf</th>
+                                    <th>akcje</th>
+                                </tr>
+                            </thead>
         
     {% for article in pagination  %}
        <tr><th>{{ article.id }}</th> 
@@ -47,8 +103,24 @@
        </tr>
     {% endfor %}
         </table>
-    <br>
-    {{ knp_pagination_render(pagination) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+                            Wszystkich zamówień jest: {{ pagination.getTotalItemCount }}
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate">
+                            {{ knp_pagination_render(pagination, 'MarcinAdminBundle:Pagination:admin_pagination.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+            
+          </div>
+
 </section>
         {% endblock %}
 {% block javascripts %}
