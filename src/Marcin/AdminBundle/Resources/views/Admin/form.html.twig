@@ -1,5 +1,21 @@
 {% extends 'MarcinAdminBundle::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
 {% block body %}
+            <section class="content-header">
+          <h1>
+            Edycja
+            <small>Edycja zamówienia</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
+            <li class="active">tutaj</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
      {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
     {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
      {{ form_row(form.status) }}
@@ -10,7 +26,8 @@
     {{ form_row(form.save) }} 
     {{ form_end(form) }}
     <a href="../../panel">Wstecz</a>   
-{% endblock %}
+</section>
+        {% endblock %}
 {% block javascripts %}
-
+    {{parent()}}
 {% endblock %}

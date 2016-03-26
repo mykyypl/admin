@@ -1,5 +1,21 @@
 {% extends 'MarcinAdminBundle::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
 {% block body %}
+            <section class="content-header">
+          <h1>
+            Pulpit
+            <small>zarządzania GM</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
+            <li class="active">tutaj</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
     <h1>Strona testowa</h1>
      {{ pagination.getTotalItemCount }}
      <br><br>
@@ -33,5 +49,9 @@
         </table>
     <br>
     {{ knp_pagination_render(pagination) }}
+</section>
+        {% endblock %}
+{% block javascripts %}
+    {{parent()}}
 {% endblock %}
 
