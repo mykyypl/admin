@@ -17,6 +17,7 @@ use Marcin\AdminBundle\Form\Type\TestType;
 
 class DashboardController extends Controller {
     
+    private $deleteTokenName = 'delete-zam-%d';
         
     /**
      * @Route(
@@ -146,6 +147,7 @@ class DashboardController extends Controller {
             'statistics' => $statistics,
             'pagination' => $pagination,
             'currStatus' => $status,
+            'deleteTokenName' => $this->deleteTokenName,
             'csrfProvider' => $this->get('form.csrf_provider'),
              'new_zam' => array(
                     'count' => $this->status_new_zam
@@ -155,5 +157,48 @@ class DashboardController extends Controller {
                 )
                 )
         );
+    }
+    
+    /**
+     * @Route(
+     *      "/usun/{id}/{token}", 
+     *      name="marcin_admin_dashboard_delete",
+     *      requirements={"id"="\d+"}
+     * )
+     * 
+     * @Template()
+     */
+    public function deleteAction($id, $token) {
+        
+        $tokenName = sprintf($this->deleteTokenName, $id);
+        $csrfProvider = $this->get('form.csrf_provider');
+        
+        if(!$csrfProvider->isCsrfTokenValid($tokenName, $token)){
+            $this->addFlash('error', 'Niepoprawny token akcji.');
+            
+        }else{
+            
+//            $Zamid = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia')->find($id);
+//            $em = $this->getDoctrine()->getManager();
+//            $em->remove($Zamid);
+//            $em->flush();
+            
+            $Proid = $this->getDoctrine()->getRepository('MarcinAdminBundle:Produkty')->findByIdzam($id);
+            $em1 = $this->getDoctrine()->getManager();
+            if (!$Proid) {
+             throw $this->createNotFoundException(
+            'No product found for id '.$id
+                );
+            }
+            //foreach ($Proid as $Proids) {
+            //$em1->remove($Proids);
+            //}
+            $em1->remove($Proid);
+            $em1->flush();
+            
+            $this->addFlash('success', 'Poprawnie usunięto slide.');
+        }
+        
+        return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
     }
 }

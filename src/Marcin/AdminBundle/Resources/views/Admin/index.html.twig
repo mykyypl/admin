@@ -98,7 +98,13 @@
                               <div class="btn-group">
                                   <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
                                       edycja<span class="glyphicon glyphicon-edit"></span>
-                                  </a></div></th>
+                                  </a></div>
+       {% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
+                                      {% set deleteUrl = path('marcin_admin_dashboard_delete', {'id': article.id, 'token': tokenName}) %}
+                                      <a href="{{ deleteUrl }}" class="btn btn-danger" data-confirmAction="">
+                                          <span class="glyphicon glyphicon-trash"></span>
+                                      </a>
+       </th>
                                   <th><a href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf" target="_blank">pdf</a></th>
        </tr>
     {% endfor %}
