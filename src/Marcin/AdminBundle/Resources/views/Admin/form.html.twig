@@ -21,17 +21,18 @@
               <h3 class="box-title"><i class="fa fa-tag"></i> Edycja zamówienia</h3>
             </div>
             <div class="box-body">
-     {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
-    {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
-     {{ form_row(form.status) }}
-     {{ form_row(form.user) }}
-     {{ form_row(form.do_zaplaty) }}
-     {{ form_row(form.zaplacono) }}
-     {{ form_rest(form) }}
-    {{ form_row(form.save) }} 
-    {{ form_end(form) }}
-    <a href="{{ path('marcin_admin_dashboard') }}">Wstecz</a> 
-            </div>
+
+                         {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+                        {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
+                         {{ form_row(form.status) }}
+                         {{ form_row(form.user) }}
+                         {{ form_row(form.do_zaplaty) }}
+                         {{ form_row(form.zaplacono) }}
+                         {{ form_rest(form) }}
+                        {{ form_row(form.save) }} 
+                        {{ form_end(form) }}
+                        <a href="{{ path('marcin_admin_dashboard') }}" class="btn btn-primary">Wstecz</a> 
+
             </div>
 </section>
         {% endblock %}

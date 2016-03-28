@@ -64,4 +64,32 @@ class TestRepository extends EntityRepository
             'all' => $all
         );
     }
+    
+            public function getNewzam() {
+
+                $qb = $this->createQueryBuilder('d')
+                        ->select('COUNT(d)')
+                        ->where('d.status = :identifier')
+                        ->setParameter('identifier', 'przesłane do realizacji');
+        
+        
+        $all_new = (int)$qb->getQuery()->getSingleScalarResult();
+ return array(
+            'all_new' => $all_new
+        );
+    }
+    
+                public function getSendzam() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.status = :identifier')
+                        ->setParameter('identifier', 'przyjęte do realizacji');
+        
+        
+        $all_send = (int)$qb->getQuery()->getSingleScalarResult();
+ return array(
+            'all_send' => $all_send
+        );
+    }
 }

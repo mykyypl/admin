@@ -58,7 +58,8 @@ class DashboardController extends Controller {
         );
     }
     
-    
+    private $status_new_zam;
+    private $status_send_zam;
     /**
      * @Route(
      *       "/{status}/{page}",
@@ -125,6 +126,12 @@ class DashboardController extends Controller {
             'Nieopublikowane' => 'unpublished',
             'Wszystkie' => 'all'
         );
+        if(!isset($this->status_new_zam)) {
+            $this->status_new_zam = $RepoZam->getNewzam();
+        }
+        if(!isset($this->status_send_zam)) {
+            $this->status_send_zam = $RepoZam->getSendzam();
+        }
         
         return $this->render('MarcinAdminBundle:Admin:index.html.twig',
             array(
@@ -139,7 +146,13 @@ class DashboardController extends Controller {
             'statistics' => $statistics,
             'pagination' => $pagination,
             'currStatus' => $status,
-            'csrfProvider' => $this->get('form.csrf_provider')
+            'csrfProvider' => $this->get('form.csrf_provider'),
+             'new_zam' => array(
+                    'count' => $this->status_new_zam
+                ),
+             'send_zam' => array(
+                    'count' => $this->status_send_zam
+                )
                 )
         );
     }

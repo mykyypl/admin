@@ -21,8 +21,8 @@
               <!-- small box -->
               <div class="small-box bg-aqua">
                 <div class="inner">
-                  <h3>??</h3>
-                  <p>Zamówień</p>
+                  <h3>{{ new_zam.count.all_new }}</h3>
+                  <p>Nowych zamówień</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-bag"></i>
@@ -33,8 +33,8 @@
               <!-- small box -->
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3>??<sup style="font-size: 20px">%</sup></h3>
-                  <p>Zamówień w realizacji</p>
+                  <h3>{{ send_zam.count.all_send }}<!--<sup style="font-size: 20px">%</sup>--></h3>
+                  <p>Przyjętych do realizacji</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
@@ -93,13 +93,13 @@
         <th>{{ article.status }}</th>
        <th>{{ article.sendDate | date('m/d/Y') }}</th>
        <th>{{ article.nr_user_zam  }}</th>
-       <th>{% if article.zaplacono == '0' %} {{ article.dozaplaty  }} {% else %} zapłacono {% endif %}</th>
+       <th>{% if article.zaplacono == '0' %} <span class="label label-danger">{{ article.dozaplaty  }}</span> {% else %} <span class="label label-success">zapłacono</span> {% endif %}</th>
        <th>
                               <div class="btn-group">
                                   <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
                                       edycja<span class="glyphicon glyphicon-edit"></span>
                                   </a></div></th>
-                                  <th><a href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf">pdf</a></th>
+                                  <th><a href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf" target="_blank">pdf</a></th>
        </tr>
     {% endfor %}
         </table>

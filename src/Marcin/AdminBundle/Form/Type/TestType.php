@@ -25,19 +25,29 @@ class TestType extends AbstractType
                 'label' => 'User',
                 'attr' => array(
                     'autocomplete' => 'off',
+                    'class' => 'form-control',
                 )
             ))
             ->add('status', 'choice', array(
                 'choices'   => array('przesłane do realizacji' => 'przesłane do realizacji', 'przyjęte do realizacji' => 'przyjęte do realizacji', 'w realizacji' => 'w realizacji', 'zrealizowane' => 'zrealizowane', 'odebrane' => 'odebrane'),
                 'required'  => false,
                 'empty_value'       => 'Proszę wybrać status',
+                'attr' => array (
+                    'class' => 'form-control'
+                )
             ))
             ->add('do_zaplaty', 'text', array(
-                'label' => 'Kwota'
+                'label' => 'Kwota',
+                'attr' => array (
+                    'class' => 'form-control'
+                )
             ))
             ->add('zaplacono', 'checkbox', array(
              'label'     => 'zaplacono?',
-              'required'  => false
+              'required'  => false,
+                'attr' => array (
+                    'class' => 'minimal'
+                )
  ))
             ->add('save', 'submit', array(
                 'label' => 'Zapisz',
