@@ -13,7 +13,7 @@
             <li class="active">tutaj</li>
           </ol>
         </section>
-
+                    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
         <!-- Main content -->
         <section class="content">
             <div class="row">
@@ -97,7 +97,7 @@
        <th>
                               <div class="btn-group">
                                   <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
-                                      edycja<span class="glyphicon glyphicon-edit"></span>
+                                      <span class="glyphicon glyphicon-edit"></span>
                                   </a></div>
        {% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
                                       {% set deleteUrl = path('marcin_admin_dashboard_delete', {'id': article.id, 'token': tokenName}) %}

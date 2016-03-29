@@ -178,23 +178,26 @@ class DashboardController extends Controller {
             
         }else{
             
-//            $Zamid = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia')->find($id);
-//            $em = $this->getDoctrine()->getManager();
-//            $em->remove($Zamid);
-//            $em->flush();
+            $Zamid = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia')->find($id);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($Zamid);
+            $em->flush();
             
-            $Proid = $this->getDoctrine()->getRepository('MarcinAdminBundle:Produkty')->findByIdzam($id);
-            $em1 = $this->getDoctrine()->getManager();
-            if (!$Proid) {
-             throw $this->createNotFoundException(
-            'No product found for id '.$id
-                );
-            }
-            //foreach ($Proid as $Proids) {
-            //$em1->remove($Proids);
-            //}
-            $em1->remove($Proid);
-            $em1->flush();
+//            $Proid = $this->getDoctrine()->getRepository('MarcinAdminBundle:Produkty')->findOneBy(array('id_zam' => $id));
+//            $em1 = $this->getDoctrine()->getManager();
+//            if (!$Proid) {
+//             throw $this->createNotFoundException(
+//            'No product found for id '.$id
+//                );
+//            }
+//            foreach ($Proid as $Proids) {
+//            $em1->remove($Proids);
+//            }
+//            $em1->remove($Proid);
+//            $em1->flush();
+            //$em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery("DELETE MarcinAdminBundle:Produkty c WHERE c.id_zam = '$id'");
+            $query->execute(); 
             
             $this->addFlash('success', 'Poprawnie usunięto slide.');
         }
