@@ -35,6 +35,14 @@ class Username {
     private $new;
     
     /**
+     * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
+     * 
+     */
+    private $imie_nazw;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -63,5 +71,27 @@ class Username {
     public function getNew()
     {
         return $this->new;
+    }
+    
+    /**
+     * Set imie_nazw
+     *
+     * @param string $imie_nazw
+     *
+     * @return Seo
+     */
+    public function setImie_nazw($imie_nazw)
+    {
+        $this->imie_nazw = $imie_nazw;
+        return $this;
+    }
+    /**
+     * Get imie_nazw
+     *
+     * @return string
+     */
+    public function getImie_nazw()
+    {
+        return $this->imie_nazw;
     }
 }

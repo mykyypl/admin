@@ -44,4 +44,16 @@ class UsernameRepository extends EntityRepository
             'user' => $user
         );
     }
+    
+        public function getUsernamecount() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)');
+        
+        
+        $user = (int)$qb->getQuery()->getSingleScalarResult();
+ return array(
+            'user' => $user
+        );
+    }
 }

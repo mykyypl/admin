@@ -45,6 +45,7 @@ class AdminExtension extends \Twig_Extension {
     }
     
     private $navigationZamowienia;
+    private $navigationUser;
     //private $navigationPage;
    // private $navigationSlider;
    // private $navigationSugestion;
@@ -52,6 +53,10 @@ class AdminExtension extends \Twig_Extension {
         if(!isset($this->navigationZamowienia)) {
             $RepoZamowienia = $this->doctrine->getRepository('MarcinAdminBundle:Zamowienia');
             $this->navigationZamowienia = $RepoZamowienia->getStatistics();
+        }
+        if(!isset($this->navigationUser)) {
+            $RepoUser = $this->doctrine->getRepository('MarcinAdminBundle:Username');
+            $this->navigationUser = $RepoUser->getUsernamecount();
         }
 //        if(!isset($this->navigationPage)) {
 //            $RepoPage = $this->doctrine->getRepository('TomSiteBundle:Page');
@@ -70,6 +75,9 @@ class AdminExtension extends \Twig_Extension {
             'navigation' => array(
                 'zamowienia' => array(
                     'count' => $this->navigationZamowienia
+                ),
+                'username' => array(
+                    'count' => $this->navigationUser
                 )
 //                ,
 //                'page' => array(

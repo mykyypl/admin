@@ -7,3 +7,7 @@ marcin_admin_dashboard:
     type: annotation
     prefix: /
     
+marcin_admin_username:
+    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
+    type: annotation
+    prefix: /u/user
