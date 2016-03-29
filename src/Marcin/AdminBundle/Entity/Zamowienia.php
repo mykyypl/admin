@@ -70,7 +70,7 @@ class Zamowienia {
     private $kwota;  
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      * 
      * 
      */

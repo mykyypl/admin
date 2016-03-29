@@ -61,6 +61,7 @@ class DashboardController extends Controller {
     
     private $status_new_zam;
     private $status_send_zam;
+    private $new_user_stat;
     /**
      * @Route(
      *       "/{status}/{page}",
@@ -108,7 +109,7 @@ class DashboardController extends Controller {
 //        $Request->query->get('page', 1)/*page number*/,
 //        10/*limit per page*/
 //    );
-        
+        $StatUser = $this->getDoctrine()->getRepository('MarcinAdminBundle:Username');
         $RepoZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
         $statistics = $RepoZam->getStatistics();
         
@@ -133,6 +134,9 @@ class DashboardController extends Controller {
         if(!isset($this->status_send_zam)) {
             $this->status_send_zam = $RepoZam->getSendzam();
         }
+        if(!isset($this->new_user_stat)) {
+            $this->new_user_stat = $StatUser->getUserstat();
+        }
         
         return $this->render('MarcinAdminBundle:Admin:index.html.twig',
             array(
@@ -151,6 +155,9 @@ class DashboardController extends Controller {
             'csrfProvider' => $this->get('form.csrf_provider'),
              'new_zam' => array(
                     'count' => $this->status_new_zam
+                ),
+             'new_user' => array(
+                    'count' => $this->new_user_stat
                 ),
              'send_zam' => array(
                     'count' => $this->status_send_zam

@@ -36,7 +36,7 @@ class TestType extends AbstractType
                     'class' => 'form-control'
                 )
             ))
-            ->add('do_zaplaty', 'text', array(
+            ->add('do_zaplaty', 'number', array(
                 'label' => 'Kwota',
                 'attr' => array (
                     'class' => 'form-control'
