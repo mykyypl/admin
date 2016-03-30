@@ -93,7 +93,7 @@
         <th><h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4></th>
        <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('m/d/Y') }}{% endif %}</th>
        <th>{{ article.nr_user_zam  }}</th>
-       <th>{% if article.zaplacono == '0' %} <h4><span class="label label-danger">{{ article.dozaplaty  }}</span></h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</th>
+       <th>{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<span class="label label-warning"><i class="fa fa-exclamation-circle"></i> do wyceny </span>{% else %}<span class="label label-danger">{{ article.dozaplaty  }} zł</span>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</th>
        <th>
                               <div class="btn-group">
                                   <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
