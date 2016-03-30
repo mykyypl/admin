@@ -28,6 +28,8 @@
                                 <tr role="row">
                                     <th <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Imie nazwisko</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Login</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Email</th>
                                     <th>akcje</th>
                                 </tr>
                             </thead>
@@ -35,11 +37,13 @@
     {% for article in pagination  %}
        <tr><th>{{ article.id }}</th> 
            <th>{{ article.imie_nazw }}</th>
+           <th>{{ article.login }}</th>
+           <th>{{ article.email }}</th>
            <th>{% if article.new == '0' %}  {% else %}  
                {% set tokenName = csrfProvider.generateCsrfToken(updateTokenName|format(article.id)) %}
                                       {% set updateUrl = path('marcin_admin_username_update', {'id': article.id, 'token': tokenName}) %}
-                                      <a href="{{ updateUrl }}" class="btn btn-danger" data-confirmAction="">
-                                          <span class="glyphicon glyphicon-trash"></span>
+                                      <a href="{{ updateUrl }}" class="btn btn-success" data-confirmAction="">
+                                          <span class="glyphicon glyphicon-ok"></span>
                                       </a>{% endif %}
                
            </th>

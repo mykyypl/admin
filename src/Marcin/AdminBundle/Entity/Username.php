@@ -43,6 +43,20 @@ class Username {
     private $imie_nazw;
     
     /**
+     * @ORM\Column(type="string")
+     * 
+     * @Assert\NotBlank
+     */
+    private $login; 
+    
+    /**
+     * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
+     */
+    private $email; 
+    
+    /**
      * Get id
      *
      * @return integer
@@ -93,5 +107,50 @@ class Username {
     public function getImie_nazw()
     {
         return $this->imie_nazw;
+    }
+    
+    /**
+     * Get login
+     *
+     * 
+     */
+    public function getLogin()
+    {
+        return $this->login;
+    }
+    
+    /**
+     * Set login
+     *
+     * @param string $login
+     *
+     * @return Username
+     */
+    public function setLogin($login)
+    {
+        $this->login = $login;
+        return $this;
+    }
+    
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Username
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
+    }
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }
