@@ -1,74 +1,76 @@
 {% extends 'MarcinAdminBundle::base.html.twig' %}
 {% block stylesheets %}
-{{parent()}}
+    {{parent()}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
 {% endblock %}
 {% block body %}
-            <section class="content-header">
-          <h1>
+    <section class="content-header">
+        <h1>
             Pulpit
             <small>zarządzania GM</small>
-          </h1>
-          <ol class="breadcrumb">
+        </h1>
+        <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
             <li class="active">tutaj</li>
-          </ol>
-        </section>
-                    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
-        <!-- Main content -->
-        <section class="content">
-            <div class="row">
+        </ol>
+    </section>
+    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
             <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-aqua">
-                <div class="inner">
-                  <h3>{{ new_zam.count.all_new }}</h3>
-                  <p>Nowych zamówień</p>
+                <!-- small box -->
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>{{ new_zam.count.all_new }}</h3>
+                        <p>Nowych zamówień</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
                 </div>
-                <div class="icon">
-                  <i class="ion ion-bag"></i>
-                </div>
-              </div>
             </div><!-- ./col -->
             <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-green">
-                <div class="inner">
-                  <h3>{{ send_zam.count.all_send }}<!--<sup style="font-size: 20px">%</sup>--></h3>
-                  <p>Przyjętych do realizacji</p>
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>{{ send_zam.count.all_send }}<!--<sup style="font-size: 20px">%</sup>--></h3>
+                        <p>Przyjętych do realizacji</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
                 </div>
-                <div class="icon">
-                  <i class="ion ion-stats-bars"></i>
-                </div>
-              </div>
             </div><!-- ./col -->
             <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-yellow">
-                <div class="inner">
-                  <h3>{{ new_user.count.user }}</h3>
-                  <p>Nowych użytkowników</p>
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>{{ new_user.count.user }}</h3>
+                        <p>Nowych użytkowników</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
                 </div>
-                <div class="icon">
-                  <i class="ion ion-person-add"></i>
-                </div>
-              </div>
             </div><!-- ./col -->
             <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-red">
-                <div class="inner">
-                  <h3>{{ pagination.getTotalItemCount }}</h3>
-                  <p>Wszystkich zamówień</p>
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>{{ pagination.getTotalItemCount }}</h3>
+                        <p>Wszystkich zamówień</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
                 </div>
-                <div class="icon">
-                  <i class="ion ion-pie-graph"></i>
-                </div>
-              </div>
             </div><!-- ./col -->
-          </div>
-            <div class="box box-default color-palette-box">
+        </div>
+        <div class="box box-default color-palette-box">
             <div class="box-header with-border">
-              <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia</h3>
+                <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia</h3>
             </div>
             <div class="box-body">
                 <div class="row">
@@ -83,53 +85,210 @@
                                     <th>nr-user-zam</th>
                                     <th>do zaplaty</th>
                                     <th>akcje</th>
-                                    <th>PDF</th>
+                                    <th>zł</th>
                                 </tr>
                             </thead>
-        
-    {% for article in pagination  %}
-       <tr><th>{{ article.id }}</th> 
-        <th>{{ article.jakie_zam }}</th>
-        <th><h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4></th>
-       <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('m/d/Y') }}{% endif %}</th>
-       <th>{{ article.nr_user_zam  }}</th>
-       <th>{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<span class="label label-warning"><i class="fa fa-exclamation-circle"></i> do wyceny </span>{% else %}<span class="label label-danger">{{ article.dozaplaty  }} zł</span>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</th>
-       <th>
-                              <div class="btn-group">
-                                  <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
-                                      <span class="glyphicon glyphicon-edit"></span>
-                                  </a></div>
-       {% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
-                                      {% set deleteUrl = path('marcin_admin_dashboard_delete', {'id': article.id, 'token': tokenName}) %}
-                                      <a href="{{ deleteUrl }}" class="btn btn-danger" data-confirmAction="">
-                                          <span class="glyphicon glyphicon-trash"></span>
-                                      </a>
-       </th>
-                                  <th><a href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf" target="_blank"><span class="fa fa-file-pdf-o"></span></a></th>
-       </tr>
-    {% endfor %}
-        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-5">
-                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
-                            Wszystkich zamówień jest: {{ pagination.getTotalItemCount }}
-                        </div>
-                    </div>
-                    <div class="col-sm-7">
-                        <div class="dataTables_paginate">
-                            {{ knp_pagination_render(pagination, 'MarcinAdminBundle:Pagination:admin_pagination.html.twig') }}
-                        </div>
-                    </div>
-                </div>
-            </div><!-- /.box-body -->
-            
-          </div>
 
-</section>
-        {% endblock %}
-{% block javascripts %}
-    {{parent()}}
-{% endblock %}
+                            {% for article in pagination  %}
+                                <tr><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
+                                    <th>{{ article.jakie_zam }}</th>
+                                    <th id="zmiana-status-{{ article.id }}"><select name="status_select" class="selectpicker"{% if article.status == 'wersja robocza' %} data-style="btn-danger" {% elseif article.status == 'przesłane do realizacji' %} data-style="btn-info" {% elseif article.status == 'w realizacji' %} data-style="btn-success" {% elseif article.status == 'przyjęte do realizacji' %} data-style="btn-success" {% else %} data-style="btn-primary" {% endif %} id="{{ path('marcin_admin_dashboard_update', {'id': article.id }) }}" onchange="changeOrderStatus('{{ article.id }}', event)">
+                                            <option value="wersja robocza"{% if article.status == 'wersja robocza' %} selected="selected" {% endif %}>wersja robocza</option><option value="przesłane do realizacji"{% if article.status == 'przesłane do realizacji' %} selected="selected" {% endif %}>przesłane do realizacji</option><option value="przyjęte do realizacji"{% if article.status == 'przyjęte do realizacji' %} selected="selected" {% endif %}>przyjęte do realizacji</option><option value="w realizacji"{% if article.status == 'w realizacji' %} selected="selected" {% endif %}>w realizacji</option><option value="zrealizowane"{% if article.status == 'zrealizowane' %} selected="selected" {% endif %}>zrealizowane</option><option value="odebrane"{% if article.status == 'odebrane' %} selected="selected" {% endif %}>odebrane</option></select>
+                                        {#<h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4>#}</th>
+                                    <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('m/d/Y') }}{% endif %}</th>
+                                    <th>{{ article.nr_user_zam  }}</th>
+                                    <th id="wynik{{ article.id }}">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<span class="label label-warning"><i class="fa fa-exclamation-circle"></i> do wyceny </span>{% else %}<span class="label label-danger">{{ article.dozaplaty  }} zł</span>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</th>
+                                    <th id="wynik_b{{ article.id }}">
+                                        <div class="btn-group">
+                                            <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                            <a  href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf" target="_blank" class="ajax-task-complete btn btn-primary">
+                                                <span class="glyphicon glyphicon-print"></span>
+                                            </a>
+                                        </div> {% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
+                                            {% set deleteUrl = path('marcin_admin_dashboard_delete', {'id': article.id, 'token': tokenName}) %}
+                                        <a href="{{ deleteUrl }}" class="btn btn-danger" data-confirmAction="">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </a></th>
+                                        <th><div class="checkbox checkbox-success">
+                                                <input style="flat-red" id="spr" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderPay('{{ article.id }}', event)" {% if article.zaplacono == '1' %}checked {% endif %} /><label for="checkbox1">
+    </label></div></th>
+                                    </tr>
+                                    {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+                                        Wszystkich zamówień jest: {{ pagination.getTotalItemCount }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="dataTables_paginate">
+                                        {{ knp_pagination_render(pagination, 'MarcinAdminBundle:Pagination:admin_pagination.html.twig') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+
+                    </div>
+
+                </section>
+                {% endblock %}
+                    {% block javascripts %}
+                        {{parent()}}
+                        <script type="text/javascript">
+
+                            function changeOrderStatus(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                var status = $(element).val();
+                                var url = '{{ path('marcin_admin_dashboard_update') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        status: status
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+
+                                    }
+                                });
+
+                            }
+                            function changeOrderPay(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var zaplacono = 1;
+        } else {
+             console.log('odznaczono!');
+             var zaplacono = 0;
+        }
+                                var url = '{{ path('marcin_admin_dashboard_update') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        zaplacono: zaplacono
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                $('#wynik'+order_id).load(document.URL + ' #wynik'+order_id);
+                                                
+                                    }
+                                });
+
+                            }
+                            {#      $(function(){
+                                       $('.ajax-task-complete').on({
+                                           click: function(e) {
+                                               e.preventDefault();
+                                               var $href = $(this).attr('href');
+                    
+                                               $('<div></div>').load($href+' form', function(){
+                                                   var $form = $(this).children('form');
+                                                   var $cb = $form.find('input[type="checkbox"]');
+                        
+                                                   $cb.prop('checked', !$cb.prop('checked'));
+                        
+                                                   var $cb1 = $form.find('select[name*="status_select"]');
+                        
+                                                   $cb1.prop('selected', !$cb1.prop('selected'));
+                        
+                                                   var $url = $form.attr('action');
+                                                   var $data = $form.serialize();
+                        
+                                                   $.ajax({
+                                                       url: $url,
+                                                       data: $data,
+                                                       method: 'post',
+                                                       dataType: 'json',
+                                                       cache: false,
+                                                       success: function(obj) {
+                                                           var $tic = $('#task-complete-'+obj.id+' .ajax-task-complete');
+                                                           if(obj.complete){
+                                                               //$tic.text('X');
+                                    
+                                                           }
+                                                           else {
+                                                               //$tic.text('0');
+                                                           $('#wynik'+obj.id).load(document.URL + ' #wynik'+obj.id);
+                                                           $('#wynik_b'+obj.id).load(document.URL + ' #wynik_b'+obj.id);
+                                                           }
+                                                       },
+                                                       complete: function() {
+                                                           console.log('complete!');
+
+                                                       },
+                                                       error: function(err) {
+                                                           console.log(err);
+                                                       }
+                                                   });
+                                               });
+                                           }
+                                       });
+            
+            
+                                       $('.status_select').on({
+                                           change: function(e) {
+                
+                                     //  $('select[name*="status_select"]').prop('selected', true).change(function(e){
+                                               e.preventDefault();
+                                               var $href = $(this).attr('id');
+                   
+                    
+                                               $('<div></div>').load($href+' form', function(){
+                                                   //var $form = $(this).children('form');
+                                                   var $form = $(this).closest('form');
+                                                   var $cb = $form.find('select[name*="status_select"]');
+                        
+                                                   $cb.prop('selected');
+                        
+                                                   var $url = $form.attr('action');
+                                                   var $data = $form.serialize();
+                        
+                                                   $.ajax({
+                                                       url: $url,
+                                                       data: $data,
+                                                       method: 'POST',
+                                                       dataType: 'json',
+                                                       cache: false,
+                                                       success: function(obj) {
+                                                           var $tic = $('#task-complete-'+obj.id+' .status_select');
+                                                           if(obj.complete){
+                                                               //$tic.text('X');
+                                    
+                                                           }
+                                                           else {
+                                                               //$tic.text('0');
+                                                           $('#wynik'+obj.id).load(document.URL + ' #wynik'+obj.id);
+                                                           $('#wynik_b'+obj.id).load(document.URL + ' #wynik_b'+obj.id);
+                                                           }
+                                                       },
+                                                       complete: function() {
+                                                           console.log('complete!');
+
+                                                       },
+                                                       error: function(err) {
+                                                           console.log(err);
+                                                       }
+                                                   });
+                                               });
+                                           }
+                                       });
+                                       });
+#}
+                        </script>
+        <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+                    {% endblock %}
 

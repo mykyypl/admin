@@ -15,7 +15,7 @@ class TestType extends AbstractType
 {
     public function getName()
     {
-        return 'test';
+        return 'marcin_adminbundle_testype';
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
