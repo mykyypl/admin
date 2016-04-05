@@ -29,7 +29,7 @@ class TestType extends AbstractType
                 )
             ))
             ->add('status', 'choice', array(
-                'choices'   => array('przesłane do realizacji' => 'przesłane do realizacji', 'przyjęte do realizacji' => 'przyjęte do realizacji', 'w realizacji' => 'w realizacji', 'zrealizowane' => 'zrealizowane', 'odebrane' => 'odebrane'),
+                'choices'   => array('przesłane do realizacji' => 'przesłane do realizacji', 'oczekiwanie na zapłatę' => 'oczekiwanie na zapłatę', 'w realizacji' => 'w realizacji', 'wyprodukowane' => 'wyprodukowane', 'zrealizowane/odebrane' => 'zrealizowane/odebrane'),
                 'required'  => false,
                 'empty_value'       => 'Proszę wybrać status',
                 'attr' => array (

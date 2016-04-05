@@ -36,7 +36,8 @@ class DashboardController extends Controller {
         $result = array(
             'id' => $Request->request->get('id'),
             'status' => $Request->request->get('status'),
-            'zaplacono' => $Request->request->get('zaplacono')
+            'zaplacono' => $Request->request->get('zaplacono'),
+            'price' => $Request->request->get('price')
         );
 
         $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
@@ -46,13 +47,20 @@ class DashboardController extends Controller {
             return new JsonResponse(false);
         }
 
-        if ($result['status'] == NULL)
+        if ($result['status'] == NULL && $result['price'] == NULL)
         {
         $em = $this->getDoctrine()->getManager();
         //$Zamowienie->setStatus($result['status']);
         $Zamowienie->setZaplacono($result['zaplacono']);
         $em->flush();
-        } else
+        }
+        elseif ($result['status'] == NULL && $result['zaplacono'] == NULL) {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setDozaplaty($result['price']);
+        //$Zamowienie->setZaplacono($result['zaplacono']);
+            $em->flush();
+        }
+        else
         {
         $em = $this->getDoctrine()->getManager();
         $Zamowienie->setStatus($result['status']);
@@ -149,6 +157,8 @@ class DashboardController extends Controller {
     private $status_new_zam;
     private $status_send_zam;
     private $new_user_stat;
+    private $new_many;
+    private $suma;
 
     /**
      * @Route(
@@ -223,6 +233,12 @@ class DashboardController extends Controller {
         if (!isset($this->new_user_stat)) {
             $this->new_user_stat = $StatUser->getUserstat();
         }
+        if (!isset($this->new_many)) {
+            $this->new_many = $RepoZam->getMany();
+        }
+        if (!isset($this->suma)) {
+            $this->suma = $RepoZam->getSuma();
+        }
 
         return $this->render('MarcinAdminBundle:Admin:index.html.twig', array(
                     'pageTitle' => 'GM Panel',
@@ -243,6 +259,12 @@ class DashboardController extends Controller {
                     ),
                     'new_user' => array(
                         'count' => $this->new_user_stat
+                    ),
+                    'new_many' => array(
+                        'count' => $this->new_many
+                    ),
+                    'suma' => array(
+                        'count' => $this->suma
                     ),
                     'send_zam' => array(
                         'count' => $this->status_send_zam

@@ -84,12 +84,40 @@ class TestRepository extends EntityRepository
                 $qb = $this->createQueryBuilder('u')
                         ->select('COUNT(u)')
                         ->where('u.status = :identifier')
-                        ->setParameter('identifier', 'przyjęte do realizacji');
+                        ->setParameter('identifier', 'w realizacji');
         
         
         $all_send = (int)$qb->getQuery()->getSingleScalarResult();
  return array(
             'all_send' => $all_send
+        );
+    }
+    
+    public function getMany() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.status = :identifier')
+                        ->setParameter('identifier', 'oczekiwanie na zapłatę');
+        
+        
+        $all_many = (int)$qb->getQuery()->getSingleScalarResult();
+ return array(
+            'all_many' => $all_many
+        );
+    }
+    
+    public function getSuma() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('SUM(u.do_zaplaty) AS do_zaplaty');
+                        //->where('u.do = :identifier')
+                       // ->setParameter('identifier', 'oczekiwanie na zapłatę');
+        
+        
+        $all_suma = (int)$qb->getQuery()->getSingleScalarResult();
+ return array(
+            'all_suma' => $all_suma
         );
     }
 }
