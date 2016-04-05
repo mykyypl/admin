@@ -12,6 +12,10 @@ marcin_admin_username:
     type: annotation
     prefix: /u/user
     
+#marcin_admin_username_form:
+#    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
+#    prefix: /u/user/form/{id}
+    
 #marcin_admin_dashboard_update:
 #    pattern:  /form/update-complete/{id}
 #    defaults: { _controller: MarcinAdminBundle:Dashboard:updateZam, _format:json}

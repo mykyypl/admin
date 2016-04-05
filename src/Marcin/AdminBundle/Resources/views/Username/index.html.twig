@@ -36,7 +36,7 @@
         
     {% for article in pagination  %}
        <tr><th>{{ article.id }}</th> 
-           <th>{{ article.imie_nazw }}</th>
+           <th>{{ article.imienazw }}</th>
            <th>{{ article.login }}</th>
            <th>{{ article.email }}</th>
            <th>{% if article.new == '0' %}  {% else %}  
@@ -45,6 +45,15 @@
                                       <a href="{{ updateUrl }}" class="btn btn-success" data-confirmAction="">
                                           <span class="glyphicon glyphicon-ok"></span>
                                       </a>{% endif %}
+                {% if article.aktywacja == 'tak' %}  {% else %}  
+               {% set tokenName = csrfProvider.generateCsrfToken(aktywacjaTokenName|format(article.id)) %}
+                                      {% set aktywacjaUrl = path('marcin_admin_username_aktywacja', {'id': article.id, 'token': tokenName}) %}
+                                      <a href="{{ aktywacjaUrl }}" class="btn btn-success" data-confirmAction="">
+                                          Aktywacja
+                                      </a>{% endif %}
+                <a href="{{ path('marcin_admin_username_form', {'id': article.id}) }}" class="btn btn-primary">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
                
            </th>
        </tr>

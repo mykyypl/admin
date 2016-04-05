@@ -43,6 +43,14 @@ class Username {
     private $imie_nazw;
     
     /**
+     * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
+     * 
+     */
+    private $aktywacja;
+    
+    /**
      * @ORM\Column(type="string")
      * 
      * @Assert\NotBlank
@@ -88,23 +96,23 @@ class Username {
     }
     
     /**
-     * Set imie_nazw
+     * Set imienazw
      *
      * @param string $imie_nazw
      *
      * @return Seo
      */
-    public function setImie_nazw($imie_nazw)
+    public function setImienazw($imie_nazw)
     {
         $this->imie_nazw = $imie_nazw;
         return $this;
     }
     /**
-     * Get imie_nazw
+     * Get imienazw
      *
      * @return string
      */
-    public function getImie_nazw()
+    public function getImienazw()
     {
         return $this->imie_nazw;
     }
@@ -153,4 +161,26 @@ class Username {
     {
         return $this->email;
     }
+    /**
+     * Set aktywacja
+     *
+     * @param string $aktywacja
+     *
+     * @return Username
+     */
+    public function setAktywacja($aktywacja)
+    {
+        $this->aktywacja = $aktywacja;
+        return $this;
+    }
+    /**
+     * Get aktywacja
+     *
+     * @return string
+     */
+    public function getAktywacja()
+    {
+        return $this->aktywacja;
+    }
+    
 }

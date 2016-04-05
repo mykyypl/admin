@@ -110,9 +110,9 @@ class TestRepository extends EntityRepository
     public function getSuma() {
 
                 $qb = $this->createQueryBuilder('u')
-                        ->select('SUM(u.do_zaplaty) AS do_zaplaty');
-                        //->where('u.do = :identifier')
-                       // ->setParameter('identifier', 'oczekiwanie na zapłatę');
+                        ->select('SUM(u.do_zaplaty) AS do_zaplaty')
+                        ->where('u.zaplacono = :status_zaplaty')
+                        ->setParameter('status_zaplaty', '0');
         
         
         $all_suma = (int)$qb->getQuery()->getSingleScalarResult();
