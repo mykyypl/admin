@@ -14,15 +14,29 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-              ->addOrderBy('s.createDate', 'DESC');
-
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+        if(!empty($params['status'])){
+            if('przeslane' == $params['status']){
+                $qb->where('s.status = :przeslane')
+                        ->setParameter('przeslane', 'przesłane do realizacji');
+            }else if('realizacja' == $params['status']){
+                $qb->where('s.status = :realizacja')
+                        ->setParameter('realizacja', 'w realizacji');
+            }else if('wyprodukowane' == $params['status']){
+                $qb->where('s.status = :wyprodukowane')
+                        ->setParameter('wyprodukowane', 'wyprodukowane');
+            }
+        }
+        
+        
      if(!empty($params['orderBy'])){
             $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
             $qb->orderBy($params['orderBy'], $orderDir);
         }
 
-        if(!empty($params['jakie_zamLike'])){
-            $jakie_zamLike = '%'.$params['jakie_zamLike'].'%';
+        if(!empty($params['userLike'])){
+            $jakie_zamLike = '%'.$params['userLike'].'%';
             $qb->andWhere('s.nr_user_zam LIKE :jakie_zamLike')
                     ->setParameter('jakie_zamLike', $jakie_zamLike);
         }
@@ -31,37 +45,26 @@ class TestRepository extends EntityRepository
     }
     
         public function getStatistics() {
-        ////{
-//       $em = $this->getDoctrine()->getManager();
-//        
-//        $articles = $em->createQueryBuilder()
-//                ->select('a')
-//                ->from('MarcinAdminBundle:Zamowienia', 'a')
-//                ->addOrderBy('a.createDate','DESC')
-//                ->getQuery()
-//                ->getResult();
-//    }
-//                ($limit = null) {
-//        $qp = $this->createQueryBuilder('p')
-//                ->select('p')
-//                ->addOrderBy('p.createDate', 'DESC');
-//
-//        if (false === is_null($limit)) {
-//            $qp->setMaxResults($limit);
-//        }
-//
-//
-//        return $qp->getQuery()
-//                        ->getResult();
-//    }
-        
-                $qb = $this->createQueryBuilder('s')
-                        ->select('COUNT(s)');
-        
-        
-        $all = (int)$qb->getQuery()->getSingleScalarResult();
- return array(
-            'all' => $all
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $all = (int) $qb->getQuery()->getSingleScalarResult();
+        $przeslane = $qb->andWhere('a.status = :currDate')
+                        ->setParameter('currDate', 'przesłane do realizacji')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $realizacja = $qb->andWhere('a.status = :currDate')
+                        ->setParameter('currDate', 'w realizacji')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $wyprodukowane = $qb->andWhere('a.status = :currDate')
+                        ->setParameter('currDate', 'wyprodukowane')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        return array(
+            'all' => $all,
+            'przeslane' => $przeslane,
+            'realizacja' => $realizacja,
+            'wyprodukowane' => $wyprodukowane
         );
     }
     

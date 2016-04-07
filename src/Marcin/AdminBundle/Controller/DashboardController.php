@@ -252,8 +252,9 @@ class DashboardController extends Controller {
         $pagination = $paginator->paginate($qb, $page, $limit);
 
         $statusesList = array(
-            'Opublikowane' => 'published',
-            'Nieopublikowane' => 'unpublished',
+            'Przesłane' => 'przeslane',
+            'W realizacji' => 'realizacja',
+            'Wyprodukowane' => 'wyprodukowane',
             'Wszystkie' => 'all'
         );
         if (!isset($this->status_new_zam)) {
