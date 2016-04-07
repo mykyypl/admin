@@ -2,7 +2,7 @@
 {% block stylesheets %}
     {{parent()}}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
+   <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
 {% endblock %}
 {% block body %}
     <section class="content-header">
@@ -87,10 +87,12 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
+                        <div style="overflow-x: auto;">
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
                                     <th <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
+                                    <th>Produkcja</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">jakie_zam</th>
                                     <th>status</th>
                                     <th>send data</th>
@@ -103,6 +105,15 @@
 
                             {% for article in pagination  %}
                                 <tr><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
+                                    <th id="numerprodukcji{{ article.id }}">
+                                        <div id="produkcja{{ article.id }}" onclick="changeProdukcjaText('{{ article.id }}', event)">
+                                             <h4><span class="label label-info" onclick="changeProdukcjaText('{{ article.id }}', event)">
+                                                     <i class="fa fa-exclamation-circle"></i> {{ article.nrprodukcji }} </span></h4>
+                                        </div><div id="produkcja_edit{{ article.id }}" style="display:none;">
+                                            <input class="form-control" id="" onchange="changeProdukcjaNr('{{ article.id }}', event)" type="text" value="{{ article.nrprodukcji }}">
+                                            <button class="btn btn-success" onclick="changeButtonProdukcja('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button>
+                                        </div>
+                                    </th>
                                     <th>{{ article.jakie_zam }}</th>
                                     <th id="zmiana-status-{{ article.id }}">
                                         <select name="status_select" class="selectpicker"{% if article.status == 'wersja robocza' %} data-style="btn-info" {% elseif article.status == 'przesłane do realizacji' %} data-style="btn-warning" {% elseif article.status == 'oczekiwanie na zapłatę' %} data-style="btn-danger" {% elseif article.status == 'w realizacji' %} data-style="btn-primary" {% elseif article.status == 'wyprodukowane' %} data-style="btn-primary" {% else %} data-style="btn-success" {% endif %} id="{{ path('marcin_admin_dashboard_update', {'id': article.id }) }}" onchange="changeOrderStatus('{{ article.id }}', '{{ article.user }}', event)">
@@ -135,6 +146,7 @@
                                     </tr>
                                     {% endfor %}
                                     </table>
+                        </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -246,6 +258,37 @@
                             function changeButton(id, event) {
                                 var button_id = id;
                                 $('#wynik'+button_id).load(document.URL + ' #wynik'+button_id);
+                            }
+                            
+                            function changeProdukcjaText(id, event) {
+                                 var order_id = id;
+                                  if($('#produkcja'+order_id).css('display')!='none'){
+                                       $('#produkcja_edit'+order_id).html($('#produkcja_edit'+order_id).html()).show().siblings('div').hide();
+                                  }
+                            }
+                            function changeProdukcjaNr(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                var produkcja = $(element).val();
+                                var url = '{{ path('marcin_admin_dashboard_update') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        produkcja: produkcja
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                               
+                                    }
+                                });
+
+                            }
+                            function changeButtonProdukcja(id, event) {
+                                var button_id = id;
+                                $('#numerprodukcji'+button_id).load(document.URL + ' #numerprodukcji'+button_id);
                             }
                             {#      $(function(){
                                        $('.ajax-task-complete').on({

@@ -41,7 +41,8 @@ class DashboardController extends Controller {
            // 'username' => $Request->request-get('username'),
             'zaplacono' => $Request->request->get('zaplacono'),
             'price' => $Request->request->get('price'),
-            'login' => $Request->request->get('login')
+            'login' => $Request->request->get('login'),
+            'produkcja' =>$Request->request->get('produkcja')
         );
 
         $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
@@ -51,14 +52,14 @@ class DashboardController extends Controller {
             return new JsonResponse(false);
         }
         
-        if ($result['status'] == NULL && $result['price'] == NULL)
+        if ($result['status'] == NULL && $result['price'] == NULL && $result['produkcja'] == NULL)
         {
         $em = $this->getDoctrine()->getManager();
         //$Zamowienie->setStatus($result['status']);
         $Zamowienie->setZaplacono($result['zaplacono']);
         $em->flush();
         }
-        elseif ($result['status'] == NULL && $result['zaplacono'] == NULL) {
+        elseif ($result['status'] == NULL && $result['zaplacono'] == NULL && $result['produkcja'] == NULL) {
             $em = $this->getDoctrine()->getManager();
             $Zamowienie->setDozaplaty($result['price']);
         //$Zamowienie->setZaplacono($result['zaplacono']);
@@ -83,6 +84,13 @@ class DashboardController extends Controller {
                     $this->addFlash('error', $exc->getMessage());
                 }
         }
+        elseif ($result['status'] == NULL && $result['zaplacono'] == NULL && $result['price'] == NULL) 
+         {
+             $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setNrprodukcji($result['produkcja']);
+        //$Zamowienie->setZaplacono($result['zaplacono']);
+            $em->flush();
+         }
         else
         {
         $em = $this->getDoctrine()->getManager();

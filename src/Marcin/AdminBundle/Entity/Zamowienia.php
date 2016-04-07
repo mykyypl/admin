@@ -92,6 +92,13 @@ class Zamowienia {
      * @ORM\Column(name="data_wyslania", type="datetime")
      */
     private $sendDate;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $nrprodukcji;
 
     /**
      * Get id
@@ -319,6 +326,28 @@ class Zamowienia {
     public function getZaplacono()
     {
         return $this->zaplacono;
+    }
+    
+    /**
+     * Set nrprodukcji
+     *
+     * @param integer $nrprodukcji
+     *
+     * @return Zamowienia
+     */
+    public function setNrprodukcji($nrprodukcji)
+    {
+        $this->nrprodukcji = $nrprodukcji;
+        return $this;
+    }
+    /**
+     * Get nrprodukcji
+     *
+     * @return integer
+     */
+    public function getNrprodukcji()
+    {
+        return $this->nrprodukcji;
     }
 }
 
