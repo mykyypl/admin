@@ -44,7 +44,12 @@ security:
             logout:
                 path: _logout
                 target: login
-              
+            remember_me:
+                key:      "%secret%"
+                lifetime: 31536000 # 365 dni w sekundach
+                path:     /
+                domain:   ~
+                remember_me_parameter: login[remember_me]
             # activate different ways to authenticate
 
             # http_basic: ~
