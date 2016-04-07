@@ -120,4 +120,18 @@ class TestRepository extends EntityRepository
             'all_suma' => $all_suma
         );
     }
+    
+     public function getWyprodukowane() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.status = :identifier')
+                        ->setParameter('identifier', 'wyprodukowane');
+        
+        
+        $all_wyprodukowane = (int)$qb->getQuery()->getSingleScalarResult();
+ return array(
+            'all_wyprodukowane' => $all_wyprodukowane
+        );
+    }
 }

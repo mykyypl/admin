@@ -190,6 +190,7 @@ class DashboardController extends Controller {
     private $new_user_stat;
     private $new_many;
     private $suma;
+    private $suma_wyprodukowane;
 
     /**
      * @Route(
@@ -270,6 +271,9 @@ class DashboardController extends Controller {
         if (!isset($this->suma)) {
             $this->suma = $RepoZam->getSuma();
         }
+        if (!isset($this->suma_wyprodukowane)) {
+            $this->suma_wyprodukowane = $RepoZam->getWyprodukowane();
+        }
 
         return $this->render('MarcinAdminBundle:Admin:index.html.twig', array(
                     'pageTitle' => 'GM Panel',
@@ -296,6 +300,9 @@ class DashboardController extends Controller {
                     ),
                     'suma' => array(
                         'count' => $this->suma
+                    ),
+                    'suma_wyprodukowane' => array(
+                        'count' => $this->suma_wyprodukowane
                     ),
                     'send_zam' => array(
                         'count' => $this->status_send_zam
