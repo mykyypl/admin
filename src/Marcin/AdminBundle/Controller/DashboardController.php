@@ -14,8 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Marcin\AdminBundle\Entity\Zamowienia;
+use Marcin\AdminBundle\Entity\Username;
 use Marcin\AdminBundle\Form\Type\TestType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
+use Marcin\AdminBundle\Exception\UserException;
 
 class DashboardController extends Controller {
 
@@ -36,8 +38,10 @@ class DashboardController extends Controller {
         $result = array(
             'id' => $Request->request->get('id'),
             'status' => $Request->request->get('status'),
+           // 'username' => $Request->request-get('username'),
             'zaplacono' => $Request->request->get('zaplacono'),
-            'price' => $Request->request->get('price')
+            'price' => $Request->request->get('price'),
+            'login' => $Request->request->get('login')
         );
 
         $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
@@ -46,7 +50,7 @@ class DashboardController extends Controller {
         if (NULL === $Zamowienie) {
             return new JsonResponse(false);
         }
-
+        
         if ($result['status'] == NULL && $result['price'] == NULL)
         {
         $em = $this->getDoctrine()->getManager();
@@ -59,6 +63,25 @@ class DashboardController extends Controller {
             $Zamowienie->setDozaplaty($result['price']);
         //$Zamowienie->setZaplacono($result['zaplacono']);
             $em->flush();
+            try {
+                $userE = $result['login'];
+                 //$em = $this->getDoctrine()->getManager();
+        
+        $userEmail = $em->createQueryBuilder()
+                ->select('a.email')
+                ->from('MarcinAdminBundle:Username', 'a')
+                 ->where('a.login = :identifier')
+                 ->setParameter('identifier', $userE)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+                $userManager = $this->get('user_manager');
+                $userManager->registerUsername($userEmail);
+            }
+            catch (UserException $exc) {
+                    $this->addFlash('error', $exc->getMessage());
+                }
         }
         else
         {
@@ -144,7 +167,7 @@ class DashboardController extends Controller {
                                 'id' => $Zamowienia->getId()
             )));
         }
-
+        
         return $this->render('MarcinAdminBundle:Admin:form.html.twig', array(
                     'pageTitle' => (isset($newZamowieniaForm) ? 'Zamowienia <small>utwórz nowy</small>' : 'Zamowienia <small>edycja zamowienia</small>'),
                     'currPage' => 'zamowienia',

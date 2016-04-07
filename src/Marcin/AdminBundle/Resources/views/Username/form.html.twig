@@ -16,20 +16,47 @@
 
         <!-- Main content -->
         <section class="content">
-            <div class="box box-default color-palette-box">
-            <div class="box-header with-border">
-              <h3 class="box-title"><i class="fa fa-tag"></i> Edycja użytkownika</h3>
-            </div>
-            <div class="box-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="box box-default color-palette-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-tag"></i> Edycja użytkownika</h3>
+                        </div>
+                        <div class="box-body">
 
                          {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
                         {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
-                         {{ form_row(form.imienazw) }}
-                         {{ form_rest(form) }}
+                        <div class="form-group">
+                            {{ form_row(form.imienazw) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.login) }}
+                        </div>{# , {'attr': {'disabled':'true'} } #}
+                        <div class="form-group">
+                            {{ form_row(form.email) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_rest(form) }}
                         {{ form_row(form.save) }} 
+                        </div>
                         {{ form_end(form) }}
                         <a href="{{ path('marcin_admin_username') }}" class="btn btn-primary">Wstecz</a> 
 
+                        </div>
+                    </div>
+                </div>
+            <div class="col-md-6">
+                <div class="box box-default color-palette-box">
+                    <div class="box-header with-border">
+                     <h3 class="box-title"><i class="fa fa-tag"></i> Edycja użytkownika</h3>
+                    </div>
+                    <div class="box-body">
+
+dsad
+
+                    </div>
+                </div>
+            </div>
             </div>
 </section>
         {% endblock %}

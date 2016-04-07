@@ -28,6 +28,20 @@ class UzytkownicyType extends AbstractType
                     'class' => 'form-control',
                 )
             ))
+            ->add('login', 'text', array(
+                'label' => 'Login użytkownika',
+                'attr' => array(
+                    'autocomplete' => 'off',
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('email', 'text', array(
+                'label' => 'Email użytkownika',
+                'attr' => array(
+                    'autocomplete' => 'off',
+                    'class' => 'form-control',
+                )
+            ))
             ->add('save', 'submit', array(
                 'label' => 'Zapisz',
                 'attr' => array(

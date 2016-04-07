@@ -105,7 +105,7 @@
                                 <tr><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
                                     <th>{{ article.jakie_zam }}</th>
                                     <th id="zmiana-status-{{ article.id }}">
-                                        <select name="status_select" class="selectpicker"{% if article.status == 'wersja robocza' %} data-style="btn-info" {% elseif article.status == 'przesłane do realizacji' %} data-style="btn-warning" {% elseif article.status == 'oczekiwanie na zapłatę' %} data-style="btn-danger" {% elseif article.status == 'w realizacji' %} data-style="btn-primary" {% elseif article.status == 'wyprodukowane' %} data-style="btn-primary" {% else %} data-style="btn-success" {% endif %} id="{{ path('marcin_admin_dashboard_update', {'id': article.id }) }}" onchange="changeOrderStatus('{{ article.id }}', event)">
+                                        <select name="status_select" class="selectpicker"{% if article.status == 'wersja robocza' %} data-style="btn-info" {% elseif article.status == 'przesłane do realizacji' %} data-style="btn-warning" {% elseif article.status == 'oczekiwanie na zapłatę' %} data-style="btn-danger" {% elseif article.status == 'w realizacji' %} data-style="btn-primary" {% elseif article.status == 'wyprodukowane' %} data-style="btn-primary" {% else %} data-style="btn-success" {% endif %} id="{{ path('marcin_admin_dashboard_update', {'id': article.id }) }}" onchange="changeOrderStatus('{{ article.id }}', '{{ article.user }}', event)">
                                             <option value="wersja robocza"{% if article.status == 'wersja robocza' %} selected="selected" {% endif %}>wersja robocza</option>
                                             <option value="przesłane do realizacji"{% if article.status == 'przesłane do realizacji' %} selected="selected" {% endif %}>przesłane do realizacji</option>
                                             <option value="oczekiwanie na zapłatę"{% if article.status == 'oczekiwanie na zapłatę' %} selected="selected" {% endif %}>oczekiwanie na zapłatę</option>
@@ -115,7 +115,7 @@
                                         {#<h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4>#}</th>
                                     <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
-                                    <th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-warning" onclick="changeOrderText('{{ article.id }}', event)"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', event)" type="text" value=""><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div>{% else %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-danger" onclick="changeOrderText('{{ article.id }}', event)">{{ article.dozaplaty  }} zł</span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', event)" type="text" value="{{ article.dozaplaty }}"><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</div></th>
+                                    <th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-warning" onclick="changeOrderText('{{ article.id }}', event)"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value=""><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div>{% else %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-danger" onclick="changeOrderText('{{ article.id }}', event)">{{ article.dozaplaty  }} zł</span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value="{{ article.dozaplaty }}"><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</div></th>
                                     <th id="wynik_b{{ article.id }}">
                                         <div class="btn-group">
                                             <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
@@ -159,8 +159,9 @@
                         {{parent()}}
                         <script type="text/javascript">
 
-                            function changeOrderStatus(id, event) {
+                            function changeOrderStatus(id, user, event) {
                                 var order_id = id;
+                                var username = user;
                                 var element = event.currentTarget;
                                 var clicked = event.target;
                                 var status = $(element).val();
@@ -170,11 +171,12 @@
                                     url: url,
                                     data: {
                                         id: order_id,
-                                        status: status
+                                        status: status,
+                                        login: username
                                     },
                                     method: 'POST',
                                     success: function (data) {
-
+                                                console.log(username);
                                     }
                                 });
 
@@ -213,8 +215,9 @@
                                        $('#dozaplaty_edit'+order_id).html($('#dozaplaty_edit'+order_id).html()).show().siblings('div').hide();
                                   }
                             }
-                            function changeOrderPrice(id, event) {
+                            function changeOrderPrice(id, user, event) {
                                 var order_id = id;
+                                var username = user;
                                 var element = event.currentTarget;
                                 var clicked = event.target;
                                 var price = parseFloat($(element).val().replace(',', '.'));
@@ -229,7 +232,8 @@
                                     url: url,
                                     data: {
                                         id: order_id,
-                                        price: num
+                                        price: num,
+                                        login: username
                                     },
                                     method: 'POST',
                                     success: function (data) {
