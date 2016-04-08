@@ -257,6 +257,7 @@ class DashboardController extends Controller {
             'Przesłane' => 'przeslane',
             'W realizacji' => 'realizacja',
             'Wyprodukowane' => 'wyprodukowane',
+            'Zrealizowane' =>'zrealizowane',
             'Wszystkie' => 'all'
         );
         if (!isset($this->status_new_zam)) {

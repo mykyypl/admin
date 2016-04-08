@@ -113,9 +113,9 @@
                                     <th <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
                                     <th>Produkcja</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">jakie_zam</th>
-                                    <th>status</th>
                                     <th>send data</th>
                                     <th>nr-user-zam</th>
+                                    <th>status</th>
                                     <th>do zaplaty</th>
                                     <th>akcje</th>
                                     <th>zł</th>
@@ -133,8 +133,10 @@
                                             <button class="btn btn-success" onclick="changeButtonProdukcja('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button>
                                             </div></div>
                                     </th>
-                                    <th>{{ article.jakie_zam }}</th>
-                                    <th id="zmiana-status-{{ article.id }}">
+                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <h4><font color="red">M</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <h4><font color="red">MD</font></h4> {% else %} <h4><font color="red">R</font></h4>{# {{ article.jakie_zam }}#}{% endif %}</th>
+                                    <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
+                                    <th>{{ article.nr_user_zam  }}</th>
+                                                                        <th id="zmiana-status-{{ article.id }}">
                                         <select name="status_select" class="selectpicker"{% if article.status == 'wersja robocza' %} data-style="btn-info" {% elseif article.status == 'przesłane do realizacji' %} data-style="btn-warning" {% elseif article.status == 'oczekiwanie na zapłatę' %} data-style="btn-danger" {% elseif article.status == 'w realizacji' %} data-style="btn-primary" {% elseif article.status == 'wyprodukowane' %} data-style="btn-primary" {% else %} data-style="btn-success" {% endif %} id="{{ path('marcin_admin_dashboard_update', {'id': article.id }) }}" onchange="changeOrderStatus('{{ article.id }}', '{{ article.user }}', event)">
                                             <option value="wersja robocza"{% if article.status == 'wersja robocza' %} selected="selected" {% endif %}>wersja robocza</option>
                                             <option value="przesłane do realizacji"{% if article.status == 'przesłane do realizacji' %} selected="selected" {% endif %}>przesłane do realizacji</option>
@@ -143,8 +145,6 @@
                                             <option value="wyprodukowane"{% if article.status == 'wyprodukowane' %} selected="selected" {% endif %}>wyprodukowane</option>
                                             <option value="zrealizowane/odebrane"{% if article.status == 'zrealizowane/odebrane' %} selected="selected" {% endif %}>zrealizowane/odebrane</option></select>
                                         {#<h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4>#}</th>
-                                    <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
-                                    <th>{{ article.nr_user_zam  }}</th>
                                     <th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-warning" onclick="changeOrderText('{{ article.id }}', event)"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"> <div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value=""></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% else %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-danger" onclick="changeOrderText('{{ article.id }}', event)">{{ article.dozaplaty  }} zł</span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value="{{ article.dozaplaty }}"></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</div></th>
                                     <th id="wynik_b{{ article.id }}">
                                         <div class="btn-group">

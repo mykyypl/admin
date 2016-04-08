@@ -26,6 +26,9 @@ class TestRepository extends EntityRepository
             }else if('wyprodukowane' == $params['status']){
                 $qb->where('s.status = :wyprodukowane')
                         ->setParameter('wyprodukowane', 'wyprodukowane');
+            }else if('zrealizowane' == $params['status']){
+                $qb->where('s.status = :zrealizowane')
+                        ->setParameter('zrealizowane', 'zrealizowane/odebrane');
             }
         }
         
@@ -60,11 +63,16 @@ class TestRepository extends EntityRepository
                         ->setParameter('currDate', 'wyprodukowane')
                         ->getQuery()
                         ->getSingleScalarResult();
+        $zrealizowane = $qb->andWhere('a.status = :currDate')
+                        ->setParameter('currDate', 'zrealizowane/odebrane')
+                        ->getQuery()
+                        ->getSingleScalarResult();
         return array(
             'all' => $all,
             'przeslane' => $przeslane,
             'realizacja' => $realizacja,
-            'wyprodukowane' => $wyprodukowane
+            'wyprodukowane' => $wyprodukowane,
+            'zrealizowane' => $zrealizowane
         );
     }
     

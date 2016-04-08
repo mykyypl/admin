@@ -7,7 +7,13 @@ services:
         arguments: ["@doctrine"]
         tags:
             - { name: twig.extension }
-            
+    
+    marcin_admin.twig.extension.adminlive:
+        class: Marcin\AdminBundle\Twig\Extension\AdminliveExtension
+        arguments: ["@doctrine"]
+        tags:
+            - { name: twig.extension }
+    
             
     user_mailer:
         class: Marcin\AdminBundle\Mailer\UserMailer
