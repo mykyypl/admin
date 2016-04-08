@@ -64,25 +64,27 @@ class DashboardController extends Controller {
             $Zamowienie->setDozaplaty($result['price']);
         //$Zamowienie->setZaplacono($result['zaplacono']);
             $em->flush();
-            try {
-                $userE = $result['login'];
-                 //$em = $this->getDoctrine()->getManager();
-        
-        $userEmail = $em->createQueryBuilder()
-                ->select('a.email')
-                ->from('MarcinAdminBundle:Username', 'a')
-                 ->where('a.login = :identifier')
-                 ->setParameter('identifier', $userE)
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult();
-
-                $userManager = $this->get('user_manager');
-                $userManager->registerUsername($userEmail);
-            }
-            catch (UserException $exc) {
-                    $this->addFlash('error', $exc->getMessage());
-                }
+            /////////////////////////////////////// WYSYŁANIE WIADOMOŚCI EMAIL
+//            try {
+//                $userE = $result['login'];
+//                 //$em = $this->getDoctrine()->getManager();
+//        
+//        $userEmail = $em->createQueryBuilder()
+//                ->select('a.email')
+//                ->from('MarcinAdminBundle:Username', 'a')
+//                 ->where('a.login = :identifier')
+//                 ->setParameter('identifier', $userE)
+//                ->setMaxResults(1)
+//                ->getQuery()
+//                ->getOneOrNullResult();
+//
+//                $userManager = $this->get('user_manager');
+//                $userManager->registerUsername($userEmail);
+//            }
+//            catch (UserException $exc) {
+//                    $this->addFlash('error', $exc->getMessage());
+//                }
+            /////////////////////////////////////// KONIEC WYSYŁANIA WIADOMOŚCI EMAIL
         }
         elseif ($result['status'] == NULL && $result['zaplacono'] == NULL && $result['price'] == NULL) 
          {
