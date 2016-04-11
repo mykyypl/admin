@@ -25,14 +25,15 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/",
-     *       name="marcin_admin_shoper"
+     *       "/dodawanie-zamowien",
+     *       name="marcin_admin_shoper-dodawanie"
      * )
      *    
      * @Template()
      */
-    public function indexAction() {
+    public function dodawanieAction() {
 
+        
         $em = $this->getDoctrine()->getManager(); 
         $zamowienia_zapytanie = $em->createQuery('
             SELECT q.idzam FROM MarcinAdminBundle:Shoperzamowienia q          
@@ -66,7 +67,7 @@ class ShoperController extends Controller {
     } else {
             // wyświetlenie wyniku
             $session = $result[0];
-            $this->addFlash('success', 'Zalogowano w SHOPER. Identyfikator sesji: '.$session.'.');
+            //$this->addFlash('success', 'Zalogowano w SHOPER. Identyfikator sesji: '.$session.'.');
             //echo "Identyfikator sesji użytkownika: " . $session;
     }
 
@@ -95,42 +96,110 @@ class ShoperController extends Controller {
         foreach ($result as $item) {
             $order = (Array)$item;
             //echo "Id zamówienia: " . $order['order_id'] . "<br>";
-            $zamowienia = new Shoperzamowienia();
-            $zamowienia->setIdzam($order['order_id']);
-            $zamowienia->setSuma($order['sum']);
-            $zamowienia->setDate($order['date']);
+
+            $numer_zamowienia = $order['order_id'];
+            $suma_zamowienia = $order['sum'];
+            $data_zamowienia = $order['date'];
             
             $deliveryAddress = (Array)$order['billingAddress'];
-            $zamowienia->setFirma($deliveryAddress['company']);
-            $zamowienia->setNip($deliveryAddress['tax_id']);
-            $zamowienia->setImie($deliveryAddress['firstname']);
-            $zamowienia->setNazwisko($deliveryAddress['lastname']);
-            $zamowienia->setKodpocztowy($deliveryAddress['postcode']);
-            $zamowienia->setMiejscowosc($deliveryAddress['city']);
-            $zamowienia->setAdres1($deliveryAddress['street1']);
-            $zamowienia->setAdres2($deliveryAddress['street2']);
-            $zamowienia->setTelefon($deliveryAddress['phone']);
-            $zamowienia->setWojewodztwo($deliveryAddress['state']);
+            $firma_zamowienia = $deliveryAddress['company'];
+            $nip_zamowienia = $deliveryAddress['tax_id'];
+            $imie_zamowienia = $deliveryAddress['firstname'];
+            $nazwisko_zamowienia = $deliveryAddress['lastname'];
+            $kod_zamowienia = $deliveryAddress['postcode'];
+            $miejscowosc_zamowienia = $deliveryAddress['city'];
+            $adres1_zamowienia = $deliveryAddress['street1'];
+            $adres2_zamowienia = $deliveryAddress['street2'];
+            $telefon_zamowienia = $deliveryAddress['phone'];
+            $wojewodztwo_zamowienia = $deliveryAddress['state'];
             
             $products = (Array)$order['products'];
             foreach ($products as $p) {
                 $product = (Array)$p;
+                $zamowienia = new Shoperzamowienia();
+                $zamowienia->setIdzam($numer_zamowienia);
+                $zamowienia->setSuma($suma_zamowienia);
+                $zamowienia->setDate($data_zamowienia);
+                
+                $zamowienia->setFirma($firma_zamowienia);
+                $zamowienia->setNip($nip_zamowienia);
+                $zamowienia->setImie($imie_zamowienia);
+                $zamowienia->setNazwisko($nazwisko_zamowienia);
+                $zamowienia->setKodpocztowy($kod_zamowienia);
+                $zamowienia->setMiejscowosc($miejscowosc_zamowienia);
+                $zamowienia->setAdres1($adres1_zamowienia);
+                $zamowienia->setAdres2($adres2_zamowienia);
+                $zamowienia->setTelefon($telefon_zamowienia);
+                $zamowienia->setWojewodztwo($wojewodztwo_zamowienia);
+                
                 $zamowienia->setNazwa($product['name']);
                 $zamowienia->setKod($product['code']);
                 $zamowienia->setWariant($product['option']);
                 $zamowienia->setIlosc($product['quantity']);
                 $zamowienia->setJednostka($product['unit']);
+                $em->persist($zamowienia);
+                $em->flush();   
             }
-            
+
             //$em = $this->getDoctrine()->getManager();
-            $em->persist($zamowienia);
-            $em->flush();
+ 
+        }
+        if ($result == null)
+        {
+          $this->addFlash('success', 'Poprawnie wykonano polecenie. Brak nowych zamówień! Identyfikator sesji: '.$session); 
+        } else {
+         $this->addFlash('success', 'Poprawnie wykonano polecenie. Zamówienia zostały pobrane! Identyfikator sesji: '.$session); 
         }
     }
 } else {
     $this->addFlash('error', 'Wystąpił błąd logowania.');
 }
 
-        return $this->render('MarcinAdminBundle:Shoper:index.html.twig');
+        //return $this->render('MarcinAdminBundle:Shoper:index.html.twig');
+        return $this->redirect($this->generateUrl('marcin_admin_shoper'));
+    }
+    
+    /**
+     * @Route(
+     *       "/{page}",
+     *       name="marcin_admin_shoper",
+     *       requirements={"page"="\d+"},
+     *       defaults={"page"=1}
+     * )
+     *    
+     * @Template()
+     */
+    public function indexAction(Request $Request, $page) {
+        $queryParams = array(
+            'idLike' => $Request->query->get('idLike'),
+
+        ); 
+     
+        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        //$statistics = $StatUser->getStatistics();
+        
+        $qb = $StatZam->getQueryBuilder($queryParams);
+        
+        $paginationLimit = $this->container->getParameter('admin.pagination_limit');
+        $limits = array(2, 5, 10, 15);
+        
+        $limit = $Request->query->get('limit', $paginationLimit);
+        
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($qb, $page, $limit);
+        
+        
+        return $this->render('MarcinAdminBundle:Shoper:index.html.twig',
+            array(
+            'pageTitle'            => 'GM Panel Shoper zamówienia',
+            'queryParams' => $queryParams,
+            'limits' => $limits,
+            'currLimit' => $limit,
+            'pagination' => $pagination
+            //'updateTokenName' => $this->updateTokenName,
+            //'aktywacjaTokenName' => $this->aktywacjaTokenName,
+            //'csrfProvider' => $this->get('form.csrf_provider')
+                )
+        );
     }
 }

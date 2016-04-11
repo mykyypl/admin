@@ -3,4 +3,5 @@
             <!-- Optionally, you can add icons to the links -->
             <li class="{% if app.request.get('_route') == 'marcin_admin_dashboard' %}active{% endif %}"><a href="{{ path('marcin_admin_dashboard') }}"><i class="fa fa-link"></i> <span>Panel</span><span class="label label-primary pull-right">{{ navigation.zamowienia.count.all }}</span></a></li>
             <li class="{% if app.request.get('_route') == 'marcin_admin_username' %}active{% endif %}"><a href="{{ path('marcin_admin_username') }}"><i class="fa fa-user"></i> <span>Użytkownicy</span><span class="label label-primary pull-right">{{ navigation.username.count.user }}</span></a></li>
+            <li class="{% if app.request.get('_route') == 'marcin_admin_shoper' %}active{% endif %}"><a href="{{ path('marcin_admin_shoper') }}"><i class="fa fa-shopping-cart"></i> <span>Zamówienia sklep</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>
           </ul>

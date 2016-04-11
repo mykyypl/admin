@@ -4,8 +4,70 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
 {% endblock %}
-{% block body %}
-{% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}    
+{% block body %} 
+ <section class="content-header">
+          <h1>
+            Pulpit
+            <small>zarządzania GM</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
+            <li class="active">tutaj</li>
+          </ol>
+        </section>
+                    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+        <!-- Main content -->
+        <section class="content">
+            <div class="box box-default color-palette-box">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia Shoper</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="{{ path('marcin_admin_shoper-dodawanie') }}" class="btn btn-primary">pobierz zamówienia</a>
+                        <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">{{ knp_pagination_sortable(pagination, 'ID zamówienia', 's.idzam') }}</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Firma</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Imie Nazwisko</th>
+                                    <th>Produkty</th>
+                                    <th>ilości</th>
+                                    <th>akcje</th>
+                                </tr>
+                            </thead>
+        
+    {% for shoper in pagination  %}
+       <tr>
+           <th>{{ shoper.idzam }}</th>
+           <th>{{ shoper.firma }}</th>
+           <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
+           <th>{{ shoper.nazwa }} {{ shoper.wariant }}</th>
+           <th>{{ shoper.ilosc }} {{ shoper.jednostka }}</th>
+           <th></th>
+       </tr>
+    {% endfor %}
+        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+                            Wszystkich zamówień jest: {{ pagination.getTotalItemCount }}
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate">
+                            {{ knp_pagination_render(pagination, 'MarcinAdminBundle:Pagination:admin_pagination.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+            
+          </div>
+
+</section>
 {% endblock %}
     {% block javascripts %}
         {{parent()}}
