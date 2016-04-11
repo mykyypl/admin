@@ -1,0 +1,12 @@
+{% extends 'MarcinAdminBundle::base.html.twig' %}
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
+   <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
+{% endblock %}
+{% block body %}
+{% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}    
+{% endblock %}
+    {% block javascripts %}
+        {{parent()}}
+        {% endblock %}

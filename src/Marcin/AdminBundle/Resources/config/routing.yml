@@ -12,6 +12,11 @@ marcin_admin_username:
     type: annotation
     prefix: /u/user
     
+marcin_admin_shoper:
+    resource: "@MarcinAdminBundle/Controller/ShoperController.php"
+    type: annotation
+    prefix: /u/shoper
+    
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
 #    prefix: /u/user/form/{id}
