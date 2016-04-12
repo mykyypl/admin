@@ -15,12 +15,136 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Marcin\AdminBundle\Entity\Zamowienia;
 use Marcin\AdminBundle\Entity\Shoperzamowienia;
-use Marcin\AdminBundle\Form\Type\TestType;
+use Marcin\AdminBundle\Form\Type\ShoperType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
 
 class ShoperController extends Controller {
     
+    
+    /**
+     * @Route("/form/update-complete", 
+     *       name="marcin_admin_shoper_ajax",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     *
+     */
+    public function updateZamAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'status' => $Request->request->get('status'),
+            'idzamid' => $Request->request->get('idzamid')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+      
+        $em = $this->getDoctrine()->getManager();
+        //$Zamowienie->setStatus($result['status']);
+        $Zamowienie->setProducent($result['status']);
+        $em->flush();
+
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route("/form/send", 
+     *       name="marcin_admin_shoper_send",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     *
+     */
+    public function sendAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'zaznaczono' => $Request->request->get('zaznaczono')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+        $em = $this->getDoctrine()->getManager();
+        $Zamowienie->setZaznaczono($result['zaznaczono']);
+        $em->flush();
+          /////////////////////////////////////// WYSYŁANIE WIADOMOŚCI EMAIL
+//            try {
+//                $userE = $result['login'];
+//                 //$em = $this->getDoctrine()->getManager();
+//        
+//        $userEmail = $em->createQueryBuilder()
+//                ->select('a.email')
+//                ->from('MarcinAdminBundle:Username', 'a')
+//                 ->where('a.login = :identifier')
+//                 ->setParameter('identifier', $userE)
+//                ->setMaxResults(1)
+//                ->getQuery()
+//                ->getOneOrNullResult();
+//
+//                $userManager = $this->get('user_manager');
+//                $userManager->registerUsername($userEmail);
+//            }
+//            catch (UserException $exc) {
+//                    $this->addFlash('error', $exc->getMessage());
+//                }
+            /////////////////////////////////////// KONIEC WYSYŁANIA WIADOMOŚCI EMAIL
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route(
+     *      "/form/{id}", 
+     *      name="marcin_admin_shoper_form",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=NULL}
+     * )
+     * 
+     * @Template()
+     */
+    public function formAction(Request $Request, Shoperzamowienia $Shoper = NULL) {
+        if (null == $Shoper) {
+            $Shoper = new Shoperzamowienia();
+            $newShoperyForm = TRUE;
+        }
+
+        $form = $this->createForm(new ShoperType(), $Shoper);
+
+        $form->handleRequest($Request);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($Shoper);
+            $em->flush();
+            $message = (isset($newShoperyForm)) ? 'Poprawnie dodano.' : 'Użytkownik został zaaktualizowany.';
+            $this->addFlash('success', $message);
+            return $this->redirect($this->generateUrl('marcin_admin_shoper', array(
+                                'id' => $Shoper->getId()
+            )));
+        }
+
+        return $this->render('MarcinAdminBundle:Shoper:form.html.twig', array(
+                    'pageTitle' => (isset($newShoperyForm) ? 'Zamowienia <small>utwórz nowy</small>' : 'Zamowienia <small>edycja</small>'),
+                    'currPage' => 'uzytkownicy',
+                    'form' => $form->createView(),
+                    'zamowienia' => $Shoper,
+                        )
+        );
+    }
     
     
     /**
@@ -192,6 +316,50 @@ class ShoperController extends Controller {
         return $this->render('MarcinAdminBundle:Shoper:index.html.twig',
             array(
             'pageTitle'            => 'GM Panel Shoper zamówienia',
+            'queryParams' => $queryParams,
+            'limits' => $limits,
+            'currLimit' => $limit,
+            'pagination' => $pagination
+            //'updateTokenName' => $this->updateTokenName,
+            //'aktywacjaTokenName' => $this->aktywacjaTokenName,
+            //'csrfProvider' => $this->get('form.csrf_provider')
+                )
+        );
+    }
+    
+    /**
+     * @Route(
+     *       "/klinar/{page}",
+     *       name="marcin_admin_shoper_klinar",
+     *       requirements={"page"="\d+"},
+     *       defaults={"page"=1}
+     * )
+     *    
+     * @Template()
+     */
+    public function klinarAction(Request $Request, $page) {
+        $queryParams = array(
+            'idLike' => $Request->query->get('idLike'),
+
+        ); 
+     
+        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        //$statistics = $StatUser->getStatistics();
+        
+        $qb = $StatZam->getKlinarBuilder($queryParams);
+        
+        $paginationLimit = $this->container->getParameter('admin.pagination_limit');
+        $limits = array(2, 5, 10, 15);
+        
+        $limit = $Request->query->get('limit', $paginationLimit);
+        
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($qb, $page, $limit);
+        
+        
+        return $this->render('MarcinAdminBundle:Shoper:klinar.html.twig',
+            array(
+            'pageTitle'            => 'GM Panel Shoper zamówienia klinar',
             'queryParams' => $queryParams,
             'limits' => $limits,
             'currLimit' => $limit,

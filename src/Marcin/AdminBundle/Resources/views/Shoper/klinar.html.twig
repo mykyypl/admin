@@ -25,7 +25,7 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <a href="{{ path('marcin_admin_shoper-dodawanie') }}" class="btn btn-primary">pobierz zamówienia</a>
+                       {# <a href="{{ path('marcin_admin_shoper-dodawanie') }}" class="btn btn-primary">pobierz zamówienia</a>#}
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
@@ -55,7 +55,9 @@
                                             <option value="Invest"{% if shoper.producent == 'Invest' %} selected="selected" {% endif %}>Invest</option>
                                             <option value="GrupaMAGNUM"{% if shoper.producent == 'GrupaMAGNUM' %} selected="selected" {% endif %}>GrupaMAGNUM</option></select>
             </th>
-           <th></th>
+           <th><div class="checkbox checkbox-success">
+                                                <input style="flat-red" id="spr" type="checkbox" value="" onclick="changeOrderKlinar('{{ shoper.id }}', event)" {% if shoper.zaznaczono == '1' %}checked {% endif %} /><label for="checkbox1">
+    </label></div></th>
        </tr>
     {% endfor %}
         </table>
@@ -83,24 +85,30 @@
         {{parent()}}
         <script type="text/javascript">
 
-                            function changeOrderStatus(id, idzam, event) {
+                            function changeOrderKlinar(id, event) {
                                 var order_id = id;
-                                var idzamid = idzam;
                                 var element = event.currentTarget;
                                 var clicked = event.target;
-                                var wartosc = $(element).val();
-                                var url = '{{ path('marcin_admin_shoper_ajax') }}';
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var zaplacono = 1;
+        } else {
+             console.log('odznaczono!');
+             var zaplacono = 0;
+        }
+                                
+                                var url = '{{ path('marcin_admin_shoper_send') }}';
 
                                 $.ajax({
                                     url: url,
                                     data: {
                                         id: order_id,
-                                        status: wartosc,
-                                        idzamid: idzamid
+                                        zaznaczono: zaplacono
                                     },
                                     method: 'POST',
                                     success: function (data) {
-                                                console.log(idzamid);
+                                                console.log(order_id);
                                     }
                                 });
 

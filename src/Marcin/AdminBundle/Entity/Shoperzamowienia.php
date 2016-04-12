@@ -122,6 +122,17 @@ class Shoperzamowienia {
     private $wojewodztwo;
     
     /**
+     * @ORM\Column(type="string")
+     */
+    private $producent;
+    
+    /**
+     * @ORM\Column(type="integer")
+     * 
+     */
+    private $zaznaczono;
+    
+    /**
      * Get id
      *
      * 
@@ -538,5 +549,50 @@ class Shoperzamowienia {
     public function getWojewodztwo()
     {
         return $this->wojewodztwo;
+    }
+    
+    /**
+     * Set producent
+     *
+     * @param string $producent
+     *
+     * @return Shoperzamowienia
+     */
+    public function setProducent($producent)
+    {
+        $this->producent = $producent;
+        return $this;
+    }
+    /**
+     * Get producent
+     *
+     * @return string
+     */
+    public function getProducent()
+    {
+        return $this->producent;
+    }
+    
+    /**
+     * Get zaznaczono
+     *
+     * 
+     */
+    public function getZaznaczono()
+    {
+        return $this->zaznaczono;
+    }
+    
+    /**
+     * Set zaznaczono
+     *
+     * @param integer $zaznaczono
+     *
+     * @return Shoperzamowienia
+     */
+    public function setZaznaczono($zaznaczono)
+    {
+        $this->zaznaczono = $zaznaczono;
+        return $this;
     }
 }

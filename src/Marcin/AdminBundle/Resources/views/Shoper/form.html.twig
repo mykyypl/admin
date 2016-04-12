@@ -1,0 +1,86 @@
+{% extends 'MarcinAdminBundle::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
+{% block body %}
+            <section class="content-header">
+          <h1>
+            Edycja
+            <small>Dodawanie zamowienia</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
+            <li class="active">tutaj</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="box box-default color-palette-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-tag"></i> Edycja </h3>
+                        </div>
+                        <div class="box-body">
+
+                         {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+                        {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
+                        <div class="form-group">
+                            {{ form_row(form.imie) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.nazwisko) }}
+                        </div>{# , {'attr': {'disabled':'true'} } #}
+                        <div class="form-group">
+                            {{ form_row(form.adres1) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.adres2) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.miejscowosc) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.kodpocztowy) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.nazwa) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.wariant) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.ilosc) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.jednostka) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_rest(form) }}
+                        {{ form_row(form.save) }} 
+                        </div>
+                        {{ form_end(form) }}
+                        <a href="{{ path('marcin_admin_shoper') }}" class="btn btn-primary">Wstecz</a> 
+
+                        </div>
+                    </div>
+                </div>
+            <div class="col-md-6">
+                <div class="box box-default color-palette-box">
+                    <div class="box-header with-border">
+                     <h3 class="box-title"><i class="fa fa-tag"></i> Edycja </h3>
+                    </div>
+                    <div class="box-body">
+
+dsad
+
+                    </div>
+                </div>
+            </div>
+            </div>
+</section>
+        {% endblock %}
+{% block javascripts %}
+    {{parent()}}
+{% endblock %}
