@@ -156,7 +156,7 @@
                                             </a>
                                         </div> {% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
                                             {% set deleteUrl = path('marcin_admin_dashboard_delete', {'id': article.id, 'token': tokenName}) %}
-                                        <a href="{{ deleteUrl }}" class="btn btn-danger" data-confirmAction="">
+                                        <a id="potwierdzenie" href="{{ deleteUrl }}" class="potwierdzenie btn btn-danger" data-confirmAction="">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a></th>
                                         <th><div class="checkbox checkbox-success">
@@ -309,6 +309,15 @@
                                 var button_id = id;
                                 $('#numerprodukcji'+button_id).load(document.URL + ' #numerprodukcji'+button_id);
                             }
+                            
+    var elems = document.getElementsByClassName('potwierdzenie');
+    var confirmIt = function (e) {
+        if (!confirm('Czy napewno usunąć?')) e.preventDefault();
+    };
+    for (var i = 0, l = elems.length; i < l; i++) {
+        elems[i].addEventListener('click', confirmIt, false);
+    }
+
                             {#      $(function(){
                                        $('.ajax-task-complete').on({
                                            click: function(e) {

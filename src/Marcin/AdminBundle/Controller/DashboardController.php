@@ -354,7 +354,7 @@ class DashboardController extends Controller {
             $query = $em->createQuery("DELETE MarcinAdminBundle:Produkty c WHERE c.id_zam = '$id'");
             $query->execute();
 
-            $this->addFlash('success', 'Poprawnie usunięto slide.');
+            $this->addFlash('success', 'Poprawnie usunięto zamówienie.');
         }
 
         return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
