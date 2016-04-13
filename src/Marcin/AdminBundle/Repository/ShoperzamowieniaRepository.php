@@ -53,6 +53,16 @@ class ShoperzamowieniaRepository extends EntityRepository
         return $qb;
     }
     
+        public function getKlinarBuildertest(){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.zaznaczono = :realizacja')
+                ->setParameter('realizacja', '1')
+              ->addOrderBy('s.id', 'DESC');
+        
+        return $qb;
+    }
      
     
 }

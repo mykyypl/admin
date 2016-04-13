@@ -84,7 +84,7 @@ class ShoperController extends Controller {
         $Zamowienie->setZaznaczono($result['zaznaczono']);
         $em->flush();
           /////////////////////////////////////// WYSYŁANIE WIADOMOŚCI EMAIL
-//            try {
+           // try {
 //                $userE = $result['login'];
 //                 //$em = $this->getDoctrine()->getManager();
 //        
@@ -96,13 +96,14 @@ class ShoperController extends Controller {
 //                ->setMaxResults(1)
 //                ->getQuery()
 //                ->getOneOrNullResult();
-//
-//                $userManager = $this->get('user_manager');
-//                $userManager->registerUsername($userEmail);
-//            }
-//            catch (UserException $exc) {
-//                    $this->addFlash('error', $exc->getMessage());
-//                }
+
+              //  $userEmail = 'marcin@grupamagnum.eu';
+              //  $userManager = $this->get('user_manager');
+              //  $userManager->registerUsername($userEmail);
+           // }
+          //  catch (UserException $exc) {
+           //         $this->addFlash('error', $exc->getMessage());
+            //    }
             /////////////////////////////////////// KONIEC WYSYŁANIA WIADOMOŚCI EMAIL
         return new JsonResponse(true);
     }
@@ -369,5 +370,38 @@ class ShoperController extends Controller {
             //'csrfProvider' => $this->get('form.csrf_provider')
                 )
         );
+    }
+    
+    /**
+     * @Route("/form/send_klinar", 
+     *       name="marcin_admin_shoper_send_klinar"
+     * )
+     *
+     */
+    public function sendklinarAction() {
+
+          /////////////////////////////////////// WYSYŁANIE WIADOMOŚCI EMAIL
+            try {
+//                $userE = $result['login'];
+//                 //$em = $this->getDoctrine()->getManager();
+//        
+//        $userEmail = $em->createQueryBuilder()
+//                ->select('a.email')
+//                ->from('MarcinAdminBundle:Username', 'a')
+//                 ->where('a.login = :identifier')
+//                 ->setParameter('identifier', $userE)
+//                ->setMaxResults(1)
+//                ->getQuery()
+//                ->getOneOrNullResult();
+
+                $userEmail = 'marcin@grupamagnum.eu';
+                $userManager = $this->get('user_manager');
+                $userManager->registerUsername($userEmail);
+            }
+            catch (UserException $exc) {
+                    $this->addFlash('error', $exc->getMessage());
+                }
+            /////////////////////////////////////// KONIEC WYSYŁANIA WIADOMOŚCI EMAIL
+       return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar'));
     }
 }

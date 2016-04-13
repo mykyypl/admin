@@ -12,3 +12,29 @@
     </td>
     <td style="width: 25px;"></td>
 </tr>
+{% for dane in klinar_dane  %}
+ 
+          {{ dane.firma }}
+           {{ dane.imie }} {{ dane.nazwisko }}
+
+    {% endfor %}
+
+ <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th>Firma</th>
+                                    <th>Imie Nazwisko</th>
+                                    <th>Produkty</th>
+                                    <th>ilości</th>
+
+                                </tr>
+                            </thead>
+{% for shoper in klinar  %}
+       <tr>
+           <th>{{ shoper.firma }}</th>
+           <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
+           <th>{{ shoper.nazwa }} {{ shoper.wariant }}</th>
+           <th>{{ shoper.ilosc }} {{ shoper.jednostka }}</th>
+       </tr>
+    {% endfor %}
+ </table>

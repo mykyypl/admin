@@ -17,7 +17,7 @@ services:
             
     user_mailer:
         class: Marcin\AdminBundle\Mailer\UserMailer
-        arguments: [@mailer, "produkcja@grupamagnum.eu", "GrupaMAGNUM"]
+        arguments: [@mailer, "sklep@grupamagnum.eu", "Sklep GrupaMAGNUM"]
 
     user_manager:
         class: Marcin\AdminBundle\Manager\UserManager

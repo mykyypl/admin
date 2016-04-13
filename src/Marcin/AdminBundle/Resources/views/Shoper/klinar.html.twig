@@ -25,7 +25,7 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
-                       {# <a href="{{ path('marcin_admin_shoper-dodawanie') }}" class="btn btn-primary">pobierz zamówienia</a>#}
+                       <a href="{{ path('marcin_admin_shoper_send_klinar') }}" class="btn btn-primary">wyślij zaznaczone</a>
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
@@ -55,9 +55,10 @@
                                             <option value="Invest"{% if shoper.producent == 'Invest' %} selected="selected" {% endif %}>Invest</option>
                                             <option value="GrupaMAGNUM"{% if shoper.producent == 'GrupaMAGNUM' %} selected="selected" {% endif %}>GrupaMAGNUM</option></select>
             </th>
-           <th><div class="checkbox checkbox-success">
+           <th>{% if shoper.zaznaczono == '2' %}wysłano{% else %}<div class="checkbox checkbox-success">
                                                 <input style="flat-red" id="spr" type="checkbox" value="" onclick="changeOrderKlinar('{{ shoper.id }}', event)" {% if shoper.zaznaczono == '1' %}checked {% endif %} /><label for="checkbox1">
-    </label></div></th>
+                                                </label></div>{% endif %}
+           </th>
        </tr>
     {% endfor %}
         </table>

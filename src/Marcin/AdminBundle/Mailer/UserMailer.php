@@ -25,7 +25,8 @@ class UserMailer {
         $message = \Swift_Message::newInstance()
                         ->setSubject($subject)
                         ->setFrom($this->fromEmail, $this->fromName)
-                        ->setTo($userEmail['email'])
+                        ->setTo('marcin@grupamagnum.eu')
+                        ->setCc('sklep@grupamagnum.eu')
                         ->setBody($htmlBody, 'text/html');
         
         $this->swiftMailer->send($message);
