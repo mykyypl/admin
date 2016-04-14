@@ -26,44 +26,22 @@
                 <div class="row">
                     <div class="col-sm-12">
                        {#<a href="{{ path('marcin_admin_shoper_send_klinar') }}" class="btn btn-primary">wyślij zaznaczone</a>#}
-                       <a href="{{ path('marcin_admin_shoper_klinar_pokaz') }}" class="btn btn-success">Szczegóły wiadomośći wysłanych</a>
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">{{ knp_pagination_sortable(pagination, 'ID zamówienia', 's.idzam') }}</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Firma</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Imie Nazwisko</th>
-                                    <th>Produkty</th>
-                                    <th>Wariant</th>
-                                    <th>ilości</th>
-                                    {#<th>producent</th>#}
-                                    <th>uwagi</th>
                                     <th>akcje</th>
                                 </tr>
                             </thead>
         
     {% for shoper in pagination  %}
        <tr>
-           <th>{% if shoper.zaznaczono == '66' %}{{ shoper.idzam }} {% else %}<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">{{ shoper.idzam }}</a>{% endif %}</th>
+           <th>{#<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">#}{{ shoper.idzam }}{#</a>#}</th>
            <th>{{ shoper.firma }}</th>
            <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
-           <th>{{ shoper.nazwa }}  -(zmiana opisu)</th>
-           <th>{{ shoper.wariant }}</th>
-           <th>{{ shoper.ilosc }} {{ shoper.jednostka }}</th>
-           {#<th id="zmiana-status-{{ shoper.id }}">
-                                        <select name="status_select" class="selectpicker"{% if shoper.producent == '' %} data-style="btn-default" {% elseif shoper.producent == 'Klinar' %} data-style="btn-warning" {% elseif shoper.producent == 'ProTape' %} data-style="btn-danger" {% elseif shoper.producent == 'Hanno' %} data-style="btn-primary" {% elseif shoper.producent == 'Invest' %} data-style="btn-primary" {% else %} data-style="btn-success" {% endif %} id="{{ path('marcin_admin_shoper_ajax', {'id': shoper.id }) }}" onchange="changeOrderStatus('{{ shoper.id }}', '{{ shoper.idzam }}', event)">
-                                            <option{% if shoper.producent == '' %} selected="selected" {% endif %}>Proszę wybrać</option>
-                                            <option value="Klinar"{% if shoper.producent == 'Klinar' %} selected="selected" {% endif %}>Klinar</option>
-                                            <option value="ProTape"{% if shoper.producent == 'ProTape' %} selected="selected" {% endif %}>ProTape</option>
-                                            <option value="Hanno"{% if shoper.producent == 'Hanno' %} selected="selected" {% endif %}>Hanno</option>
-                                            <option value="Invest"{% if shoper.producent == 'Invest' %} selected="selected" {% endif %}>Invest</option>
-                                            <option value="GrupaMAGNUM"{% if shoper.producent == 'GrupaMAGNUM' %} selected="selected" {% endif %}>GrupaMAGNUM</option></select>
-            </th>#}
-           <th>{% if shoper.uwagi == NULL %} dodaj opis {% else %}{{ shoper.uwagi }}{% endif %}</th>
-           <th>{% if shoper.zaznaczono == '66' %}<a href="{{ path('marcin_admin_shoper_klinar_pokaz') }}" class="btn btn-success">wysłano</a>{% else %}<div class="checkbox checkbox-success">
-                                                <input style="flat-red" id="spr" type="checkbox" value="" onclick="changeOrderKlinar('{{ shoper.id }}', event)" {% if shoper.zaznaczono == '1' %}checked {% endif %} /><label for="checkbox1">
-                                                </label></div>{% endif %}
-           </th>
+           <th> {% if( shoper.datawyslania == null) %}<a href="{{ path('marcin_admin_shoper_send_klinar', {'id': shoper.id, 'idzam': shoper.idzam}) }}" class="btn btn-primary">wyślij zamówienie</a>{% else %} {{ shoper.datawyslania|date("Y-m-d H:i:s") }} {% endif %}</th>
        </tr>
     {% endfor %}
         </table>

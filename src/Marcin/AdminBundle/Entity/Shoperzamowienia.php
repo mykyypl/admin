@@ -133,6 +133,17 @@ class Shoperzamowienia {
     private $zaznaczono;
     
     /**
+     * @ORM\Column(type="integer")
+     * 
+     */
+    private $idposrednik;
+    
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $uwagi;
+    
+    /**
      * Get id
      *
      * 
@@ -594,5 +605,50 @@ class Shoperzamowienia {
     {
         $this->zaznaczono = $zaznaczono;
         return $this;
+    }
+    
+    /**
+     * Get idposrednik
+     *
+     * 
+     */
+    public function getIdposrednik()
+    {
+        return $this->idposrednik;
+    }
+    
+    /**
+     * Set idposrednik
+     *
+     * @param integer $idposrednik
+     *
+     * @return Shoperzamowienia
+     */
+    public function setIdposrednik($idposrednik)
+    {
+        $this->idposrednik = $idposrednik;
+        return $this;
+    }
+    
+    /**
+     * Set uwagi
+     *
+     * @param string $uwagi
+     *
+     * @return Shoperzamowienia
+     */
+    public function setUwagi($uwagi)
+    {
+        $this->uwagi = $uwagi;
+        return $this;
+    }
+    /**
+     * Get uwagi
+     *
+     * @return string
+     */
+    public function getUwagi()
+    {
+        return $this->uwagi;
     }
 }

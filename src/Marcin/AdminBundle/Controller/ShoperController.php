@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Marcin\AdminBundle\Entity\Zamowienia;
 use Marcin\AdminBundle\Entity\Shoperzamowienia;
+use Marcin\AdminBundle\Entity\Shoperklinar;
 use Marcin\AdminBundle\Form\Type\ShoperType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
@@ -373,13 +374,20 @@ class ShoperController extends Controller {
     }
     
     /**
-     * @Route("/form/send_klinar", 
+     * @Route("/form/send_klinar/{id}/{idzam}", 
      *       name="marcin_admin_shoper_send_klinar"
      * )
      *
      */
-    public function sendklinarAction() {
-
+    public function sendklinarAction($id, $idzam) {
+        
+//        $request = $this->getRequest();
+//         //$request = array(
+//        $id->query->get('id'),
+//         //'id' => query->get('id'),
+//       // $idzam->query->get('idzam')
+//                 
+//    );
           /////////////////////////////////////// WYSYŁANIE WIADOMOŚCI EMAIL
             try {
 //                $userE = $result['login'];
@@ -394,14 +402,202 @@ class ShoperController extends Controller {
 //                ->getQuery()
 //                ->getOneOrNullResult();
 
-                $userEmail = 'marcin@grupamagnum.eu';
+               // $userEmail = 'marcin@grupamagnum.eu';
                 $userManager = $this->get('user_manager');
-                $userManager->registerUsername($userEmail);
+                $userManager->registerUsername($id, $idzam);
+                $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
             }
             catch (UserException $exc) {
                     $this->addFlash('error', $exc->getMessage());
                 }
             /////////////////////////////////////// KONIEC WYSYŁANIA WIADOMOŚCI EMAIL
        return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar'));
+    }
+    
+    /**
+     * @Route(
+     *      "/klinar/show/{idzam}", 
+     *      name="marcin_admin_shoper_klinar_show",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=NULL}
+     * )
+     * 
+     * @Template()
+     */
+    public function klinarshowAction(Request $Request, $idzam) {
+//        if (null == $Uzytkownicy) {
+//            $Uzytkownicy = new Username();
+//            $newUzytkownicyForm = TRUE;
+//        }
+            
+        $zamowienia_klinar = new Shoperklinar();
+        
+       $em = $this->getDoctrine()->getManager();
+
+
+        $qb_klinar = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Shoperzamowienia', 'a')
+                 ->where('a.zaznaczono = :identifier AND a.producent = :Klinar AND a.idzam = :idzam')
+                 //->andWhere('a.producent = Klinar' )
+                 ->setParameter('identifier', '1')
+                ->setParameter('Klinar', 'Klinar')
+                ->setParameter('idzam', $idzam)
+                
+                 //->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        if ($qb_klinar == null) {
+             $this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
+             return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar'));
+        } else {
+        
+        $firma = $qb_klinar[0]->getFirma();
+        $imie = $qb_klinar[0]->getImie();
+        $nazwisko = $qb_klinar[0]->getNazwisko();
+        $miejscowosc = $qb_klinar[0]->getMiejscowosc();
+        $kodpocztowy = $qb_klinar[0]->getKodpocztowy();
+        $adres1 = $qb_klinar[0]->getAdres1();
+        $adres2 = $qb_klinar[0]->getAdres2();
+        $telefon = $qb_klinar[0]->getTelefon();
+        
+        $zamowienia_klinar->setIdzam($idzam);
+        $zamowienia_klinar->setFirma($firma);
+        $zamowienia_klinar->setImie($imie);
+        $zamowienia_klinar->setNazwisko($nazwisko);
+        $zamowienia_klinar->setAdres1($adres1);
+        $zamowienia_klinar->setAdres2($adres2);
+        $zamowienia_klinar->setKodpocztowy($kodpocztowy);
+        $zamowienia_klinar->setMiejscowosc($miejscowosc);
+        $zamowienia_klinar->setTelefon($telefon);
+        
+        $em->persist($zamowienia_klinar);
+        $em->flush();
+            
+            $sprwadzam = $zamowienia_klinar->getId();
+            
+             foreach($qb_klinar as $posrednik)
+             {
+                $posrednik->setIdposrednik($sprwadzam);
+                $posrednik->setZaznaczono('66');
+                // klinar -> 66
+                $em->flush();
+             }
+            
+       // print_r($Request);
+//        $form = $this->createForm(new UzytkownicyType(), $Uzytkownicy);
+//
+//        $form->handleRequest($Request);
+//        if ($form->isValid()) {
+//            $em = $this->getDoctrine()->getManager();
+//            $em->persist($Uzytkownicy);
+//            $em->flush();
+//            $message = (isset($newUzytkownicyForm)) ? 'Poprawnie dodano.' : 'Użytkownik został zaaktualizowany.';
+//            $this->addFlash('success', $message);
+//            return $this->redirect($this->generateUrl('marcin_admin_username', array(
+//                                'id' => $Uzytkownicy->getId()
+//            )));
+//        }
+
+//        return $this->render('MarcinAdminBundle:Shoper:klinar_posrednik.html.twig'//, array(
+////                    'pageTitle' => (isset($newUzytkownicyForm) ? 'Zamowienia <small>utwórz nowy</small>' : 'Zamowienia <small>edycja użytkownika</small>'),
+////                    'currPage' => 'uzytkownicy',
+////                    'form' => $form->createView(),
+////                    'uzytkownicy' => $Uzytkownicy,
+////                        )
+//        );
+             $this->addFlash('success', 'Poprawnie wygenerowano nowy formularz!');
+             return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar_pokaz'));
+    }
+    }
+    
+    /**
+     * @Route(
+     *       "/klinar/b/pokaz/{page}",
+     *       name="marcin_admin_shoper_klinar_pokaz",
+     *       requirements={"page"="\d+"},
+     *       defaults={"page"=1}
+     * )
+     *    
+     * @Template()
+     */
+    public function klinarpokazAction(Request $Request, $page) {
+        $queryParams = array(
+            'idLike' => $Request->query->get('idLike'),
+
+        ); 
+     
+        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperklinar');
+        //$statistics = $StatUser->getStatistics();
+        
+        $qb = $StatZam->getKlinarBuilder($queryParams);
+        
+        $paginationLimit = $this->container->getParameter('admin.pagination_limit');
+        $limits = array(2, 5, 10, 15);
+        
+        $limit = $Request->query->get('limit', $paginationLimit);
+        
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($qb, $page, $limit);
+        
+        
+        return $this->render('MarcinAdminBundle:Shoper:klinar_posrednik.html.twig',
+            array(
+            'pageTitle'            => 'GM Panel Shoper zamówienia klinar',
+            'queryParams' => $queryParams,
+            'limits' => $limits,
+            'currLimit' => $limit,
+            'pagination' => $pagination
+            //'updateTokenName' => $this->updateTokenName,
+            //'aktywacjaTokenName' => $this->aktywacjaTokenName,
+            //'csrfProvider' => $this->get('form.csrf_provider')
+                )
+        );
+    }
+    
+    /**
+     * @Route(
+     *       "/klinar/b/odczytanie/{id}.png",
+     *       name="marcin_admin_shoper_klinar_odczytanie",
+     *       requirements={"id"="\d+"},
+     * )
+     *    
+     * @Template()
+     */
+    public function odczytanieklinarAction(Request $Request, $id) {
+        
+        if(null !== $id)
+        {
+            $em = $this->getDoctrine()->getManager();
+
+
+        $qb_klinar = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+//                 //->andWhere('a.producent = Klinar' )
+                 ->setParameter('identifier', $id)
+//                ->setParameter('Klinar', 'Klinar')
+//                ->setParameter('idzam', $idzam)
+                
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        if ($qb_klinar == null) {
+             $this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
+             return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar'));
+        } else {
+                
+                $qb_klinar[0]->setUwagi($id);
+                //$posrednik->setZaznaczono('66');
+                // klinar -> 66
+                $em->flush();
+             return $this->render('MarcinAdminBundle:Shoper:zdjecie.html.php');
+        }
+        }
+        else 
+        {
+            return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar_pokaz'));
+        }
     }
 }

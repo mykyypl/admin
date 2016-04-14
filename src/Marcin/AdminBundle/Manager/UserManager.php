@@ -47,31 +47,31 @@ class UserManager {
         $this->userMailer = $userMailer;
     }
     
-    public function registerUsername($userEmail) {
+    public function registerUsername($id, $idzam) {
        
         $em = $this->doctrine->getManager();
         
         $qb = $em->createQueryBuilder()
                 ->select('a')
                 ->from('MarcinAdminBundle:Shoperzamowienia', 'a')
-                 ->where('a.zaznaczono = :identifier')
-                 ->setParameter('identifier', '1')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
                //->setMaxResults(1)
                 ->getQuery()
                 ->getResult();
 
         $qb_dane = $em->createQueryBuilder()
                 ->select('a')
-                ->from('MarcinAdminBundle:Shoperzamowienia', 'a')
-                 ->where('a.zaznaczono = :identifier')
-                 ->setParameter('identifier', '1')
+                ->from('MarcinAdminBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
                  ->setMaxResults(1)
                  ->getQuery()
                  ->getResult();
         
-        foreach($qb as $odznaczenie)
+        foreach($qb_dane as $odznaczenie)
         {
-                        $odznaczenie->setZaznaczono('2');
+                        $odznaczenie->setDatawyslania(new \DateTime());
             $em->flush();
         }
         $emaiBody = $this->templating->render('MarcinAdminBundle:Email:pay.html.twig', array(
@@ -80,6 +80,7 @@ class UserManager {
         ));
         $tytul = $qb_dane[0]->getFirma();
         $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
         if (!$tytul == '')
         {
                     $tytul_email = substr($tytul, 0, 25);
