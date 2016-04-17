@@ -1,0 +1,20 @@
+
+.fixedposition {
+	position:fixed;
+	bottom:5%;
+	right:5%;
+	padding:15px;
+	-webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+}
+
+.fixedposition_down {
+    position:fixed;
+	bottom:11%;
+	right:5%;
+	padding:15px;
+	-webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+}

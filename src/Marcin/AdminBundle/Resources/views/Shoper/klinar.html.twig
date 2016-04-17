@@ -47,7 +47,7 @@
            <th>{% if shoper.zaznaczono == '66' %}{{ shoper.idzam }} {% else %}<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">{{ shoper.idzam }}</a>{% endif %}</th>
            <th>{{ shoper.firma }}</th>
            <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
-           <th>{{ shoper.nazwa }}  -(zmiana opisu)</th>
+           <th>{{ shoper.nazwa }}</th>
            <th>{{ shoper.wariant }}</th>
            <th>{{ shoper.ilosc }} {{ shoper.jednostka }}</th>
            {#<th id="zmiana-status-{{ shoper.id }}">
@@ -59,7 +59,7 @@
                                             <option value="Invest"{% if shoper.producent == 'Invest' %} selected="selected" {% endif %}>Invest</option>
                                             <option value="GrupaMAGNUM"{% if shoper.producent == 'GrupaMAGNUM' %} selected="selected" {% endif %}>GrupaMAGNUM</option></select>
             </th>#}
-           <th>{% if shoper.uwagi == NULL %} dodaj opis {% else %}{{ shoper.uwagi }}{% endif %}</th>
+           <th>{% if shoper.uwagi == NULL %} {% else %}{{ shoper.uwagi }}{% endif %}</th>
            <th>{% if shoper.zaznaczono == '66' %}<a href="{{ path('marcin_admin_shoper_klinar_pokaz') }}" class="btn btn-success">wysłano</a>{% else %}<div class="checkbox checkbox-success">
                                                 <input style="flat-red" id="spr" type="checkbox" value="" onclick="changeOrderKlinar('{{ shoper.id }}', event)" {% if shoper.zaznaczono == '1' %}checked {% endif %} /><label for="checkbox1">
                                                 </label></div>{% endif %}

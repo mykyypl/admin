@@ -19,6 +19,8 @@ use Marcin\AdminBundle\Entity\Shoperklinar;
 use Marcin\AdminBundle\Form\Type\ShoperType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 
 class ShoperController extends Controller {
     
@@ -54,6 +56,83 @@ class ShoperController extends Controller {
         $Zamowienie->setProducent($result['status']);
         $em->flush();
 
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route("/form/klinar/update-complete", 
+     *       name="marcin_admin_shoper_update_podglad",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     *
+     */
+    public function updateKlinarpodAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'uwagi' => $Request->request->get('uwagi'),
+            'idzam' => $Request->request->get('idzam'),
+            'nazwa' => $Request->request->get('nazwa')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+       if ($result['uwagi'] == null)
+       {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setNazwa($result['nazwa']);
+            $em->flush();
+       } else {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setUwagi($result['uwagi']);
+            $em->flush();
+       }
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route("/form/klinar/update-complete_zam", 
+     *       name="marcin_admin_shoper_update_podglad_zam",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     *
+     */
+    public function updateKlinarpodzamAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'uwagi' => $Request->request->get('uwagi'),
+            'idzam' => $Request->request->get('idzam')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperklinar');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+       if ($result['uwagi'] == null)
+       {
+//            $em = $this->getDoctrine()->getManager();
+//            $Zamowienie->setNazwa($result['nazwa']);
+//            $em->flush();
+       } else {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setUwagi($result['uwagi']);
+            $em->flush();
+       }
         return new JsonResponse(true);
     }
     
@@ -132,7 +211,7 @@ class ShoperController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $em->persist($Shoper);
             $em->flush();
-            $message = (isset($newShoperyForm)) ? 'Poprawnie dodano.' : 'Użytkownik został zaaktualizowany.';
+            $message = (isset($newShoperyForm)) ? 'Poprawnie dodano.' : 'Dane zostały zaaktualizowane.';
             $this->addFlash('success', $message);
             return $this->redirect($this->generateUrl('marcin_admin_shoper', array(
                                 'id' => $Shoper->getId()
@@ -470,6 +549,8 @@ class ShoperController extends Controller {
         $zamowienia_klinar->setKodpocztowy($kodpocztowy);
         $zamowienia_klinar->setMiejscowosc($miejscowosc);
         $zamowienia_klinar->setTelefon($telefon);
+        $zamowienia_klinar->setDatawygenerowania(new \DateTime());
+        $zamowienia_klinar->setDatamaxdo(new \DateTime('+ 2 days'));
         
         $em->persist($zamowienia_klinar);
         $em->flush();
@@ -507,7 +588,7 @@ class ShoperController extends Controller {
 ////                        )
 //        );
              $this->addFlash('success', 'Poprawnie wygenerowano nowy formularz!');
-             return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar_pokaz'));
+             return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar_podglad', array('id' => $sprwadzam)));
     }
     }
     
@@ -557,7 +638,7 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/klinar/b/odczytanie/{id}.png",
+     *       "/klinar/b/odczytanie/obrazek/{id}.png",
      *       name="marcin_admin_shoper_klinar_odczytanie",
      *       requirements={"id"="\d+"},
      * )
@@ -588,16 +669,87 @@ class ShoperController extends Controller {
              return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar'));
         } else {
                 
-                $qb_klinar[0]->setUwagi($id);
+                $qb_klinar[0]->setDataodczytania(new \DateTime());
                 //$posrednik->setZaznaczono('66');
                 // klinar -> 66
                 $em->flush();
-             return $this->render('MarcinAdminBundle:Shoper:zdjecie.html.php');
+//                $file = readfile('https://grupamagnum.eu/images/logo.png'); 
+                $filepath = "https://grupamagnum.eu/images/logo.png";
+
+
+                $response = new Response();
+                //$disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+                $response->headers->set('Content-Disposition' , 'attachment; filename="'.$filepath.'"');
+                $response->headers->set('Content-Type', 'image/png');
+                $response->setContent(file_get_contents($filepath));
+
+                return $response;
+           //return $this->render('MarcinAdminBundle:Shoper:zdjecie.html.php');
         }
         }
         else 
         {
             return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar_pokaz'));
         }
+    }
+    
+    /**
+     * @Route(
+     *       "/klinar/b/podglad/{id}",
+     *       name="marcin_admin_shoper_klinar_podglad",
+     *       requirements={"id"="\d+"}
+     * )
+     *    
+     * @Template()
+     */
+    public function kpodgladAction(Request $Request, $id) {
+
+          $em = $this->getDoctrine()->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Shoperklinar', 'a')
+                ->where('a.id = :identifier')
+                ->setParameter('identifier', $id)
+                ->addOrderBy('a.id','DESC')
+                ->getQuery()
+                ->getResult();
+        
+        $qb_products = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Shoperzamowienia', 'a')
+                ->where('a.idposrednik = :identifier')
+                ->setParameter('identifier', $id)
+                ->addOrderBy('a.id','DESC')
+                ->getQuery()
+                ->getResult();
+     
+//        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperklinar');
+//        //$statistics = $StatUser->getStatistics();
+//        
+//        $qb = $StatZam->getKlinarBuilder();
+        
+//        $paginationLimit = $this->container->getParameter('admin.pagination_limit');
+//        $limits = array(2, 5, 10, 15);
+//        
+//        $limit = $Request->query->get('limit', $paginationLimit);
+//        
+//        $paginator = $this->get('knp_paginator');
+//        $pagination = $paginator->paginate($qb, $page, $limit);
+        
+        
+        return $this->render('MarcinAdminBundle:Shoper:klinar_podglad.html.twig',
+            array(
+            'pageTitle'            => 'GM Panel Shoper zamówienia klinar',
+            //'queryParams' => $queryParams,
+            //'limits' => $limits,
+            //'currLimit' => $limit,
+            'dane' => $qb,
+            'produkty' => $qb_products
+            //'updateTokenName' => $this->updateTokenName,
+            //'aktywacjaTokenName' => $this->aktywacjaTokenName,
+            //'csrfProvider' => $this->get('form.csrf_provider')
+                )
+        );
     }
 }

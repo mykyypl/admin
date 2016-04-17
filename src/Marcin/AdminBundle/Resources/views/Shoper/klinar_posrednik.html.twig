@@ -32,6 +32,8 @@
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">{{ knp_pagination_sortable(pagination, 'ID zamówienia', 's.idzam') }}</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Firma</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Imie Nazwisko</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Wygenerowano</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Odczytano</th>
                                     <th>akcje</th>
                                 </tr>
                             </thead>
@@ -41,7 +43,9 @@
            <th>{#<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">#}{{ shoper.idzam }}{#</a>#}</th>
            <th>{{ shoper.firma }}</th>
            <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
-           <th> {% if( shoper.datawyslania == null) %}<a href="{{ path('marcin_admin_shoper_send_klinar', {'id': shoper.id, 'idzam': shoper.idzam}) }}" class="btn btn-primary">wyślij zamówienie</a>{% else %} {{ shoper.datawyslania|date("Y-m-d H:i:s") }} {% endif %}</th>
+           <th>{{ shoper.datawygenerowania|date("Y-m-d H:i:s") }}</th>
+           <th>{% if shoper.dataodczytania == null %} brak danych {% else %}{{ shoper.dataodczytania|date("Y-m-d H:i:s") }}{% endif %}</th>
+           <th> {% if( shoper.datawyslania == null) %}<a href="{{ path('marcin_admin_shoper_send_klinar', {'id': shoper.id, 'idzam': shoper.idzam}) }}" class="btn btn-primary">wyślij zamówienie</a><a href="{{ path('marcin_admin_shoper_klinar_podglad', {'id': shoper.id }) }}" class="btn btn-info"><i class="fa fa-eye" aria-hidden="true"></i></a>{% else %} {{ shoper.datawyslania|date("Y-m-d H:i:s") }} {% endif %}</th>
        </tr>
     {% endfor %}
         </table>

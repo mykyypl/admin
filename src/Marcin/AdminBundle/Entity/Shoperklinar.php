@@ -84,6 +84,21 @@ class Shoperklinar {
      */
     private $datawyslania;
     
+    /**
+     * @ORM\Column(name="datawygenerowania", type="datetime")
+     */
+    private $datawygenerowania;
+    
+    /**
+     * @ORM\Column(name="datamaxdo", type="datetime")
+     */
+    private $datamaxdo;
+    
+    /**
+     * @ORM\Column(name="dataodczytania", type="datetime")
+     */
+    private $dataodczytania;
+    
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -351,6 +366,69 @@ class Shoperklinar {
     public function getDatawyslania()
     {
         return $this->datawyslania;
+    }
+    
+    /**
+     * Set datawygenerowania
+     *
+     * @param \DateTime $datawygenerowania
+     * @return Shoperklinar
+     */
+    public function setDatawygenerowania($datawygenerowania)
+    {
+        $this->datawygenerowania = $datawygenerowania;
+        return $this;
+    }
+    /**
+     * Get datawygenerowania
+     *
+     * @return \DateTime 
+     */
+    public function getDatawygenerowania()
+    {
+        return $this->datawygenerowania;
+    }
+    
+    /**
+     * Set datamaxdo
+     *
+     * @param \DateTime $datamaxdo
+     * @return Shoperklinar
+     */
+    public function setDatamaxdo($datamaxdo)
+    {
+        $this->datamaxdo = $datamaxdo;
+        return $this;
+    }
+    /**
+     * Get datamaxdo
+     *
+     * @return \DateTime 
+     */
+    public function getDatamaxdo()
+    {
+        return $this->datamaxdo;
+    }
+    
+    /**
+     * Set dataodczytania
+     *
+     * @param \DateTime $dataodczytania
+     * @return Shoperklinar
+     */
+    public function setDataodczytania($dataodczytania)
+    {
+        $this->dataodczytania = $dataodczytania;
+        return $this;
+    }
+    /**
+     * Get dataodczytania
+     *
+     * @return \DateTime 
+     */
+    public function getDataodczytania()
+    {
+        return $this->dataodczytania;
     }
 
 

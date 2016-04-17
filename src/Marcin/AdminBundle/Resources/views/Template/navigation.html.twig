@@ -3,13 +3,14 @@
             <!-- Optionally, you can add icons to the links -->
             <li class="{% if app.request.get('_route') == 'marcin_admin_dashboard' %}active{% endif %}"><a href="{{ path('marcin_admin_dashboard') }}"><i class="fa fa-link"></i> <span>Panel</span><span class="label label-primary pull-right">{{ navigation.zamowienia.count.all }}</span></a></li>
             <li class="{% if app.request.get('_route') == 'marcin_admin_username' %}active{% endif %}"><a href="{{ path('marcin_admin_username') }}"><i class="fa fa-user"></i> <span>Użytkownicy</span><span class="label label-primary pull-right">{{ navigation.username.count.user }}</span></a></li>
-            <li class="treeview {% if app.request.get('_route') == 'marcin_admin_shoper' %}active{% endif %}">
-                <a href="{{ path('marcin_admin_shoper') }}">
-                    <i class="fa fa-shopping-cart"></i> <span>Zamówienia sklep</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}
+            <li class="{% if app.request.get('_route') == 'marcin_admin_shoper' %}active{% endif %}"><a href="{{ path('marcin_admin_shoper') }}"><i class="fa fa-shopping-cart"></i> <span>Shoper</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>
+            <li class="treeview {% if app.request.get('_route') == 'marcin_admin_shoper_klinar' %}active{% endif %}">
+                <a href="{{ path('marcin_admin_shoper_klinar') }}">
+                    <i><b>KLI</B></i> <span>Zamówienia klinar</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{% if app.request.get('_route') == 'marcin_admin_shoper' %}active on{% endif %}"><a href="{{ path('marcin_admin_shoper') }}"><i class="fa fa-circle-o"></i> Zamówienia</a></li>
                     <li class="{% if app.request.get('_route') == 'marcin_admin_shoper_klinar' %}active on{% endif %}"><a href="{{ path('marcin_admin_shoper_klinar') }}"><i class="fa fa-circle-o"></i> Klinar</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_shoper_klinar_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_shoper_klinar_pokaz') }}"><i class="fa fa-circle-o"></i> Klinar podsumowanie</a></li>
                 </ul>
             </li>
           </ul>
