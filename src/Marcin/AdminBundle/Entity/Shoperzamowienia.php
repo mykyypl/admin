@@ -5,9 +5,11 @@
  */
 
 namespace Marcin\AdminBundle\Entity;
+use Marcin\AdminBundle\Entity\Shoperklinar;
 
 use Doctrine\ORM\Mapping as ORM;
-//use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 //use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -142,6 +144,11 @@ class Shoperzamowienia {
      * @ORM\Column(type="string")
      */
     private $uwagi;
+    
+        public function __construct()
+    {
+       // $this->nazwa = new ArrayCollection();
+    }
     
     /**
      * Get id

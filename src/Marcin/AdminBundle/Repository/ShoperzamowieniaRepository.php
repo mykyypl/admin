@@ -39,6 +39,15 @@ class ShoperzamowieniaRepository extends EntityRepository
                 ->setParameter('realizacja', 'Klinar')
               ->addOrderBy('s.id', 'DESC');
 
+        if(!empty($params['status'])){
+            if('nowe' == $params['status']){
+                $qb->andwhere('s.idposrednik IS NULL');
+            }else if('zrealizowane' == $params['status']){
+                $qb->andwhere('s.zaznaczono = :zaznaczono')
+                        ->setParameter('zaznaczono', '66');
+            }
+        }
+        
           if(!empty($params['orderBy'])){
             $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
             $qb->orderBy($params['orderBy'], $orderDir);
@@ -63,6 +72,39 @@ class ShoperzamowieniaRepository extends EntityRepository
         
         return $qb;
     }
+    
+        public function getStatistics() {
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $all = $qb->andWhere('a.producent = :currDate')
+                        ->setParameter('currDate', 'Klinar')
+                        ->getQuery()    
+                        ->getSingleScalarResult();
+        $nowe = $qb->andWhere('a.idposrednik IS NULL')
+                       // ->setParameter('currDate', NULL)
+                       //  ->andWhere('a.producent = :producent')
+                       // ->setParameter('producent', 'Klinar')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+//        $zrealizowane = $qb->andWhere('a.zaznaczono = :currDate')
+//                        ->setParameter('currDate', '66')
+//                        ->getQuery()
+//                        ->getSingleScalarResult();
+        return array(
+            'all' => $all,
+            'nowe' => $nowe,
+            'zrealizowane' => ($all - $nowe)
+        );
+    }
+    
+//     public function getTagsListOcc(){
+//        $qb = $this->createQueryBuilder('t')
+//                        ->select('t.name, t.name, COUNT(p) as occ')
+//                        ->leftJoin('t.articles', 'a')
+//                        ->groupBy('t.name');
+//        
+//        return $qb->getQuery()->getArrayResult();
+//    }
      
     
 }

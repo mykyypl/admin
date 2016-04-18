@@ -7,6 +7,8 @@
 namespace Marcin\AdminBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+//use Marcin\AdminBundle\Entity\Shoperzamowienia;
+//use Doctrine\Common\Collections\ArrayCollection;
 //use Symfony\Component\Validator\Constraints as Assert;
 //use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -99,7 +101,7 @@ class Shoperklinar {
      */
     private $dataodczytania;
     
-    public function __construct()
+ public function __construct()
     {
         $this->date = new \DateTime();
     }
@@ -430,6 +432,5 @@ class Shoperklinar {
     {
         return $this->dataodczytania;
     }
-
 
 }

@@ -410,22 +410,23 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/klinar/{page}",
+     *       "/klinar/{status}/{page}",
      *       name="marcin_admin_shoper_klinar",
      *       requirements={"page"="\d+"},
-     *       defaults={"page"=1}
+     *      defaults={"status"="all", "page"=1}
      * )
      *    
      * @Template()
      */
-    public function klinarAction(Request $Request, $page) {
+    public function klinarAction(Request $Request,$status ,$page) {
         $queryParams = array(
-            'idLike' => $Request->query->get('idLike'),
+            'idzamLike' => $Request->query->get('idzamLike'),
+            'status' => $status
 
         ); 
      
         $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
-        //$statistics = $StatUser->getStatistics();
+        $statistics = $StatZam->getStatistics();
         
         $qb = $StatZam->getKlinarBuilder($queryParams);
         
@@ -437,6 +438,11 @@ class ShoperController extends Controller {
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate($qb, $page, $limit);
         
+        $statusesList = array(
+            'Nowe' => 'nowe',
+            'Zrealizowane' => 'zrealizowane',
+            'Wszystkie' => 'all'
+        );
         
         return $this->render('MarcinAdminBundle:Shoper:klinar.html.twig',
             array(
@@ -444,7 +450,11 @@ class ShoperController extends Controller {
             'queryParams' => $queryParams,
             'limits' => $limits,
             'currLimit' => $limit,
-            'pagination' => $pagination
+            'statusesList' => $statusesList,
+            'currStatus' => $status,
+            'statistics' => $statistics,
+            'pagination' => $pagination,
+            'currStatus' => $status
             //'updateTokenName' => $this->updateTokenName,
             //'aktywacjaTokenName' => $this->aktywacjaTokenName,
             //'csrfProvider' => $this->get('form.csrf_provider')
@@ -495,7 +505,7 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *      "/klinar/show/{idzam}", 
+     *      "/klinar/show/zamowienie/{idzam}", 
      *      name="marcin_admin_shoper_klinar_show",
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
@@ -658,8 +668,6 @@ class ShoperController extends Controller {
                  ->where('a.id = :identifier')
 //                 //->andWhere('a.producent = Klinar' )
                  ->setParameter('identifier', $id)
-//                ->setParameter('Klinar', 'Klinar')
-//                ->setParameter('idzam', $idzam)
                 
                  ->setMaxResults(1)
                  ->getQuery()
@@ -673,7 +681,6 @@ class ShoperController extends Controller {
                 //$posrednik->setZaznaczono('66');
                 // klinar -> 66
                 $em->flush();
-//                $file = readfile('https://grupamagnum.eu/images/logo.png'); 
                 $filepath = "https://grupamagnum.eu/images/logo.png";
 
 

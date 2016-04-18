@@ -25,6 +25,18 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
+                         <form action="{{ path('marcin_admin_shoper_klinar_pokaz') }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
+                            <div class="col-xs-12 col-md-2 col-lg-3 padding-bottom-15 pull-right">
+                                <div class="input-group" style="width: 100%;">
+                                  <input type="text" name="idLike" class="form-control input-md" placeholder="Wyszukaj po id" value="{{ queryParams['idLike'] }}">
+                                  <div class="input-group-btn">
+                                    <button class="btn btn-md btn-block btn-default"><i class="fa fa-search"></i></button>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                         </form>
                        {#<a href="{{ path('marcin_admin_shoper_send_klinar') }}" class="btn btn-primary">wyślij zaznaczone</a>#}
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
@@ -40,8 +52,12 @@
         
     {% for shoper in pagination  %}
        <tr>
-           <th>{#<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">#}{{ shoper.idzam }}{#</a>#}</th>
-           <th>{{ shoper.firma }}</th>
+           <th>{#<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">#}{{ shoper.idzam }} - {{ shoper.id }}{#</a>#}</th>
+           <th>{{ shoper.firma }} {#{% for tag in shoper.nazwanew %}
+                                  <span class="label label-info">{{ tag.id }}</span>
+                              {% else %}
+                                  Brak tagów
+                              {% endfor %}#}</th>
            <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
            <th>{{ shoper.datawygenerowania|date("Y-m-d H:i:s") }}</th>
            <th>{% if shoper.dataodczytania == null %} brak danych {% else %}{{ shoper.dataodczytania|date("Y-m-d H:i:s") }}{% endif %}</th>

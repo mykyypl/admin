@@ -33,13 +33,19 @@ class ShoperklinarRepository extends EntityRepository
     
     
     
-        public function getKlinarBuilder(){
+        public function getKlinarBuilder(array $params = array()){
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
                // ->where('s.zaznaczono = :zaznaczono')
               //  ->setParameter('zaznaczono', '66')
               ->addOrderBy('s.id', 'DESC');
+        
+        if(!empty($params['idLike'])){
+            $jakie_zamLike = '%'.$params['idLike'].'%';
+            $qb->andWhere('s.id LIKE :idLike')
+                    ->setParameter('idLike', $jakie_zamLike);
+        }
         
         return $qb;
     }

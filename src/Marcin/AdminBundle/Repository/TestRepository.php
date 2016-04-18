@@ -43,6 +43,11 @@ class TestRepository extends EntityRepository
             $qb->andWhere('s.nr_user_zam LIKE :jakie_zamLike')
                     ->setParameter('jakie_zamLike', $jakie_zamLike);
         }
+        
+        
+        if (!empty($params['limit'])) {
+            $qb->setMaxResults($params['limit']);
+        }
                 
         return $qb;
     }

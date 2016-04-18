@@ -224,7 +224,8 @@ class DashboardController extends Controller {
 
         $queryParams = array(
             'userLike' => $Request->query->get('userLike'),
-            'status' => $status
+            'status' => $status,
+            //'limit' => $Request->query->get('limit'),
         );
 
 //        $em = $this->getDoctrine()
@@ -246,7 +247,7 @@ class DashboardController extends Controller {
         $qb = $RepoZam->getQueryBuilder($queryParams);
 
         $paginationLimit = $this->container->getParameter('admin.pagination_limit');
-        $limits = array(2, 5, 10, 15);
+        $limits = array(15, 20, 50);
 
         $limit = $Request->query->get('limit', $paginationLimit);
 
