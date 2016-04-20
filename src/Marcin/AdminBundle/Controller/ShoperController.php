@@ -14,8 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Marcin\AdminBundle\Entity\Zamowienia;
-use Marcin\AdminBundle\Entity\Shoperzamowienia;
-use Marcin\AdminBundle\Entity\Shoperklinar;
+use Marcin\SiteBundle\Entity\Shoperzamowienia;
+use Marcin\SiteBundle\Entity\Shoperklinar;
 use Marcin\AdminBundle\Form\Type\ShoperType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
@@ -43,7 +43,7 @@ class ShoperController extends Controller {
             'idzamid' => $Request->request->get('idzamid')
         );
 
-        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
         $Zamowienie = $RepoZamowienia->find($result['id']);
 
         if (NULL === $Zamowienie) {
@@ -78,7 +78,7 @@ class ShoperController extends Controller {
             'nazwa' => $Request->request->get('nazwa')
         );
 
-        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
         $Zamowienie = $RepoZamowienia->find($result['id']);
 
         if (NULL === $Zamowienie) {
@@ -116,7 +116,7 @@ class ShoperController extends Controller {
             'idzam' => $Request->request->get('idzam')
         );
 
-        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperklinar');
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperklinar');
         $Zamowienie = $RepoZamowienia->find($result['id']);
 
         if (NULL === $Zamowienie) {
@@ -153,7 +153,7 @@ class ShoperController extends Controller {
             'zaznaczono' => $Request->request->get('zaznaczono')
         );
 
-        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
         $Zamowienie = $RepoZamowienia->find($result['id']);
 
         if (NULL === $Zamowienie) {
@@ -241,7 +241,7 @@ class ShoperController extends Controller {
         
         $em = $this->getDoctrine()->getManager(); 
         $zamowienia_zapytanie = $em->createQuery('
-            SELECT q.idzam FROM MarcinAdminBundle:Shoperzamowienia q          
+            SELECT q.idzam FROM MarcinSiteBundle:Shoperzamowienia q          
             ORDER BY q.idzam DESC
             ')
             ->setMaxResults(1)
@@ -380,7 +380,7 @@ class ShoperController extends Controller {
 
         ); 
      
-        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        $StatZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
         //$statistics = $StatUser->getStatistics();
         
         $qb = $StatZam->getQueryBuilder($queryParams);
@@ -425,7 +425,7 @@ class ShoperController extends Controller {
 
         ); 
      
-        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperzamowienia');
+        $StatZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
         $statistics = $StatZam->getStatistics();
         
         $qb = $StatZam->getKlinarBuilder($queryParams);
@@ -526,7 +526,7 @@ class ShoperController extends Controller {
 
         $qb_klinar = $em->createQueryBuilder()
                 ->select('a')
-                ->from('MarcinAdminBundle:Shoperzamowienia', 'a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
                  ->where('a.zaznaczono = :identifier AND a.producent = :Klinar AND a.idzam = :idzam')
                  //->andWhere('a.producent = Klinar' )
                  ->setParameter('identifier', '1')
@@ -549,6 +549,7 @@ class ShoperController extends Controller {
         $adres1 = $qb_klinar[0]->getAdres1();
         $adres2 = $qb_klinar[0]->getAdres2();
         $telefon = $qb_klinar[0]->getTelefon();
+       // $id = $qb_klinar[0]->getId();
         
         $zamowienia_klinar->setIdzam($idzam);
         $zamowienia_klinar->setFirma($firma);
@@ -571,6 +572,11 @@ class ShoperController extends Controller {
              {
                 $posrednik->setIdposrednik($sprwadzam);
                 $posrednik->setZaznaczono('66');
+                //$id = $posrednik->getId();
+                $zamowienia_klinar->addShoper1($posrednik);
+                $posrednik->addShoperklinar($zamowienia_klinar);
+               // $em->persist($posrednik);
+               // $em->persist($zamowienia_klinar);
                 // klinar -> 66
                 $em->flush();
              }
@@ -618,7 +624,7 @@ class ShoperController extends Controller {
 
         ); 
      
-        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperklinar');
+        $StatZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperklinar');
         //$statistics = $StatUser->getStatistics();
         
         $qb = $StatZam->getKlinarBuilder($queryParams);
@@ -664,7 +670,7 @@ class ShoperController extends Controller {
 
         $qb_klinar = $em->createQueryBuilder()
                 ->select('a')
-                ->from('MarcinAdminBundle:Shoperklinar', 'a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
                  ->where('a.id = :identifier')
 //                 //->andWhere('a.producent = Klinar' )
                  ->setParameter('identifier', $id)
@@ -715,7 +721,7 @@ class ShoperController extends Controller {
         
         $qb = $em->createQueryBuilder()
                 ->select('a')
-                ->from('MarcinAdminBundle:Shoperklinar', 'a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
                 ->where('a.id = :identifier')
                 ->setParameter('identifier', $id)
                 ->addOrderBy('a.id','DESC')
@@ -724,7 +730,7 @@ class ShoperController extends Controller {
         
         $qb_products = $em->createQueryBuilder()
                 ->select('a')
-                ->from('MarcinAdminBundle:Shoperzamowienia', 'a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
                 ->where('a.idposrednik = :identifier')
                 ->setParameter('identifier', $id)
                 ->addOrderBy('a.id','DESC')

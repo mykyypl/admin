@@ -1,0 +1,7 @@
+marcin_site_klinar:
+    resource: "@MarcinSiteBundle/Controller/KlinarController.php"
+    type: annotation
+    prefix: /zarzadzanie/3384567321/klinar
+#    path:     /zarzadzanie/123456789
+#    defaults: { _controller: MarcinSiteBundle:Klinar:index }
+

@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Marcin\AdminBundle\MarcinAdminBundle(),
             new Common\UserBundle\CommonUserBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Marcin\SiteBundle\MarcinSiteBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

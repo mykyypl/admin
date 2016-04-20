@@ -103,7 +103,7 @@ class ShoperType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Marcin\AdminBundle\Entity\Shoperzamowienia'
+            'data_class' => 'Marcin\SiteBundle\Entity\Shoperzamowienia'
         ));
     }
 }

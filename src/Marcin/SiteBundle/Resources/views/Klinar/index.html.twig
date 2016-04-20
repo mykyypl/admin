@@ -1,0 +1,71 @@
+{% extends 'MarcinSiteBundle::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
+{% block body %} 
+    <div class="row">
+        <div class="col-lg-6">
+        </div>
+        <div class="col-lg-6">
+        </div>
+    </div>
+<table id="example2" class="table table-bordered table-hover dataTable" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">{{ knp_pagination_sortable(pagination, 'ID zamówienia', 's.idzam') }}</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Firma</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Imie Nazwisko</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Przeslano</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Realizacja do</th>
+                                    <th>Akcja</th>
+                                </tr>
+                            </thead>
+
+                            {% for shoper in pagination  %}
+                                {% if date(shoper.datamaxdo) < date() %}<tr class="danger">
+                                    <th>{#<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">#}{{ shoper.id }}{#</a>#}</th>
+                                    <th>{{ shoper.firma }} 
+{#                                        {{ dump(shoper.shoper1) }}#}
+                                        {% for row in shoper.shoper1 %}
+                                            {{ row.nazwa }}
+                                            <span class="label label-info"></span>
+                                        {% endfor %}
+                                    </th>
+                                    <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
+                                    <th>{% if shoper.datawyslania == null %}nie przesłano{% else %}{{ shoper.datawyslania|date("Y-m-d H:i:s") }}{% endif %}</th>
+                                    <th>{% if shoper.datamaxdo == null %}brak danych{% else %}<font color="red">{{ shoper.datamaxdo|date("Y-m-d H:i:s") }}</font>{% endif %}</th>
+                                    <th><a href="#" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true"></i></a></th>
+                                </tr>{% else %}
+                                <tr>
+                                    <th>{#<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">#}{{ shoper.id }}{#</a>#}</th>
+                                    <th>{{ shoper.firma }} 
+{#                                        {{ dump(shoper.shoper1) }}#}
+                                        {% for row in shoper.shoper1 %}
+                                            {{ row.nazwa }}
+                                            <span class="label label-info"></span>
+                                        {% endfor %}
+                                    </th>
+                                    <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
+                                    <th>{% if shoper.datawyslania == null %}nie przesłano{% else %}{{ shoper.datawyslania|date("Y-m-d H:i:s") }}{% endif %}</th>
+                                    <th>{% if shoper.datamaxdo == null %}brak danych{% else %}{{ shoper.datamaxdo|date("Y-m-d H:i:s") }}{% endif %}</th>
+                                    <th><a href="#" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true"></i></a></th>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                                        <div class="row">
+                    <div class="col-sm-5">
+                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+                            Wszystkich zamówień jest: {{ pagination.getTotalItemCount }}
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate">
+                            {{ knp_pagination_render(pagination, 'MarcinAdminBundle:Pagination:admin_pagination.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+       {% endblock %}
+{% block javascripts %}
+    {{parent()}}
+{% endblock %}

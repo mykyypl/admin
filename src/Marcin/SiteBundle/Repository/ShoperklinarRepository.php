@@ -4,7 +4,7 @@
  * Marcin Kukliński
  */
 
-namespace Marcin\AdminBundle\Repository;
+namespace Marcin\SiteBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -36,7 +36,9 @@ class ShoperklinarRepository extends EntityRepository
         public function getKlinarBuilder(array $params = array()){
         
         $qb = $this->createQueryBuilder('s')
-                ->select('s')
+                ->select('s, t')
+                //->leftJoin('MarcinAdminBundle:Shoperzamowienia', 'ct', 'WITH', 'ct.idposrednik = s.id');
+                ->leftJoin('s.shoper1', 't')
                // ->where('s.zaznaczono = :zaznaczono')
               //  ->setParameter('zaznaczono', '66')
               ->addOrderBy('s.id', 'DESC');

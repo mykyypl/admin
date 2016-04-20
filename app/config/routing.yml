@@ -1,3 +1,7 @@
+marcin_site:
+    resource: "@MarcinSiteBundle/Resources/config/routing.yml"
+    prefix:   /
+
 common_user:
     resource: "@CommonUserBundle/Resources/config/routing.yml"
     prefix:   /

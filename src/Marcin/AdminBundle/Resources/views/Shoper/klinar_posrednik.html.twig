@@ -2,42 +2,42 @@
 {% block stylesheets %}
     {{parent()}}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
-   <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
 {% endblock %}
 {% block body %} 
- <section class="content-header">
-          <h1>
+    <section class="content-header">
+        <h1>
             Pulpit
             <small>zarządzania GM</small>
-          </h1>
-          <ol class="breadcrumb">
+        </h1>
+        <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
             <li class="active">tutaj</li>
-          </ol>
-        </section>
-                    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
-        <!-- Main content -->
-        <section class="content">
-            <div class="box box-default color-palette-box">
+        </ol>
+    </section>
+    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="box box-default color-palette-box">
             <div class="box-header with-border">
-              <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia Shoper</h3>
+                <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia Shoper</h3>
             </div>
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
-                         <form action="{{ path('marcin_admin_shoper_klinar_pokaz') }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
+                        <form action="{{ path('marcin_admin_shoper_klinar_pokaz') }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
                             <div class="col-xs-12 col-md-2 col-lg-3 padding-bottom-15 pull-right">
                                 <div class="input-group" style="width: 100%;">
-                                  <input type="text" name="idLike" class="form-control input-md" placeholder="Wyszukaj po id" value="{{ queryParams['idLike'] }}">
-                                  <div class="input-group-btn">
-                                    <button class="btn btn-md btn-block btn-default"><i class="fa fa-search"></i></button>
-                                  </div>
+                                    <input type="text" name="idLike" class="form-control input-md" placeholder="Wyszukaj po id" value="{{ queryParams['idLike'] }}">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-md btn-block btn-default"><i class="fa fa-search"></i></button>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="clearfix"></div>
-                         </form>
-                       {#<a href="{{ path('marcin_admin_shoper_send_klinar') }}" class="btn btn-primary">wyślij zaznaczone</a>#}
+                        </form>
+                        {#<a href="{{ path('marcin_admin_shoper_send_klinar') }}" class="btn btn-primary">wyślij zaznaczone</a>#}
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
@@ -49,22 +49,24 @@
                                     <th>akcje</th>
                                 </tr>
                             </thead>
-        
-    {% for shoper in pagination  %}
-       <tr>
-           <th>{#<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">#}{{ shoper.idzam }} - {{ shoper.id }}{#</a>#}</th>
-           <th>{{ shoper.firma }} {#{% for tag in shoper.nazwanew %}
-                                  <span class="label label-info">{{ tag.id }}</span>
-                              {% else %}
-                                  Brak tagów
-                              {% endfor %}#}</th>
-           <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
-           <th>{{ shoper.datawygenerowania|date("Y-m-d H:i:s") }}</th>
-           <th>{% if shoper.dataodczytania == null %} brak danych {% else %}{{ shoper.dataodczytania|date("Y-m-d H:i:s") }}{% endif %}</th>
-           <th> {% if( shoper.datawyslania == null) %}<a href="{{ path('marcin_admin_shoper_send_klinar', {'id': shoper.id, 'idzam': shoper.idzam}) }}" class="btn btn-primary">wyślij zamówienie</a><a href="{{ path('marcin_admin_shoper_klinar_podglad', {'id': shoper.id }) }}" class="btn btn-info"><i class="fa fa-eye" aria-hidden="true"></i></a>{% else %} {{ shoper.datawyslania|date("Y-m-d H:i:s") }} {% endif %}</th>
-       </tr>
-    {% endfor %}
-        </table>
+
+                            {% for shoper in pagination  %}
+                                <tr>
+                                    <th>{#<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">#}{{ shoper.idzam }} - {{ shoper.id }}{#</a>#}</th>
+                                    <th>{{ shoper.firma }} 
+{#                                        {{ dump(shoper.shoper1) }}#}
+                                        {% for row in shoper.shoper1 %}
+                                            {{ row.nazwa }}
+                                            <span class="label label-info"></span>
+                                        {% endfor %}
+                                    </th>
+                                    <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
+                                    <th>{{ shoper.datawygenerowania|date("Y-m-d H:i:s") }}</th>
+                                    <th>{% if shoper.dataodczytania == null %} brak danych {% else %}{{ shoper.dataodczytania|date("Y-m-d H:i:s") }}{% endif %}</th>
+                                    <th> {% if( shoper.datawyslania == null) %}<a href="{{ path('marcin_admin_shoper_send_klinar', {'id': shoper.id, 'idzam': shoper.idzam}) }}" class="btn btn-primary">wyślij zamówienie</a><a href="{{ path('marcin_admin_shoper_klinar_podglad', {'id': shoper.id }) }}" class="btn btn-info"><i class="fa fa-eye" aria-hidden="true"></i></a>{% else %} {{ shoper.datawyslania|date("Y-m-d H:i:s") }} {% endif %}</th>
+                                </tr>
+                            {% endfor %}
+                        </table>
                     </div>
                 </div>
                 <div class="row">
@@ -80,43 +82,43 @@
                     </div>
                 </div>
             </div><!-- /.box-body -->
-            
-          </div>
 
-</section>
+        </div>
+
+    </section>
 {% endblock %}
-    {% block javascripts %}
-        {{parent()}}
-        <script type="text/javascript">
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript">
 
-                            function changeOrderKlinar(id, event) {
-                                var order_id = id;
-                                var element = event.currentTarget;
-                                var clicked = event.target;
-                                
-                                if($(element).is(":checked")) {
-             console.log('zaznaczono!');
-             var zaplacono = 1;
-        } else {
-             console.log('odznaczono!');
-             var zaplacono = 0;
+        function changeOrderKlinar(id, event) {
+            var order_id = id;
+            var element = event.currentTarget;
+            var clicked = event.target;
+
+            if ($(element).is(":checked")) {
+                console.log('zaznaczono!');
+                var zaplacono = 1;
+            } else {
+                console.log('odznaczono!');
+                var zaplacono = 0;
+            }
+
+            var url = '{{ path('marcin_admin_shoper_send') }}';
+
+            $.ajax({
+                url: url,
+                data: {
+                    id: order_id,
+                    zaznaczono: zaplacono
+                },
+                method: 'POST',
+                success: function (data) {
+                    console.log(order_id);
+                }
+            });
+
         }
-                                
-                                var url = '{{ path('marcin_admin_shoper_send') }}';
-
-                                $.ajax({
-                                    url: url,
-                                    data: {
-                                        id: order_id,
-                                        zaznaczono: zaplacono
-                                    },
-                                    method: 'POST',
-                                    success: function (data) {
-                                                console.log(order_id);
-                                    }
-                                });
-
-                            }
-        </script>
-                <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
-        {% endblock %}
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}

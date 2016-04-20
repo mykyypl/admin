@@ -4,7 +4,7 @@
  * Marcin Kukliński
  */
 
-namespace Marcin\AdminBundle\Repository;
+namespace Marcin\SiteBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
