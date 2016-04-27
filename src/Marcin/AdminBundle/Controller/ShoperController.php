@@ -17,6 +17,8 @@ use Marcin\AdminBundle\Entity\Zamowienia;
 use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\SiteBundle\Entity\Shoperklinar;
 use Marcin\AdminBundle\Form\Type\ShoperType;
+use Marcin\AdminBundle\Form\Type\KlinarType;
+use Marcin\AdminBundle\Form\Type\KlinarpType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -715,54 +717,83 @@ class ShoperController extends Controller {
      *    
      * @Template()
      */
-    public function kpodgladAction(Request $Request, $id) {
+//    public function kpodgladAction(Request $Request, $id) {
+//
+//          $em = $this->getDoctrine()->getManager();
+//        
+//        $qb = $em->createQueryBuilder()
+//                ->select('a')
+//                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+//                ->where('a.id = :identifier')
+//                ->setParameter('identifier', $id)
+//                ->addOrderBy('a.id','DESC')
+//                ->getQuery()
+//                ->getResult();
+//        
+//        $qb_products = $em->createQueryBuilder()
+//                ->select('a')
+//                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+//                ->where('a.idposrednik = :identifier')
+//                ->setParameter('identifier', $id)
+//                ->addOrderBy('a.id','DESC')
+//                ->getQuery()
+//                ->getResult();
+//     
+////        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperklinar');
+////        //$statistics = $StatUser->getStatistics();
+////        
+////        $qb = $StatZam->getKlinarBuilder();
+//        
+////        $paginationLimit = $this->container->getParameter('admin.pagination_limit');
+////        $limits = array(2, 5, 10, 15);
+////        
+////        $limit = $Request->query->get('limit', $paginationLimit);
+////        
+////        $paginator = $this->get('knp_paginator');
+////        $pagination = $paginator->paginate($qb, $page, $limit);
+//        
+//        
+//        return $this->render('MarcinAdminBundle:Shoper:klinar_podglad.html.twig',
+//            array(
+//            'pageTitle'            => 'GM Panel Shoper zamówienia klinar',
+//            //'queryParams' => $queryParams,
+//            //'limits' => $limits,
+//            //'currLimit' => $limit,
+//            'dane' => $qb,
+//            'produkty' => $qb_products
+//            //'updateTokenName' => $this->updateTokenName,
+//            //'aktywacjaTokenName' => $this->aktywacjaTokenName,
+//            //'csrfProvider' => $this->get('form.csrf_provider')
+//                )
+//        );
+//    }
+    
+    public function kpodgladAction(Request $Request, $id, Shoperklinar $Shoper = NULL) {
+        if (null == $Shoper) {
+            $Shoper = new Shoperklinar();
+            $newShoperyForm = TRUE;
+        }
 
-          $em = $this->getDoctrine()->getManager();
-        
-        $qb = $em->createQueryBuilder()
-                ->select('a')
-                ->from('MarcinSiteBundle:Shoperklinar', 'a')
-                ->where('a.id = :identifier')
-                ->setParameter('identifier', $id)
-                ->addOrderBy('a.id','DESC')
-                ->getQuery()
-                ->getResult();
-        
-        $qb_products = $em->createQueryBuilder()
-                ->select('a')
-                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
-                ->where('a.idposrednik = :identifier')
-                ->setParameter('identifier', $id)
-                ->addOrderBy('a.id','DESC')
-                ->getQuery()
-                ->getResult();
-     
-//        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Shoperklinar');
-//        //$statistics = $StatUser->getStatistics();
-//        
-//        $qb = $StatZam->getKlinarBuilder();
-        
-//        $paginationLimit = $this->container->getParameter('admin.pagination_limit');
-//        $limits = array(2, 5, 10, 15);
-//        
-//        $limit = $Request->query->get('limit', $paginationLimit);
-//        
-//        $paginator = $this->get('knp_paginator');
-//        $pagination = $paginator->paginate($qb, $page, $limit);
-        
-        
-        return $this->render('MarcinAdminBundle:Shoper:klinar_podglad.html.twig',
-            array(
-            'pageTitle'            => 'GM Panel Shoper zamówienia klinar',
-            //'queryParams' => $queryParams,
-            //'limits' => $limits,
-            //'currLimit' => $limit,
-            'dane' => $qb,
-            'produkty' => $qb_products
-            //'updateTokenName' => $this->updateTokenName,
-            //'aktywacjaTokenName' => $this->aktywacjaTokenName,
-            //'csrfProvider' => $this->get('form.csrf_provider')
-                )
+        $form = $this->createForm(new KlinarType(), $Shoper);
+
+        $form->handleRequest($Request);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($Shoper);
+            $em->flush();
+            $message = (isset($newShoperyForm)) ? 'Poprawnie dodano.' : 'Dane zostały zaaktualizowane.';
+            $this->addFlash('success', $message);
+            return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar_pokaz', array(
+                                'id' => $Shoper->getId()
+            )));
+        }
+
+        return $this->render('MarcinAdminBundle:Shoper:klinar_podglad.html.twig', array(
+                    'pageTitle' => (isset($newShoperyForm) ? 'Zamowienia <small>utwórz nowy</small>' : 'Zamowienia <small>edycja</small>'),
+                    'currPage' => 'uzytkownicy',
+                    'form' => $form->createView(),
+                    'zamowienia' => $Shoper,
+                        )
         );
     }
 }

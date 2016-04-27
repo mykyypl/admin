@@ -139,6 +139,13 @@ class Shoperzamowienia {
      * 
      */
     private $idposrednik = null;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     * 
+     */
+    private $zrealizowano = null;  
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -670,6 +677,29 @@ class Shoperzamowienia {
     {
         return $this->uwagi;
     }
+    
+    /**
+     * Set zrealizowano
+     *
+     * @param string $zrealizowano
+     *
+     * @return Shoperzamowienia
+     */
+    public function setZrealizowano($zrealizowano)
+    {
+        $this->zrealizowano = $zrealizowano;
+        return $this;
+    }
+    /**
+     * Get zrealizowano
+     *
+     * @return string
+     */
+    public function getZrealizowano()
+    {
+        return $this->zrealizowano;
+    }
+    
     /**
      * Constructor
      */

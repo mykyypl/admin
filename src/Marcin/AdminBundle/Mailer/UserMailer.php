@@ -1,7 +1,7 @@
 <?php
 namespace Marcin\AdminBundle\Mailer;
 
-use Marcin\AdminBundle\Entity\Username;
+use Marcin\SiteBundle\Entity\Username;
 
 class UserMailer {
     
@@ -26,7 +26,7 @@ class UserMailer {
                         ->setSubject($subject)
                         ->setFrom($this->fromEmail, $this->fromName)
                         ->setTo('marcin@grupamagnum.eu')
-                        //->setCc('sklep@grupamagnum.eu')
+                        ->setCc('sklep@grupamagnum.eu')
                         ->setBody($htmlBody, 'text/html');
         
         $this->swiftMailer->send($message);

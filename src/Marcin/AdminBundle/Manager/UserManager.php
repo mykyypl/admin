@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface as Templating;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Marcin\AdminBundle\Mailer\UserMailer;
-use Marcin\AdminBundle\Entity\Shoperzamowienia;
+use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -53,7 +53,7 @@ class UserManager {
         
         $qb = $em->createQueryBuilder()
                 ->select('a')
-                ->from('MarcinAdminBundle:Shoperzamowienia', 'a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
                  ->where('a.idposrednik = :identifier')
                  ->setParameter('identifier', $id)
                //->setMaxResults(1)
@@ -62,7 +62,7 @@ class UserManager {
 
         $qb_dane = $em->createQueryBuilder()
                 ->select('a')
-                ->from('MarcinAdminBundle:Shoperklinar', 'a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
                  ->where('a.id = :identifier')
                  ->setParameter('identifier', $id)
                  ->setMaxResults(1)
