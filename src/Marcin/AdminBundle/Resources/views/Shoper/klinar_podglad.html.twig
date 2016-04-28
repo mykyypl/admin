@@ -142,7 +142,7 @@ kom.:+48 600280602
         <a href="{{ path('marcin_admin_shoper_klinar_pokaz') }}" class="btn btn-primary fixedposition_down">Zapisz podsumowanie</a>
 {% endfor %}
 #}
-{{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
+{{ form_start(form) }}
                 <div class="col-md-6">
                     <div class="box box-default color-palette-box">
                         <div class="box-header with-border">
@@ -176,9 +176,6 @@ kom.:+48 600280602
                             <div class="form-group">
                                 {{ form_row(form.uwagi) }}
                             </div>
-                            <div class="form-group">
-                                {{ form_row(form.klinaryt) }}
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -193,6 +190,7 @@ kom.:+48 600280602
                              {{ form_row(shoper.wariant) }}
                              {{ form_row(shoper.ilosc) }}
                              {{ form_row(shoper.uwagi) }}
+                             {{ form_row(shoper.klinaryt) }}
                         </div>
                     </div>
                 {% endfor %}

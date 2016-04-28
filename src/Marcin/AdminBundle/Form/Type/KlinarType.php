@@ -36,6 +36,7 @@ class KlinarType extends AbstractType
             ))
             ->add('firma', 'text', array(
                 'label' => 'Firma',
+                'required'  => false,
                 'attr' => array(
                     'class' => 'form-control',
                 )
@@ -48,6 +49,7 @@ class KlinarType extends AbstractType
             ))
             ->add('adres2', 'text', array(
                 'label' => 'Adres',
+                'required'  => false,
                 'attr' => array(
                     'class' => 'form-control',
                 )
@@ -71,16 +73,9 @@ class KlinarType extends AbstractType
             ))
             ->add('uwagi', 'textarea', array(
                 'label' => 'Uwagi do zamówienia',
+                'required'  => false,
                 'attr' => array(
                     'class' => 'form-control',
-                )
-            ))
-            ->add('klinaryt', 'checkbox', array(
-            'label'     => 'Klinaryt?',
-                //'label' => false,
-              'required'  => false,
-                'attr' => array (
-                    'class' => 'minimal'
                 )
             ))
             ->add('shoper1', CollectionType::class, array(

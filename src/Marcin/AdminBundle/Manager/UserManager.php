@@ -105,14 +105,14 @@ class UserManager {
        
         $em = $this->doctrine->getManager();
         
-//        $qb = $em->createQueryBuilder()
-//                ->select('a')
-//                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
-//                 ->where('a.idposrednik = :identifier')
-//                 ->setParameter('identifier', $id)
-//               //->setMaxResults(1)
-//                ->getQuery()
-//                ->getResult();
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
 
         $qb_dane = $em->createQueryBuilder()
                 ->select('a')
@@ -129,6 +129,7 @@ class UserManager {
             $em->flush();
         }
         $emaiBody = $this->templating->render('MarcinAdminBundle:Email:own.html.twig', array(
+            'klinar' => $qb,
             'klinar_dane' => $qb_dane
         ));
         $tytul = $qb_dane[0]->getFirma();

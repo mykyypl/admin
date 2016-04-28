@@ -146,9 +146,17 @@ class Shoperzamowienia {
      * 
      */
     private $zrealizowano = null;  
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     * 
+     */
+    private $klinaryt = null;  
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * 
      */
     private $uwagi = null;
 
@@ -698,6 +706,29 @@ class Shoperzamowienia {
     public function getZrealizowano()
     {
         return $this->zrealizowano;
+    }
+    
+    /**
+     * Set klinaryt
+     *
+     * @param string $klinaryt
+     *
+     * @return Shoperzamowienia
+     */
+    public function setKlinaryt($klinaryt)
+    {
+        $this->klinaryt = $klinaryt;
+        return $this;
+    }
+    
+    /**
+     * Get klinaryt
+     *
+     * @return string
+     */
+    public function getKlinaryt()
+    {
+        return $this->klinaryt;
     }
     
     /**

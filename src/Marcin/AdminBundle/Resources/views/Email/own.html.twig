@@ -66,10 +66,23 @@
 <tr>
 <th>
 <h1>Witam</h1>
-<p class="lead">Klinar dokonał modyfikacji zamówienia nr: {{dane.idzam}} id w panelu: {{dane.id}} dodając lub modyfikując fakturę!<br><br>PROSZĘ O DOKONANIE ANALIZY ZMIAN!</p>
+<p class="lead">Klinar dokonał modyfikacji zamówienia nr: {{dane.idzam}}. <br>Id w panelu: {{dane.id}}, dodając lub modyfikując fakturę!<br><br>PROSZĘ O DOKONANIE ANALIZY ZMIAN!</p>
 <p>{% if dane.firma == "" %}{{ dane.imie }} {{ dane.nazwisko }}{% else %}{{ dane.firma }}{% endif %}<br><br>
             <a href="https://grupamagnum.eu/zamowienia/panel/web/panel/u/shoper/klinar/b/pokaz?idLike={{dane.id}}"><b>Link do panelu</b></a><br><br>https://grupamagnum.eu/zamowienia/panel/web/panel/u/shoper/klinar/b/pokaz?idLike={{dane.id}}</p>
 <table class="callout">
+ <tr>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">
+    Profil okna 
+   </td>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Ciepły parapet</td>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Wysokość</td>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Ilość szt</td>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Zrealizowano</td>
+  </tr>
+      {% for shoper in klinar  %}
+  <tr><td><b>{{ shoper.uwagi }}</b></td><td style="padding: 15px;"><b>{{ shoper.nazwa }}</b></td><td style="padding: 15px;"><b>{{ shoper.wariant }}</b></td><td align="center" ><b>{{ shoper.ilosc }}</b></td><td align="center"><b>{%if shoper.zrealizowano == "1" %} TAK {% else %} NIE {% endif %}{#{{ shoper.zrealizowano }}#}</b></td></tr>
+      {% endfor %}
+</tr>
 <tr>
 {#<th class="callout-inner primary">
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit repellendus natus, sint ea optio dignissimos asperiores inventore a molestiae dolorum placeat repellat excepturi mollitia ducimus unde doloremque

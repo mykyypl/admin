@@ -43,6 +43,15 @@ class KlinarpType extends AbstractType
                 'label' => 'Profil produktu',
                 'attr' => array(
                     'class' => 'form-control',
+                    'required'    => true,
+                )
+            ))
+            ->add('klinaryt', 'checkbox', array(
+            'label'     => 'Klinaryt?',
+                //'label' => false,
+              'required'  => false,
+                'attr' => array (
+                    'class' => 'minimal'
                 )
             ));
 

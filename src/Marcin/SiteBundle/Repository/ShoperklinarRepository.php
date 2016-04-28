@@ -45,9 +45,9 @@ class ShoperklinarRepository extends EntityRepository
         
         if(!empty($params['status'])){
             if('nowe' == $params['status']){
-                $qb->andwhere('s.nrlistu IS NULL');
+                $qb->andwhere('s.nrlistu IS NULL OR s.pdf IS NULL');
             }else if('zrealizowane' == $params['status']){
-                $qb->andwhere('s.nrlistu IS NOT NULL');
+                $qb->andwhere('s.nrlistu IS NOT NULL OR s.pdf IS NOT NULL');
                        // ->setParameter('zaznaczono', 'IS NOT NULL');
             }
         }
@@ -80,7 +80,7 @@ class ShoperklinarRepository extends EntityRepository
         $all = $qb->andWhere('a.datawyslania IS NOT NULL')
                   ->getQuery()    
                   ->getSingleScalarResult();
-        $nowe = $qb->andWhere('a.nrlistu IS NULL')
+        $nowe = $qb->andWhere('a.nrlistu IS NULL OR a.pdf IS NULL')
                        // ->setParameter('currDate', NULL)
                    ->andWhere('a.datawyslania IS NOT NULL')
                        // ->setParameter('producent', 'Klinar')
