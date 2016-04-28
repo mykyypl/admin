@@ -39,6 +39,21 @@ class KlinarController extends Controller {
         $form = $this->createForm(new KlinarType(), $Shoper);
         $em = $this->getDoctrine()->getManager();
         $form->handleRequest($Request);
+        $qb_klinar = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+//                 //->andWhere('a.producent = Klinar' )
+                 ->setParameter('identifier', $id)
+                
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        if ( $qb_klinar[0]->getDataodczytania() == null )
+        {
+            $qb_klinar[0]->setDataodczytania(new \DateTime());
+            $em->flush();
+        }
         if ($form->isValid()) {
            
 //            $file = $Shoper->getFile();
@@ -50,6 +65,18 @@ class KlinarController extends Controller {
             $Shoper->setModyfikacja(new \DateTime());
             $em->persist($Shoper);
             $em->flush();
+            $PDF = $Shoper->getPdf();
+            if (!empty($PDF))
+            {
+                 try {
+                $userManager = $this->get('user_manager');
+                $userManager->checkKlinar($id);
+              //  $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
+            }
+            catch (UserException $exc) {
+                    $this->addFlash('error', $exc->getMessage());
+                }
+            }
             $message = 'Zamówienie zaaktualizowano.';
             $this->addFlash('success', $message);
             return $this->redirect($this->generateUrl('marcin_site_klinar', array(
@@ -111,6 +138,7 @@ class KlinarController extends Controller {
         
         $statusesList = array(
             'Nowe' => 'nowe',
+            //'Do uzupełnienia' => 'douzupelnienia',
             'Zrealizowane' => 'zrealizowane',
             'Wszystkie' => 'all'
         );

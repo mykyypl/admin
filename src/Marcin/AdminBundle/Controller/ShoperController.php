@@ -61,44 +61,44 @@ class ShoperController extends Controller {
         return new JsonResponse(true);
     }
     
-    /**
-     * @Route("/form/klinar/update-complete", 
-     *       name="marcin_admin_shoper_update_podglad",
-     *       requirements={
-     *          "_format": "json",
-     *          "methods": "POST"
-     *      }
-     * )
-     *
-     */
-    public function updateKlinarpodAction(Request $Request) {
-
-        $result = array(
-            'id' => $Request->request->get('id'),
-            'uwagi' => $Request->request->get('uwagi'),
-            'idzam' => $Request->request->get('idzam'),
-            'nazwa' => $Request->request->get('nazwa')
-        );
-
-        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
-        $Zamowienie = $RepoZamowienia->find($result['id']);
-
-        if (NULL === $Zamowienie) {
-            return new JsonResponse(false);
-        }
-        
-       if ($result['uwagi'] == null)
-       {
-            $em = $this->getDoctrine()->getManager();
-            $Zamowienie->setNazwa($result['nazwa']);
-            $em->flush();
-       } else {
-            $em = $this->getDoctrine()->getManager();
-            $Zamowienie->setUwagi($result['uwagi']);
-            $em->flush();
-       }
-        return new JsonResponse(true);
-    }
+//    /**
+//     * @Route("/form/klinar/update-complete", 
+//     *       name="marcin_admin_shoper_update_podglad",
+//     *       requirements={
+//     *          "_format": "json",
+//     *          "methods": "POST"
+//     *      }
+//     * )
+//     *
+//     */
+//    public function updateKlinarpodAction(Request $Request) {
+//
+//        $result = array(
+//            'id' => $Request->request->get('id'),
+//            'uwagi' => $Request->request->get('uwagi'),
+//            'idzam' => $Request->request->get('idzam'),
+//            'nazwa' => $Request->request->get('nazwa')
+//        );
+//
+//        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
+//        $Zamowienie = $RepoZamowienia->find($result['id']);
+//
+//        if (NULL === $Zamowienie) {
+//            return new JsonResponse(false);
+//        }
+//        
+//       if ($result['uwagi'] == null)
+//       {
+//            $em = $this->getDoctrine()->getManager();
+//            $Zamowienie->setNazwa($result['nazwa']);
+//            $em->flush();
+//       } else {
+//            $em = $this->getDoctrine()->getManager();
+//            $Zamowienie->setUwagi($result['uwagi']);
+//            $em->flush();
+//       }
+//        return new JsonResponse(true);
+//    }
     
     /**
      * @Route("/form/klinar/update-complete_zam", 
@@ -639,6 +639,11 @@ class ShoperController extends Controller {
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate($qb, $page, $limit);
         
+        $statusesList = array(
+            'Nowe' => 'nowe',
+            'Zrealizowane' => 'zrealizowane',
+            'Wszystkie' => 'all'
+        );
         
         return $this->render('MarcinAdminBundle:Shoper:klinar_posrednik.html.twig',
             array(
@@ -646,6 +651,7 @@ class ShoperController extends Controller {
             'queryParams' => $queryParams,
             'limits' => $limits,
             'currLimit' => $limit,
+            'statusesList' => $statusesList,
             'pagination' => $pagination
             //'updateTokenName' => $this->updateTokenName,
             //'aktywacjaTokenName' => $this->aktywacjaTokenName,
@@ -654,59 +660,59 @@ class ShoperController extends Controller {
         );
     }
     
-    /**
-     * @Route(
-     *       "/klinar/b/odczytanie/obrazek/{id}.png",
-     *       name="marcin_admin_shoper_klinar_odczytanie",
-     *       requirements={"id"="\d+"},
-     * )
-     *    
-     * @Template()
-     */
-    public function odczytanieklinarAction(Request $Request, $id) {
-        
-        if(null !== $id)
-        {
-            $em = $this->getDoctrine()->getManager();
-
-
-        $qb_klinar = $em->createQueryBuilder()
-                ->select('a')
-                ->from('MarcinSiteBundle:Shoperklinar', 'a')
-                 ->where('a.id = :identifier')
-//                 //->andWhere('a.producent = Klinar' )
-                 ->setParameter('identifier', $id)
-                
-                 ->setMaxResults(1)
-                 ->getQuery()
-                 ->getResult();
-        if ($qb_klinar == null) {
-             $this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
-             return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar'));
-        } else {
-                
-                $qb_klinar[0]->setDataodczytania(new \DateTime());
-                //$posrednik->setZaznaczono('66');
-                // klinar -> 66
-                $em->flush();
-                $filepath = "https://grupamagnum.eu/images/logo.png";
-
-
-                $response = new Response();
-                //$disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
-                $response->headers->set('Content-Disposition' , 'attachment; filename="'.$filepath.'"');
-                $response->headers->set('Content-Type', 'image/png');
-                $response->setContent(file_get_contents($filepath));
-
-                return $response;
-           //return $this->render('MarcinAdminBundle:Shoper:zdjecie.html.php');
-        }
-        }
-        else 
-        {
-            return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar_pokaz'));
-        }
-    }
+//    /**
+//     * @Route(
+//     *       "/klinar/b/odczytanie/obrazek/{id}.png",
+//     *       name="marcin_admin_shoper_klinar_odczytanie",
+//     *       requirements={"id"="\d+"},
+//     * )
+//     *    
+//     * @Template()
+//     */
+//    public function odczytanieklinarAction(Request $Request, $id) {
+//        
+//        if(null !== $id)
+//        {
+//            $em = $this->getDoctrine()->getManager();
+//
+//
+//        $qb_klinar = $em->createQueryBuilder()
+//                ->select('a')
+//                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+//                 ->where('a.id = :identifier')
+////                 //->andWhere('a.producent = Klinar' )
+//                 ->setParameter('identifier', $id)
+//                
+//                 ->setMaxResults(1)
+//                 ->getQuery()
+//                 ->getResult();
+//        if ($qb_klinar == null) {
+//             $this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
+//             return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar'));
+//        } else {
+//                
+//                $qb_klinar[0]->setDataodczytania(new \DateTime());
+//                //$posrednik->setZaznaczono('66');
+//                // klinar -> 66
+//                $em->flush();
+//                $filepath = "https://grupamagnum.eu/images/logo.png";
+//
+//
+//                $response = new Response();
+//                //$disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+//                $response->headers->set('Content-Disposition' , 'attachment; filename="'.$filepath.'"');
+//                $response->headers->set('Content-Type', 'image/png');
+//                $response->setContent(file_get_contents($filepath));
+//
+//                return $response;
+//           //return $this->render('MarcinAdminBundle:Shoper:zdjecie.html.php');
+//        }
+//        }
+//        else 
+//        {
+//            return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar_pokaz'));
+//        }
+//    }
     
     /**
      * @Route(

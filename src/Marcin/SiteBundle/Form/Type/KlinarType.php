@@ -22,16 +22,20 @@ class KlinarType extends AbstractType
     {
         $builder
             ->add('nrlistu', 'text', array(
-                'label' => 'Nr listu przewozowego',
+                'label' => 'Nr listu przewozowego (uzupełnienie ustawia na zrealizowane)',
                 'attr' => array(
                     'class' => 'form-control',
                 )
             ))
             ->add('file', 'file', array(
-                'label' => 'Faktura'
+               // 'label' => 'Faktura',
+                'label' => false,
+                'attr' => array(
+                    'class' => 'upload',
+                )
             ))
             ->add('uwagiklinar', 'textarea', array(
-                'label' => 'Uwagi do zamówienia',
+                'label' => 'Uwagi od producenta',
                 'attr' => array(
                     'class' => 'form-control',
                 )

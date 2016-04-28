@@ -75,6 +75,14 @@ class KlinarType extends AbstractType
                     'class' => 'form-control',
                 )
             ))
+            ->add('klinaryt', 'checkbox', array(
+            'label'     => 'Klinaryt?',
+                //'label' => false,
+              'required'  => false,
+                'attr' => array (
+                    'class' => 'minimal'
+                )
+            ))
             ->add('shoper1', CollectionType::class, array(
                 'entry_type' => KlinarpType::class
                     ))

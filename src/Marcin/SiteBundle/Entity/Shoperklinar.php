@@ -110,11 +110,23 @@ class Shoperklinar {
     private $dataodczytania = null;
     
     /**
+     * @ORM\Column(name="ostzmianapofaktura", type="datetime", nullable=true)
+     */
+    private $ostzmianapofaktura = null;
+    
+    /**
      * @ORM\Column(type="text", nullable=true)
      * 
      * 
      */
     private $uwagiklinar = null;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     * 
+     */
+    private $klinaryt = null;  
 
     /**
      * @ORM\ManyToMany(
@@ -486,6 +498,27 @@ class Shoperklinar {
     public function getModyfikacja() {
         return $this->modyfikacja;
     }
+    
+    /**
+     * Set ostzmianapofaktura
+     *
+     * @param \DateTime $ostzmianapofaktura
+     * @return Shoperklinar
+     */
+    public function setOstzmianapofaktura($ostzmianapofaktura) {
+        $this->ostzmianapofaktura = $ostzmianapofaktura;
+
+        return $this;
+    }
+
+    /**
+     * Get ostzmianapofaktura
+     *
+     * @return \DateTime 
+     */
+    public function getOstzmianapofaktura() {
+        return $this->ostzmianapofaktura;
+    }
 
     /**
      * Add shoper1
@@ -589,6 +622,28 @@ class Shoperklinar {
     public function getUwagiklinar()
     {
         return $this->uwagiklinar;
+    }
+    
+    /**
+     * Set klinaryt
+     *
+     * @param string $klinaryt
+     *
+     * @return Shoperklinar
+     */
+    public function setKlinaryt($klinaryt)
+    {
+        $this->klinaryt = $klinaryt;
+        return $this;
+    }
+    /**
+     * Get klinaryt
+     *
+     * @return string
+     */
+    public function getKlinaryt()
+    {
+        return $this->klinaryt;
     }
     
 //    /**
