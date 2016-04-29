@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="Marcin\SiteBundle\Repository\ShoperzamowieniaRepository")
  * @ORM\Table(name="shoperzamowienia")
- * @ORM\HasLifecycleCallbacks() 
+ * @ORM\HasLifecycleCallbacks
  *
  */
 class Shoperzamowienia {
@@ -910,6 +910,17 @@ class Shoperzamowienia {
             $this->zalacznik = $filename.'.'.$this->getFiles()->guessExtension();
         }
     }
+    
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $files = $this->getAbsolutePath();
+        if ($files) {
+            unlink($files);
+        }
+    }
 
     /**
      * @ORM\PostPersist()
@@ -929,22 +940,16 @@ class Shoperzamowienia {
         // check if we have an old image
         if (isset($this->filesTemps)) {
             // delete the old image
-            unlink($this->getUploadRootDir().'/'.$this->zalacznik);
+           // unlink($this->getUploadRootDir().'/'.$this->zalacznik);
             // clear the temp image path
+            
+             if (file_exists($this->getUploadRootDir() .'/'. $this->filesTemps)) {    //////    /   bugfix
+                unlink($this->getUploadRootDir() . '/' . $this->filesTemps);            ////    \   z oficjalnej dokumentacji symfony 2.8 !
+            }
+            
             $this->filesTemps = null;
         }
         $this->files = null;
-    }
-
-    /**
-     * @ORM\PostRemove()
-     */
-    public function removeUpload()
-    {
-        $files = $this->getAbsolutePath();
-        if ($files) {
-            unlink($files);
-        }
     }
 
 }
