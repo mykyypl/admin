@@ -36,7 +36,6 @@ class KlinarController extends Controller {
              $this->addFlash('error', 'Brak takiego zamówienia!');
              return $this->redirect($this->generateUrl('marcin_site_klinar'));
         }
-        $sprwadzam = new Shoperzamowienia();
         $form = $this->createForm(new KlinarType(), $Shoper);
         $em = $this->getDoctrine()->getManager();
         $form->handleRequest($Request);
@@ -62,8 +61,7 @@ class KlinarController extends Controller {
 //            $dir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/faktury/';
 //            $file->move($dir, $fileName);
 //            $Shoper->setFile($fileName);
-            //$sprwadzam->uploads();
-           // $em->persist($sprwadzam);
+            $Shoper->upload();
             $Shoper->setModyfikacja(new \DateTime());
             $em->persist($Shoper);
             $em->flush();
