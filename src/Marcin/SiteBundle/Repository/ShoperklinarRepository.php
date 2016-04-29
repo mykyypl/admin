@@ -46,8 +46,10 @@ class ShoperklinarRepository extends EntityRepository
         if(!empty($params['status'])){
             if('nowe' == $params['status']){
                 $qb->andwhere('s.nrlistu IS NULL OR s.pdf IS NULL');
+                        //->andWhere('s.datawyslania IS NULL');
             }else if('zrealizowane' == $params['status']){
-                $qb->andwhere('s.nrlistu IS NOT NULL OR s.pdf IS NOT NULL');
+                $qb->andwhere('s.nrlistu IS NOT NULL AND s.pdf IS NOT NULL')
+                        ->andWhere('s.datawyslania IS NOT NULL');
                        // ->setParameter('zaznaczono', 'IS NOT NULL');
             }
         }
