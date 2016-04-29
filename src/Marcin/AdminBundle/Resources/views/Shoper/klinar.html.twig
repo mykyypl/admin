@@ -64,7 +64,7 @@
     {% for shoper in pagination  %}
        <tr>
            <th>{% if shoper.zaznaczono == '66' %}{{ shoper.idzam }} {% else %}<a href="{{ path('marcin_admin_shoper_klinar_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">{{ shoper.idzam }}</a>{% endif %}</th>
-            <th>{% if shoper.zaznaczono == '66' %}<a href="{{ path('marcin_admin_shoper_klinar_pokaz', {'idLike': shoper.idposrednik }) }}" class="btn btn-success">wysłano</a>{% else %}<div class="checkbox checkbox-success">
+           <th>{% if shoper.zaznaczono == '66' %}<a href="{{ path('marcin_admin_shoper_klinar_pokaz', {'idLike': shoper.idposrednik }) }}"{% for row in shoper.shoperklinar %} {% if row.datawyslania == NULL %} class="btn btn-primary"> utworono{% else %} class="btn btn-success"> przesłano{% endif %}{% endfor %}</a>{% else %}<div class="checkbox checkbox-success">
                                                 <input style="flat-red" id="spr" type="checkbox" value="" onclick="changeOrderKlinar('{{ shoper.id }}', event)" {% if shoper.zaznaczono == '1' %}checked {% endif %} /><label for="checkbox1">
                                                 </label></div>{% endif %}
            </th>

@@ -9,7 +9,8 @@ namespace Marcin\SiteBundle\Entity;
 //use Marcin\AdminBundle\Entity\Shoperklinar;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 //use Symfony\Component\Validator\Constraints as Assert;
 //use Doctrine\Common\Collections\ArrayCollection;
 //use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -21,6 +22,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  */
 class Shoperzamowienia {
+    
+    const UPLOAD_DIR = 'uploads/zalacznikiklinar';
 
     /**
      * @ORM\Column(type="integer")
@@ -159,7 +162,23 @@ class Shoperzamowienia {
      * 
      */
     private $uwagi = null;
-
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $zalacznik = null;
+    
+    /**
+     * @Assert\File(
+     *      maxSize = "5M",
+     *      mimeTypes = {"application/pdf", "application/x-pdf", "application/msword", "application/acad", "image/vnd.dwg", "image/x-dwg", "image/jpeg", "image/pjpeg", "image/jpeg", "image/pjpeg", "image/png", "application/x-compressed", "application/x-zip-compressed", "application/zip", "multipart/x-zip"},
+     *      mimeTypesMessage = "Obsługiwany format plików: pdf,doc,dwg,jpg,jpeg,png,zip (MAX 5M)"
+     * )
+     */
+    private $files;
+    
+    private $filesTemps;
+    
     /**
      * 
      * @ORM\ManyToMany(
@@ -781,4 +800,151 @@ class Shoperzamowienia {
     {
         $this->shoperklinar = $shoperklinar;
     }
+    
+    /**
+     * Set zalacznik
+     *
+     * @param string $zalacznik
+     * @return Shoperzamowienia
+     */
+    public function setZalacznik($zalacznik) {
+        $this->zalacznik = $zalacznik;
+
+        return $this;
+    }
+
+    /**
+     * Get zalacznik
+     *
+     * @return string 
+     */
+    public function getZalacznik() {
+        return $this->zalacznik;
+    }
+    
+       public function getAbsolutePath()
+    {
+        return null === $this->zalacznik
+            ? null
+            : $this->getUploadRootDir().'/'.$this->zalacznik;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->zalacznik
+            ? null
+            : $this->getUploadDir().'/'.$this->zalacznik;
+    }
+    public function getUploadRootDir(){
+        return __DIR__.'/../../../../web/'.self::UPLOAD_DIR;
+    }
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/zalacznikiklinar';
+    }
+    
+    /**
+     * Sets files.
+     *
+     * @param UploadedFile $files
+     */
+    public function setFiles(UploadedFile $files = null)
+    {
+        //$this->files = $files;
+        $this->files = $files;
+        // check if we have an old image path
+        if (isset($this->zalacznik)) {
+            // store the old name to delete after the update
+            $this->filesTemps = $this->zalacznik;
+            $this->zalacznik = null;
+        } else {
+            $this->zalacznik = 'initial';
+        }
+    }
+
+    /**
+     * Get files.
+     *
+     * @return UploadedFile
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+    
+//    public function uploads()
+//    {
+//    // the file property can be empty if the field is not required
+//    if (null === $this->getFiles()) {
+//        return;
+//    }
+//
+//    // use the original file name here but you should
+//    // sanitize it at least to avoid any security issues
+//
+//    // move takes the target directory and then the
+//    // target filename to move to
+//    $this->getFiles()->move(
+//        $this->getUploadRootDir(),
+//        $this->getFiles()->getClientOriginalName()
+//    );
+//
+//    // set the path property to the filename where you've saved the file
+//    $this->zalacznik = $this->getFiles()->getClientOriginalName();
+//
+//    // clean up the file property as you won't need it anymore
+//    $this->files = null;
+//    }
+    
+        /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->getFiles()) {
+            // do whatever you want to generate a unique name
+            $filename = sha1(uniqid(mt_rand(), true));
+            $this->zalacznik = $filename.'.'.$this->getFiles()->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->getFiles()) {
+            return;
+        }
+
+        // if there is an error when moving the file, an exception will
+        // be automatically thrown by move(). This will properly prevent
+        // the entity from being persisted to the database on error
+        $this->getFiles()->move($this->getUploadRootDir(), $this->zalacznik);
+
+        // check if we have an old image
+        if (isset($this->filesTemps)) {
+            // delete the old image
+            unlink($this->getUploadRootDir().'/'.$this->zalacznik);
+            // clear the temp image path
+            $this->filesTemps = null;
+        }
+        $this->files = null;
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $files = $this->getAbsolutePath();
+        if ($files) {
+            unlink($files);
+        }
+    }
+
 }

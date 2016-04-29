@@ -785,6 +785,7 @@ class ShoperController extends Controller {
         $form->handleRequest($Request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $Shoper->upload();
             $em->persist($Shoper);
             $em->flush();
             $message = (isset($newShoperyForm)) ? 'Poprawnie dodano.' : 'Dane zostały zaaktualizowane.';

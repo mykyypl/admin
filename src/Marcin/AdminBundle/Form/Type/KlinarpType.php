@@ -46,6 +46,15 @@ class KlinarpType extends AbstractType
                     'required'    => true,
                 )
             ))
+            ->add('files', 'file', array(
+               // 'label' => 'Faktura',
+                'required' => false,
+                'label' => false,
+                'attr' => array(
+                    'class' => 'upload',
+                    'required' => false,
+                )
+            ))
             ->add('klinaryt', 'checkbox', array(
             'label'     => 'Klinaryt?',
                 //'label' => false,
