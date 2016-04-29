@@ -68,9 +68,9 @@
                                                 <input style="flat-red" id="spr" type="checkbox" value="" onclick="changeOrderKlinar('{{ shoper.id }}', event)" {% if shoper.zaznaczono == '1' %}checked {% endif %} /><label for="checkbox1">
                                                 </label></div>{% endif %}
            </th>
-           <th>{{ shoper.firma }}</th>
+           <th>{{ shoper.firma }} {% if shoper.idposrednik == null %}{% else %}<span class="label label-info">{{ shoper.idposrednik }}</span>{% endif %}</th>
            <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
-           <th>{{ shoper.nazwa }}</th>
+           <th>{{ shoper.nazwa }}{% if shoper.zrealizowano == "1" %} <span class="label label-success"><i class="fa fa-check" aria-hidden="true"></i></span>{% else %} <span class="label label-danger"><i class="fa fa-times" aria-hidden="true"></i></span>{% endif %}</th>
            <th>{{ shoper.wariant }}</th>
            <th>{{ shoper.ilosc }} {{ shoper.jednostka }}</th>
            {#<th id="zmiana-status-{{ shoper.id }}">
