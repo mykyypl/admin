@@ -415,7 +415,7 @@ class ShoperController extends Controller {
      *       "/klinar/{status}/{page}",
      *       name="marcin_admin_shoper_klinar",
      *       requirements={"page"="\d+"},
-     *      defaults={"status"="all", "page"=1}
+     *      defaults={"status"="nowe", "page"=1}
      * )
      *    
      * @Template()
