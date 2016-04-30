@@ -22,7 +22,11 @@ services:
     own_mailer:
         class: Marcin\AdminBundle\Mailer\OwnMailer
         arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    invest_mailer:
+        class: Marcin\AdminBundle\Mailer\InvestMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
 
     user_manager:
         class: Marcin\AdminBundle\Manager\UserManager
-        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer]
+        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer]

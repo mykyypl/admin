@@ -122,6 +122,11 @@ class Shoperklinar {
     private $uwagiklinar = null;
     
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $kategoria = null;
+    
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      * 
      * 
@@ -644,6 +649,27 @@ class Shoperklinar {
     public function getKlinaryt()
     {
         return $this->klinaryt;
+    }
+    
+    /**
+     * Set kategoria
+     *
+     * @param string $kategoria
+     * @return Shoperklinar
+     */
+    public function setKategoria($kategoria) {
+        $this->kategoria = $kategoria;
+
+        return $this;
+    }
+
+    /**
+     * Get kategoria
+     *
+     * @return string 
+     */
+    public function getKategoria() {
+        return $this->kategoria;
     }
     
 //    /**

@@ -565,6 +565,7 @@ class ShoperController extends Controller {
         $zamowienia_klinar->setTelefon($telefon);
         $zamowienia_klinar->setDatawygenerowania(new \DateTime());
         $zamowienia_klinar->setDatamaxdo(new \DateTime('+ 2 days'));
+        $zamowienia_klinar->setKategoria("Klinar");
         
         $em->persist($zamowienia_klinar);
         $em->flush();

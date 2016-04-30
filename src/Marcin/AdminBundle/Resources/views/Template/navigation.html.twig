@@ -13,4 +13,22 @@
                     <li class="{% if app.request.get('_route') == 'marcin_admin_shoper_klinar_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_shoper_klinar_pokaz') }}"><i class="fa fa-circle-o"></i> Klinar podsumowanie</a></li>
                 </ul>
             </li>
+            <li class="treeview {% if app.request.get('_route') == 'marcin_admin_invest' %}active{% endif %}">
+                <a href="{{ path('marcin_admin_invest') }}">
+                    <i><b>INV</B></i> <span>Zamówienia invest</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_invest' %}active on{% endif %}"><a href="{{ path('marcin_admin_invest') }}"><i class="fa fa-circle-o"></i> Invest</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_invest_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_invest_pokaz') }}"><i class="fa fa-circle-o"></i> Invest podsumowanie</a></li>
+                </ul>
+            </li>
+            <li class="treeview {% if app.request.get('_route') == 'marcin_admin_partnerplast' %}active{% endif %}">
+                <a href="{{ path('marcin_admin_partnerplast') }}">
+                    <i><b>PaP</B></i> <span>Zamówienia PartnerPlast</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_partnerplast' %}active on{% endif %}"><a href="{{ path('marcin_admin_partnerplast') }}"><i class="fa fa-circle-o"></i> PartnerPlast</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_partnerplast_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_partnerplast_pokaz') }}"><i class="fa fa-circle-o"></i> PartnerPlast podsumowanie</a></li>
+                </ul>
+            </li>
           </ul>

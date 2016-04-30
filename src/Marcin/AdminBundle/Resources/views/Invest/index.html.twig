@@ -20,43 +20,69 @@
         <section class="content">
             <div class="box box-default color-palette-box">
             <div class="box-header with-border">
-              <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia Shoper</h3>
+              <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia Shoper Invest</h3>
             </div>
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <a href="{{ path('marcin_admin_shoper-dodawanie') }}" class="btn btn-primary">pobierz zamówienia</a>
-                        <a href="{{ path('marcin_admin_shoper_form') }}" class="btn btn-warning">Dodaj</a>
+                       {#<a href="{{ path('marcin_admin_shoper_send_klinar') }}" class="btn btn-primary">wyślij zaznaczone</a>#}
+                       <a href="{{ path('marcin_admin_invest_pokaz') }}" class="btn btn-success">Szczegóły wiadomośći wysłanych</a>
+                        {% for key,val in statusesList %}
+                    <div class="col-xs-12 col-md-2 col-lg-2 padding-bottom-15">
+                        <a class="btn btn-block {{ currStatus == val ? 'btn-default':'btn-primary' }}" href="{{ path('marcin_admin_invest', {'status': val}) }}">
+                            {{ key }} ({{ statistics[val] }})
+                        </a>
+                    </div>
+                    {% endfor %}
+                        <form action="{{ path('marcin_admin_invest') }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
+                            <div class="col-xs-12 col-md-2 col-lg-3 padding-bottom-15 pull-right">
+                                <div class="input-group" style="width: 100%;">
+                                  <input type="text" name="idzamLike" class="form-control input-md" placeholder="Wyszukaj po nr zam" value="{{ queryParams['idzamLike'] }}">
+                                  <div class="input-group-btn">
+                                    <button class="btn btn-md btn-block btn-default"><i class="fa fa-search"></i></button>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                         </form>
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">{{ knp_pagination_sortable(pagination, 'ID zamówienia', 's.idzam') }}</th>
+                                    <th>akcje</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Firma</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Imie Nazwisko</th>
                                     <th>Produkty</th>
+                                    <th>Wariant</th>
                                     <th>ilości</th>
-                                    <th>producent</th>
-                                    <th>akcje</th>
+                                    {#<th>producent</th>#}
+                                    <th>uwagi</th>
                                 </tr>
                             </thead>
         
     {% for shoper in pagination  %}
        <tr>
-           <th>{{ shoper.idzam }}</th>
-           <th>{{ shoper.firma }}</th>
+           <th>{% if shoper.zaznaczono == '55' %}{{ shoper.idzam }} {% else %}<a href="{{ path('marcin_admin_shoper_invest_show', {'idzam': shoper.idzam}) }}" class="btn btn-primary">{{ shoper.idzam }}</a>{% endif %}</th>
+           <th>{% if shoper.zaznaczono == '55' %}<a href="{{ path('marcin_admin_invest_pokaz', {'idLike': shoper.idposrednik }) }}"{% for row in shoper.shoperklinar %} {% if row.datawyslania == NULL %} class="btn btn-primary"> utworono{% else %} class="btn btn-success"> przesłano{% endif %}{% endfor %}</a>{% else %}<div class="checkbox checkbox-success">
+                                                <input style="flat-red" id="spr" type="checkbox" value="" onclick="changeOrderInvest('{{ shoper.id }}', event)" {% if shoper.zaznaczono == '1' %}checked {% endif %} /><label for="checkbox1">
+                                                </label></div>{% endif %}
+           </th>
+           <th>{{ shoper.firma }} {% if shoper.idposrednik == null %}{% else %}<span class="label label-info">{{ shoper.idposrednik }}</span>{% endif %}</th>
            <th>{{ shoper.imie }} {{ shoper.nazwisko }}</th>
-           <th>{{ shoper.nazwa }} {{ shoper.wariant }}</th>
+           <th>{{ shoper.nazwa }}{% if shoper.zrealizowano == "1" %} <span class="label label-success"><i class="fa fa-check" aria-hidden="true"></i></span>{% else %} <span class="label label-danger"><i class="fa fa-times" aria-hidden="true"></i></span>{% endif %}</th>
+           <th>{{ shoper.wariant }}</th>
            <th>{{ shoper.ilosc }} {{ shoper.jednostka }}</th>
-           <th id="zmiana-status-{{ shoper.id }}">
+           {#<th id="zmiana-status-{{ shoper.id }}">
                                         <select name="status_select" class="selectpicker"{% if shoper.producent == '' %} data-style="btn-default" {% elseif shoper.producent == 'Klinar' %} data-style="btn-warning" {% elseif shoper.producent == 'ProTape' %} data-style="btn-danger" {% elseif shoper.producent == 'Hanno' %} data-style="btn-primary" {% elseif shoper.producent == 'Invest' %} data-style="btn-primary" {% else %} data-style="btn-success" {% endif %} id="{{ path('marcin_admin_shoper_ajax', {'id': shoper.id }) }}" onchange="changeOrderStatus('{{ shoper.id }}', '{{ shoper.idzam }}', event)">
                                             <option{% if shoper.producent == '' %} selected="selected" {% endif %}>Proszę wybrać</option>
                                             <option value="Klinar"{% if shoper.producent == 'Klinar' %} selected="selected" {% endif %}>Klinar</option>
-                                            <option value="PartnerPlast"{% if shoper.producent == 'PartnerPlast' %} selected="selected" {% endif %}>PartnerPlast</option>
+                                            <option value="ProTape"{% if shoper.producent == 'ProTape' %} selected="selected" {% endif %}>ProTape</option>
                                             <option value="Hanno"{% if shoper.producent == 'Hanno' %} selected="selected" {% endif %}>Hanno</option>
                                             <option value="Invest"{% if shoper.producent == 'Invest' %} selected="selected" {% endif %}>Invest</option>
                                             <option value="GrupaMAGNUM"{% if shoper.producent == 'GrupaMAGNUM' %} selected="selected" {% endif %}>GrupaMAGNUM</option></select>
-            </th>
-           <th></th>
+            </th>#}
+           <th>{% if shoper.uwagi == NULL %} {% else %}{{ shoper.uwagi }}{% endif %}</th>
        </tr>
     {% endfor %}
         </table>
@@ -84,24 +110,30 @@
         {{parent()}}
         <script type="text/javascript">
 
-                            function changeOrderStatus(id, idzam, event) {
+                            function changeOrderInvest(id, event) {
                                 var order_id = id;
-                                var idzamid = idzam;
                                 var element = event.currentTarget;
                                 var clicked = event.target;
-                                var wartosc = $(element).val();
-                                var url = '{{ path('marcin_admin_shoper_ajax') }}';
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var zaplacono = 1;
+        } else {
+             console.log('odznaczono!');
+             var zaplacono = 0;
+        }
+                                
+                                var url = '{{ path('marcin_admin_invest_send') }}';
 
                                 $.ajax({
                                     url: url,
                                     data: {
                                         id: order_id,
-                                        status: wartosc,
-                                        idzamid: idzamid
+                                        zaznaczono: zaplacono
                                     },
                                     method: 'POST',
                                     success: function (data) {
-                                                console.log(idzamid);
+                                                console.log(order_id);
                                     }
                                 });
 

@@ -17,6 +17,16 @@ marcin_admin_shoper:
     type: annotation
     prefix: /u/shoper
     
+marcin_admin_invest:
+    resource: "@MarcinAdminBundle/Controller/InvestController.php"
+    type: annotation
+    prefix: /i/invest
+    
+marcin_admin_partnerplast:
+    resource: "@MarcinAdminBundle/Controller/PartnerplastController.php"
+    type: annotation
+    prefix: /p/partner
+    
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
 #    prefix: /u/user/form/{id}
