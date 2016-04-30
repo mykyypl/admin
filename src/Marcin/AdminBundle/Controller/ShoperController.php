@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class ShoperController extends Controller {
     
+    private $deleteTokenName = 'delete-zam-%d';
     
     /**
      * @Route("/form/update-complete", 
@@ -652,7 +653,9 @@ class ShoperController extends Controller {
             'limits' => $limits,
             'currLimit' => $limit,
             'statusesList' => $statusesList,
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'deleteTokenName' => $this->deleteTokenName,
+            'csrfProvider' => $this->get('form.csrf_provider')
             //'updateTokenName' => $this->updateTokenName,
             //'aktywacjaTokenName' => $this->aktywacjaTokenName,
             //'csrfProvider' => $this->get('form.csrf_provider')
@@ -801,5 +804,56 @@ class ShoperController extends Controller {
                     'zamowienia' => $Shoper,
                         )
         );
+    }
+    
+    /**
+     * @Route(
+     *      "/klinar/b/pokaz/usun/{id}/{token}", 
+     *      name="marcin_admin_shoper_klinar_pokaz_delete",
+     *      requirements={"id"="\d+"}
+     * )
+     * 
+     * @Template()
+     */
+    public function deleteAction($id, $token) {
+
+        $tokenName = sprintf($this->deleteTokenName, $id);
+        $csrfProvider = $this->get('form.csrf_provider');
+
+        if (!$csrfProvider->isCsrfTokenValid($tokenName, $token)) {
+            $this->addFlash('error', 'Niepoprawny token akcji.');
+        } else {
+
+            $Zamid = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperklinar')->find($id);
+            //$Zamid = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia')
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($Zamid);
+            $qb_klinar = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                ->where('a.producent = :Klinar AND a.idposrednik = :idzam')
+                 //->andWhere('a.producent = Klinar' )
+                 //->setParameter('identifier', '1')
+                ->setParameter('Klinar', 'Klinar')
+                ->setParameter('idzam', $id)
+                
+                 //->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+            
+            foreach($qb_klinar as $posrednik)
+             {
+                $posrednik->setIdposrednik(null);
+                $posrednik->setZaznaczono(null);
+                $posrednik->setZrealizowano(null);
+                $posrednik->setKlinaryt(null);
+                $posrednik->setZalacznik(null);
+                $em->flush();
+             }
+            $em->flush();
+            $this->addFlash('success', 'Poprawnie usunięto.');
+        }
+
+        return $this->redirect($this->generateUrl('marcin_admin_shoper_klinar'));
     }
 }
