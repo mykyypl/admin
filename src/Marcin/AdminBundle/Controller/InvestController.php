@@ -71,7 +71,7 @@ class InvestController extends Controller {
             try {
                // $userEmail = 'marcin@grupamagnum.eu';
                 $userManager = $this->get('user_manager');
-                $userManager->sendInvest($id, $idzam);
+                $userManager->sendInvest($id);
                 $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
             }
             catch (UserException $exc) {

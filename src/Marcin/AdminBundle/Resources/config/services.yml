@@ -26,7 +26,19 @@ services:
     invest_mailer:
         class: Marcin\AdminBundle\Mailer\InvestMailer
         arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    partner_mailer:
+        class: Marcin\AdminBundle\Mailer\PartnerMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+
+    selena_mailer:
+        class: Marcin\AdminBundle\Mailer\SelenaMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+
+    hanno_mailer:
+        class: Marcin\AdminBundle\Mailer\HannoMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
 
     user_manager:
         class: Marcin\AdminBundle\Manager\UserManager
-        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer]
+        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer, @partner_mailer, @selena_mailer, @hanno_mailer]

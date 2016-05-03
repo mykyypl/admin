@@ -31,4 +31,22 @@
                     <li class="{% if app.request.get('_route') == 'marcin_admin_partnerplast_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_partnerplast_pokaz') }}"><i class="fa fa-circle-o"></i> PartnerPlast podsumowanie</a></li>
                 </ul>
             </li>
+            <li class="treeview {% if app.request.get('_route') == 'marcin_admin_selena' %}active{% endif %}">
+                <a href="{{ path('marcin_admin_selena') }}">
+                    <i><b>SEL</B></i> <span>Zamówienia Selena</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_selena' %}active on{% endif %}"><a href="{{ path('marcin_admin_selena') }}"><i class="fa fa-circle-o"></i> Selena</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_selena_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_selena_pokaz') }}"><i class="fa fa-circle-o"></i> Selena podsumowanie</a></li>
+                </ul>
+            </li>
+            <li class="treeview {% if app.request.get('_route') == 'marcin_admin_hanno' %}active{% endif %}">
+                <a href="{{ path('marcin_admin_hanno') }}">
+                    <i><b>HAN</B></i> <span>Zamówienia Hanno</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_hanno' %}active on{% endif %}"><a href="{{ path('marcin_admin_hanno') }}"><i class="fa fa-circle-o"></i> Hanno</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_hanno_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_hanno_pokaz') }}"><i class="fa fa-circle-o"></i> Hanno podsumowanie</a></li>
+                </ul>
+            </li>
           </ul>

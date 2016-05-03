@@ -24,13 +24,13 @@ use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
-class PartnerplastController extends Controller {
+class HannoController extends Controller {
     
     private $deleteTokenName = 'delete-zam-%d';
     
     /**
      * @Route("/form/send", 
-     *       name="marcin_admin_partnerplast_send",
+     *       name="marcin_admin_hanno_send",
      *       requirements={
      *          "_format": "json",
      *          "methods": "POST"
@@ -60,31 +60,31 @@ class PartnerplastController extends Controller {
     }
     
     /**
-     * @Route("/form/send_partnerplast/{id}/{idzam}", 
-     *       name="marcin_admin_shoper_send_partnerplast"
+     * @Route("/form/send_hanno/{id}/{idzam}", 
+     *       name="marcin_admin_shoper_send_hanno"
      * )
      *
      */
-    public function sendpartnerplastAction($id, $idzam) {
+    public function sendhannoAction($id, $idzam) {
         
           /////////////////////////////////////// WYSYŁANIE WIADOMOŚCI EMAIL
             try {
                // $userEmail = 'marcin@grupamagnum.eu';
                 $userManager = $this->get('user_manager');
-                $userManager->sendPartner($id);
+                $userManager->sendHanno($id);
                 $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
             }
             catch (UserException $exc) {
                     $this->addFlash('error', $exc->getMessage());
                 }
             /////////////////////////////////////// KONIEC WYSYŁANIA WIADOMOŚCI EMAIL
-       return $this->redirect($this->generateUrl('marcin_admin_partnerplast'));
+       return $this->redirect($this->generateUrl('marcin_admin_hanno'));
     }
     
     /**
      * @Route(
      *       "/{status}/{page}",
-     *       name="marcin_admin_partnerplast",
+     *       name="marcin_admin_hanno",
      *       requirements={"page"="\d+"},
      *      defaults={"status"="nowe", "page"=1}
      * )
@@ -99,9 +99,9 @@ class PartnerplastController extends Controller {
         ); 
      
         $StatZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
-        $statistics = $StatZam->getStatisticspartner();
+        $statistics = $StatZam->getStatisticshanno();
         
-        $qb = $StatZam->getPartnerBuilder($queryParams);
+        $qb = $StatZam->getHannoBuilder($queryParams);
         
         $paginationLimit = $this->container->getParameter('admin.pagination_limit');
         $limits = array(2, 5, 10, 15);
@@ -117,9 +117,9 @@ class PartnerplastController extends Controller {
             'Wszystkie' => 'all'
         );
         
-        return $this->render('MarcinAdminBundle:Partner:index.html.twig',
+        return $this->render('MarcinAdminBundle:Hanno:index.html.twig',
             array(
-            'pageTitle'            => 'GM Panel Shoper zamówienia ParnerPlast',
+            'pageTitle'            => 'GM Panel Shoper zamówienia Hanno',
             'queryParams' => $queryParams,
             'limits' => $limits,
             'currLimit' => $limit,
@@ -137,15 +137,15 @@ class PartnerplastController extends Controller {
     
     /**
      * @Route(
-     *      "/partnerplast/show/zamowienie/{idzam}", 
-     *      name="marcin_admin_shoper_partnerplast_show",
+     *      "/hanno/show/zamowienie/{idzam}", 
+     *      name="marcin_admin_shoper_hanno_show",
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
      * )
      * 
      * @Template()
      */
-    public function partnerplastshowAction(Request $Request, $idzam) {
+    public function hannoshowAction(Request $Request, $idzam) {
             
         $zamowienia_klinar = new Shoperklinar();
         
@@ -158,14 +158,14 @@ class PartnerplastController extends Controller {
                  ->where('a.zaznaczono = :identifier AND a.producent = :Klinar')
                  //->andWhere('a.producent = Klinar' )
                  ->setParameter('identifier', '1')
-                ->setParameter('Klinar', 'PartnerPlast')
+                ->setParameter('Klinar', 'Hanno')
                // ->setParameter('idzam', $idzam)
                  //->setMaxResults(1)
                  ->getQuery()
                  ->getResult();
         if ($qb_klinar == null) {
              $this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
-             return $this->redirect($this->generateUrl('marcin_admin_shoper_partnerplast'));
+             return $this->redirect($this->generateUrl('marcin_admin_shoper_hanno'));
         } else {
         
         $firma = $qb_klinar[0]->getFirma();
@@ -188,7 +188,7 @@ class PartnerplastController extends Controller {
         $zamowienia_klinar->setTelefon($telefon);
         $zamowienia_klinar->setDatawygenerowania(new \DateTime());
         $zamowienia_klinar->setDatamaxdo(new \DateTime('+ 2 days'));
-        $zamowienia_klinar->setKategoria("PartnerPlast");
+        $zamowienia_klinar->setKategoria("Hanno");
         
         $em->persist($zamowienia_klinar);
         $em->flush();
@@ -198,30 +198,30 @@ class PartnerplastController extends Controller {
              foreach($qb_klinar as $posrednik)
              {
                 $posrednik->setIdposrednik($sprwadzam);
-                $posrednik->setZaznaczono('44');
+                $posrednik->setZaznaczono('22');
                 //$id = $posrednik->getId();
                 $zamowienia_klinar->addShoper1($posrednik);
                 $posrednik->addShoperklinar($zamowienia_klinar);
                // $em->persist($posrednik);
                // $em->persist($zamowienia_klinar);
-                // partnerplast -> 44
+                // Hanno -> 22
                 $em->flush();
              }
              $this->addFlash('success', 'Poprawnie wygenerowano nowy formularz!');
-             return $this->redirect($this->generateUrl('marcin_admin_shoper_partnerplast_podglad', array('id' => $sprwadzam)));
+             return $this->redirect($this->generateUrl('marcin_admin_shoper_hanno_podglad', array('id' => $sprwadzam)));
     }
     }
     
     /**
      * @Route(
-     *       "/partnerplast/b/podglad/{id}",
-     *       name="marcin_admin_shoper_partnerplast_podglad",
+     *       "/hanno/b/podglad/{id}",
+     *       name="marcin_admin_shoper_hanno_podglad",
      *       requirements={"id"="\d+"}
      * )
      *    
      * @Template()
      */
-    public function ppodgladAction(Request $Request, $id, Shoperklinar $Shoper = NULL) {
+    public function hpodgladAction(Request $Request, $id, Shoperklinar $Shoper = NULL) {
         if (null == $Shoper) {
             $Shoper = new Shoperklinar();
             $newShoperyForm = TRUE;
@@ -236,12 +236,12 @@ class PartnerplastController extends Controller {
             $em->flush();
             $message = (isset($newShoperyForm)) ? 'Poprawnie dodano.' : 'Dane zostały zaaktualizowane.';
             $this->addFlash('success', $message);
-            return $this->redirect($this->generateUrl('marcin_admin_partnerplast_pokaz', array(
+            return $this->redirect($this->generateUrl('marcin_admin_hanno_pokaz', array(
                                 'id' => $Shoper->getId()
             )));
         }
 
-        return $this->render('MarcinAdminBundle:Partner:partner_edit.html.twig', array(
+        return $this->render('MarcinAdminBundle:Hanno:hanno_edit.html.twig', array(
                     'pageTitle' => (isset($newShoperyForm) ? 'Zamowienia <small>utwórz nowy</small>' : 'Zamowienia <small>edycja</small>'),
                     'currPage' => 'uzytkownicy',
                     'form' => $form->createView(),
@@ -252,15 +252,15 @@ class PartnerplastController extends Controller {
     
     /**
      * @Route(
-     *       "/partnerplast/b/pokaz/{page}",
-     *       name="marcin_admin_partnerplast_pokaz",
+     *       "/hanno/b/pokaz/{page}",
+     *       name="marcin_admin_hanno_pokaz",
      *       requirements={"page"="\d+"},
      *       defaults={"page"=1}
      * )
      *    
      * @Template()
      */
-    public function partnerplastpokazAction(Request $Request, $page) {
+    public function hannopokazAction(Request $Request, $page) {
         $queryParams = array(
             'idLike' => $Request->query->get('idLike'),
 
@@ -269,7 +269,7 @@ class PartnerplastController extends Controller {
         $StatZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperklinar');
         //$statistics = $StatUser->getStatistics();
         
-        $qb = $StatZam->getPartnerBuilder($queryParams);
+        $qb = $StatZam->getHannoBuilder($queryParams);
         
         $paginationLimit = $this->container->getParameter('admin.pagination_limit');
         $limits = array(2, 5, 10, 15);
@@ -285,9 +285,9 @@ class PartnerplastController extends Controller {
             'Wszystkie' => 'all'
         );
         
-        return $this->render('MarcinAdminBundle:Partner:partner.html.twig',
+        return $this->render('MarcinAdminBundle:Hanno:hanno.html.twig',
             array(
-            'pageTitle'            => 'GM Panel Shoper zamówienia PartnerPlast',
+            'pageTitle'            => 'GM Panel Shoper zamówienia Hanno',
             'queryParams' => $queryParams,
             'limits' => $limits,
             'currLimit' => $limit,
@@ -304,8 +304,8 @@ class PartnerplastController extends Controller {
     
     /**
      * @Route(
-     *      "/partnerplast/b/pokaz/usun/{id}/{token}", 
-     *      name="marcin_admin_shoper_partnerplast_delete",
+     *      "/hanno/b/pokaz/usun/{id}/{token}", 
+     *      name="marcin_admin_shoper_hanno_delete",
      *      requirements={"id"="\d+"}
      * )
      * 
@@ -330,7 +330,7 @@ class PartnerplastController extends Controller {
                 ->where('a.producent = :Klinar AND a.idposrednik = :idzam')
                  //->andWhere('a.producent = Klinar' )
                  //->setParameter('identifier', '1')
-                ->setParameter('Klinar', 'PartnerPlast')
+                ->setParameter('Klinar', 'Hanno')
                 ->setParameter('idzam', $id)
                 
                  //->setMaxResults(1)
@@ -350,7 +350,7 @@ class PartnerplastController extends Controller {
             $this->addFlash('success', 'Poprawnie usunięto.');
         }
 
-        return $this->redirect($this->generateUrl('marcin_admin_partnerplast'));
+        return $this->redirect($this->generateUrl('marcin_admin_hanno'));
     }
     
 }

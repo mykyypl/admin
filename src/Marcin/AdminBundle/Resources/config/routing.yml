@@ -27,6 +27,17 @@ marcin_admin_partnerplast:
     type: annotation
     prefix: /p/partner
     
+marcin_admin_selena:
+    resource: "@MarcinAdminBundle/Controller/SelenaController.php"
+    type: annotation
+    prefix: /s/selena
+    
+marcin_admin_hanno:
+    resource: "@MarcinAdminBundle/Controller/HannoController.php"
+    type: annotation
+    prefix: /h/hanno
+    
+    
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
 #    prefix: /u/user/form/{id}
