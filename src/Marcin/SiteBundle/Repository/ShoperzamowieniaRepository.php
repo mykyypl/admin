@@ -330,4 +330,116 @@ class ShoperzamowieniaRepository extends EntityRepository
         );
     }
     
+    public function getAwaxBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.producent = :realizacja')
+                ->setParameter('realizacja', 'AWAX')
+              ->addOrderBy('s.id', 'DESC');
+
+        if(!empty($params['status'])){
+            if('nowe' == $params['status']){
+                $qb->andwhere('s.idposrednik IS NULL');
+            }else if('zrealizowane' == $params['status']){
+                $qb->andwhere('s.zaznaczono = :zaznaczono')
+                        ->setParameter('zaznaczono', '77');
+                //77 awax
+            }
+        }
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.idzam LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getStatisticsawax() {
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $all = $qb->andWhere('a.producent = :currDate')
+                        ->setParameter('currDate', 'AWAX')
+                        ->getQuery()    
+                        ->getSingleScalarResult();
+        $nowe = $qb->andWhere('a.idposrednik IS NULL')
+                       // ->setParameter('currDate', NULL)
+                       //  ->andWhere('a.producent = :producent')
+                       // ->setParameter('producent', 'Klinar')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+//        $zrealizowane = $qb->andWhere('a.zaznaczono = :currDate')
+//                        ->setParameter('currDate', '66')
+//                        ->getQuery()
+//                        ->getSingleScalarResult();
+        return array(
+            'all' => $all,
+            'nowe' => $nowe,
+            'zrealizowane' => ($all - $nowe)
+        );
+    }
+    
+    public function getZygmarBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.producent = :realizacja')
+                ->setParameter('realizacja', 'Zygmar')
+              ->addOrderBy('s.id', 'DESC');
+
+        if(!empty($params['status'])){
+            if('nowe' == $params['status']){
+                $qb->andwhere('s.idposrednik IS NULL');
+            }else if('zrealizowane' == $params['status']){
+                $qb->andwhere('s.zaznaczono = :zaznaczono')
+                        ->setParameter('zaznaczono', '88');
+                //88 Zygmar
+            }
+        }
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.idzam LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getStatisticszygmar() {
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $all = $qb->andWhere('a.producent = :currDate')
+                        ->setParameter('currDate', 'Zygmar')
+                        ->getQuery()    
+                        ->getSingleScalarResult();
+        $nowe = $qb->andWhere('a.idposrednik IS NULL')
+                       // ->setParameter('currDate', NULL)
+                       //  ->andWhere('a.producent = :producent')
+                       // ->setParameter('producent', 'Klinar')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+//        $zrealizowane = $qb->andWhere('a.zaznaczono = :currDate')
+//                        ->setParameter('currDate', '66')
+//                        ->getQuery()
+//                        ->getSingleScalarResult();
+        return array(
+            'all' => $all,
+            'nowe' => $nowe,
+            'zrealizowane' => ($all - $nowe)
+        );
+    }
+    
 }

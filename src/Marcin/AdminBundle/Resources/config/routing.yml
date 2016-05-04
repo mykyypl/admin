@@ -37,6 +37,15 @@ marcin_admin_hanno:
     type: annotation
     prefix: /h/hanno
     
+marcin_admin_awax:
+    resource: "@MarcinAdminBundle/Controller/AwaxController.php"
+    type: annotation
+    prefix: /a/awax
+    
+marcin_admin_zygmar:
+    resource: "@MarcinAdminBundle/Controller/ZygmarController.php"
+    type: annotation
+    prefix: /z/zygmar
     
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
