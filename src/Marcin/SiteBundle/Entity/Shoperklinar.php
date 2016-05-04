@@ -152,7 +152,7 @@ class Shoperklinar {
     protected $shoper1;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="array")
      */
     private $nrlistu;
     
@@ -481,7 +481,13 @@ class Shoperklinar {
     public function __construct() {
         $this->date = new \DateTime();
         $this->shoper1 = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->nrlistu = new \Doctrine\Common\Collections\ArrayCollection();
     }
+    
+//    public function addNrlistu(Nrlistu $nrlistu)
+//    {
+//        $this->nrlistu->add($nrlistu);
+//    }
     
     /**
      * Set modyfikacja
@@ -605,6 +611,11 @@ class Shoperklinar {
      */
     public function getNrlistu() {
         return $this->nrlistu;
+    }
+    
+    public function removeNrlistu(Nrlistu $nrlistu)
+    {
+        $this->nrlistu->removeElement($nrlistu);
     }
     
     /**
