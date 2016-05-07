@@ -169,6 +169,13 @@ class Shoperzamowienia {
     private $zalacznik = null;
     
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     * 
+     */
+    private $wyslane = null;  
+    
+    /**
      * @Assert\File(
      *      maxSize = "5M",
      *      mimeTypes = {"application/pdf", "application/x-pdf", "application/msword", "application/acad", "image/vnd.dwg", "image/x-dwg", "image/jpeg", "image/pjpeg", "image/jpeg", "image/pjpeg", "image/png", "application/x-compressed", "application/x-zip-compressed", "application/zip", "multipart/x-zip"},
@@ -748,6 +755,29 @@ class Shoperzamowienia {
     public function getKlinaryt()
     {
         return $this->klinaryt;
+    }
+    
+    /**
+     * Set wyslane
+     *
+     * @param string $wyslane
+     *
+     * @return Shoperzamowienia
+     */
+    public function setWyslane($wyslane)
+    {
+        $this->wyslane = $wyslane;
+        return $this;
+    }
+    
+    /**
+     * Get wyslane
+     *
+     * @return string
+     */
+    public function getWyslane()
+    {
+        return $this->wyslane;
     }
     
     /**

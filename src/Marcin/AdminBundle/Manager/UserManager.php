@@ -12,6 +12,8 @@ use Marcin\AdminBundle\Mailer\InvestMailer;
 use Marcin\AdminBundle\Mailer\PartnerMailer;
 use Marcin\AdminBundle\Mailer\SelenaMailer;
 use Marcin\AdminBundle\Mailer\HannoMailer;
+use Marcin\AdminBundle\Mailer\ZygmarMailer;
+use Marcin\AdminBundle\Mailer\AwaxMailer;
 use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -68,7 +70,17 @@ class UserManager {
      */
     protected $hannoMailer;
     
-    function __construct(Doctrine $doctrine, Router $router, Templating $templating, EncoderFactory $encoderFactory, UserMailer $userMailer, OwnMailer $ownMailer, InvestMailer $investMailer, PartnerMailer $partnerMailer, SelenaMailer $selenaMailer, HannoMailer $hannoMailer) {
+    /**
+     * @var zygmarMailer
+     */
+    protected $zygmarMailer;
+    
+    /**
+     * @var awaxMailer
+     */
+    protected $awaxMailer;
+    
+    function __construct(Doctrine $doctrine, Router $router, Templating $templating, EncoderFactory $encoderFactory, UserMailer $userMailer, OwnMailer $ownMailer, InvestMailer $investMailer, PartnerMailer $partnerMailer, SelenaMailer $selenaMailer, HannoMailer $hannoMailer, ZygmarMailer $zygmarMailer, AwaxMailer $awaxMailer) {
         $this->doctrine = $doctrine;
         $this->router = $router;
         $this->templating = $templating;
@@ -79,6 +91,8 @@ class UserManager {
         $this->partnerMailer = $partnerMailer;
         $this->selenaMailer = $selenaMailer;
         $this->hannoMailer = $hannoMailer;
+        $this->zygmarMailer = $zygmarMailer;
+        $this->awaxMailer = $awaxMailer;
     }
     
     public function registerUsername($id, $idzam) {
@@ -106,6 +120,11 @@ class UserManager {
         foreach($qb_dane as $odznaczenie)
         {
                         $odznaczenie->setDatawyslania(new \DateTime());
+            $em->flush();
+        }
+        foreach($qb as $wyslane)
+        {
+            $wyslane->setWyslane('1');
             $em->flush();
         }
         $emaiBody = $this->templating->render('MarcinAdminBundle:Email:pay.html.twig', array(
@@ -220,6 +239,11 @@ class UserManager {
                         $odznaczenie->setDatawyslania(new \DateTime());
             $em->flush();
         }
+         foreach($qb as $wyslane)
+        {
+            $wyslane->setWyslane('1');
+            $em->flush();
+        }
         $emaiBody = $this->templating->render('MarcinAdminBundle:Email:invest.html.twig', array(
             'invest' => $qb,
             'invest_dane' => $qb_dane
@@ -265,6 +289,11 @@ class UserManager {
         foreach($qb_dane as $odznaczenie)
         {
                         $odznaczenie->setDatawyslania(new \DateTime());
+            $em->flush();
+        }
+         foreach($qb as $wyslane)
+        {
+            $wyslane->setWyslane('1');
             $em->flush();
         }
         $emaiBody = $this->templating->render('MarcinAdminBundle:Email:partner.html.twig', array(
@@ -314,6 +343,11 @@ class UserManager {
                         $odznaczenie->setDatawyslania(new \DateTime());
             $em->flush();
         }
+         foreach($qb as $wyslane)
+        {
+            $wyslane->setWyslane('1');
+            $em->flush();
+        }
         $emaiBody = $this->templating->render('MarcinAdminBundle:Email:selena.html.twig', array(
             'selena' => $qb,
             'selena_dane' => $qb_dane
@@ -361,9 +395,118 @@ class UserManager {
                         $odznaczenie->setDatawyslania(new \DateTime());
             $em->flush();
         }
+         foreach($qb as $wyslane)
+        {
+            $wyslane->setWyslane('1');
+            $em->flush();
+        }
         $emaiBody = $this->templating->render('MarcinAdminBundle:Email:hanno.html.twig', array(
             'hanno' => $qb,
             'hanno_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 25);
+                    $this->hannoMailer->send($userEmail, 'Zamówienie '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 20);
+                    $this->hannoMailer->send($userEmail, 'Zamówienie '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+    public function sendZygmar($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setDatawyslania(new \DateTime());
+            $em->flush();
+        }
+         foreach($qb as $wyslane)
+        {
+            $wyslane->setWyslane('1');
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:zygmar.html.twig', array(
+            'zygmar' => $qb,
+            'zygmar_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 25);
+                    $this->hannoMailer->send($userEmail, 'Zamówienie '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 20);
+                    $this->hannoMailer->send($userEmail, 'Zamówienie '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+    public function sendAwax($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setDatawyslania(new \DateTime());
+            $em->flush();
+        }
+         foreach($qb as $wyslane)
+        {
+            $wyslane->setWyslane('1');
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:awax.html.twig', array(
+            'awax' => $qb,
+            'awax_dane' => $qb_dane
         ));
         $tytul = $qb_dane[0]->getFirma();
         $tytul_nazwisko = $qb_dane[0]->getNazwisko();

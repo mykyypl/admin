@@ -49,6 +49,18 @@ class KlinarController extends Controller {
                  ->setMaxResults(1)
                  ->getQuery()
                  ->getResult();
+        $qb_sprawdzanie = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.producent = :Klinar AND a.idposrednik = :idzam')
+                 //->andWhere('a.producent = Klinar' )
+                 //->setParameter('identifier', '1')
+                ->setParameter('Klinar', 'Klinar')
+                ->setParameter('idzam', $id)
+                
+                 //->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
         if ( $qb_klinar[0]->getDataodczytania() == null )
         {
             $qb_klinar[0]->setDataodczytania(new \DateTime());
@@ -77,6 +89,21 @@ class KlinarController extends Controller {
                     $this->addFlash('error', $exc->getMessage());
                 }
             }
+           
+             foreach($qb_sprawdzanie as $posrednik)
+             {
+                 if ($posrednik->getZrealizowano() == "" || $posrednik->getZrealizowano() == "0")
+                 {
+                     $qb_klinar[0]->setCalosc(NULL);
+                     $em->flush();
+                     break;
+                 }
+                 else {
+                     $qb_klinar[0]->setCalosc('1');
+                     $em->flush();
+                 }
+                 
+             }
             $message = 'Zamówienie zaaktualizowano.';
             $this->addFlash('success', $message);
             return $this->redirect($this->generateUrl('marcin_site_klinar', array(
@@ -92,6 +119,45 @@ class KlinarController extends Controller {
         
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate($qb);
+        
+                
+                
+//            $ilosc = 0;
+//            $sprwadzam = 0;
+//             foreach($qb_sprawdzanie as $posrednik)
+//             {
+////                $posrednik->setIdposrednik($sprwadzam);
+////                $posrednik->setZaznaczono('66');
+////                //$id = $posrednik->getId();
+////                $zamowienia_klinar->addShoper1($posrednik);
+////                $posrednik->addShoperklinar($zamowienia_klinar);
+////               // $em->persist($posrednik);
+////               // $em->persist($zamowienia_klinar);
+////                // klinar -> 66
+////                $em->flush();
+//                // $ilosc = $ilosc + 1;
+//                 //$sprwadzam = $sprwadzam + $posrednik->getZrealizowano();
+//                 if ($posrednik->getZrealizowano() == "" || $posrednik->getZrealizowano() == "0")
+//                 {
+//                     $qb_klinar[0]->setCalosc('0');
+//                     $em->flush();
+//                     break;
+//                 }
+//                 else {
+//                     $qb_klinar[0]->setCalosc('1');
+//                     $em->flush();
+//                 }
+//                 
+//             }
+//             if ($ilosc == $posrednik)
+//             {
+//                 $qb_klinar->setCalosc('1');
+//                 $em->flush();
+//             }
+//             else {
+//                 $qb_klinar->setCalosc('0');
+//                 $em->flush();
+//             }
 
         return $this->render('MarcinSiteBundle:Klinar:form.html.twig',
             array(
@@ -123,7 +189,7 @@ class KlinarController extends Controller {
         ); 
      
         $KlinarZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperklinar');
-        $statistics = $KlinarZam->getStatistics();
+        $statistics = $KlinarZam->getStatisticsKlinar();
         
         $qb = $KlinarZam->getKlinarBuilder($queryParams);
         

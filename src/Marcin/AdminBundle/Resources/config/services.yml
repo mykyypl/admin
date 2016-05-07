@@ -38,7 +38,15 @@ services:
     hanno_mailer:
         class: Marcin\AdminBundle\Mailer\HannoMailer
         arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    zygmar_mailer:
+        class: Marcin\AdminBundle\Mailer\ZygmarMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    awax_mailer:
+        class: Marcin\AdminBundle\Mailer\AwaxMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
 
     user_manager:
         class: Marcin\AdminBundle\Manager\UserManager
-        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer, @partner_mailer, @selena_mailer, @hanno_mailer]
+        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer, @partner_mailer, @selena_mailer, @hanno_mailer, @zygmar_mailer, @awax_mailer]

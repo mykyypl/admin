@@ -61,7 +61,7 @@ class HannoController extends Controller {
     
     /**
      * @Route("/form/send_hanno/{id}/{idzam}", 
-     *       name="marcin_admin_shoper_send_hanno"
+     *       name="marcin_admin_hanno_send_hanno"
      * )
      *
      */
@@ -113,6 +113,8 @@ class HannoController extends Controller {
         
         $statusesList = array(
             'Nowe' => 'nowe',
+            'Do wysłania' => 'dowyslania',
+            'Wysłane' => 'wyslane',
             'Zrealizowane' => 'zrealizowane',
             'Wszystkie' => 'all'
         );
@@ -138,7 +140,7 @@ class HannoController extends Controller {
     /**
      * @Route(
      *      "/hanno/show/zamowienie/{idzam}", 
-     *      name="marcin_admin_shoper_hanno_show",
+     *      name="marcin_admin_hanno_show",
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
      * )
@@ -165,7 +167,7 @@ class HannoController extends Controller {
                  ->getResult();
         if ($qb_klinar == null) {
              $this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
-             return $this->redirect($this->generateUrl('marcin_admin_shoper_hanno'));
+             return $this->redirect($this->generateUrl('marcin_admin_hanno'));
         } else {
         
         $firma = $qb_klinar[0]->getFirma();
@@ -189,6 +191,7 @@ class HannoController extends Controller {
         $zamowienia_klinar->setDatawygenerowania(new \DateTime());
         $zamowienia_klinar->setDatamaxdo(new \DateTime('+ 2 days'));
         $zamowienia_klinar->setKategoria("Hanno");
+        $zamowienia_klinar->setNrlistu(NULL);
         
         $em->persist($zamowienia_klinar);
         $em->flush();
@@ -208,14 +211,14 @@ class HannoController extends Controller {
                 $em->flush();
              }
              $this->addFlash('success', 'Poprawnie wygenerowano nowy formularz!');
-             return $this->redirect($this->generateUrl('marcin_admin_shoper_hanno_podglad', array('id' => $sprwadzam)));
+             return $this->redirect($this->generateUrl('marcin_admin_hanno_podglad', array('id' => $sprwadzam)));
     }
     }
     
     /**
      * @Route(
      *       "/hanno/b/podglad/{id}",
-     *       name="marcin_admin_shoper_hanno_podglad",
+     *       name="marcin_admin_hanno_podglad",
      *       requirements={"id"="\d+"}
      * )
      *    
@@ -252,24 +255,24 @@ class HannoController extends Controller {
     
     /**
      * @Route(
-     *       "/hanno/b/pokaz/{page}",
+     *       "/hanno/b/pokaz/{status}/{page}",
      *       name="marcin_admin_hanno_pokaz",
      *       requirements={"page"="\d+"},
-     *       defaults={"page"=1}
+     *       defaults={"status"="dowyslania", "page"=1}
      * )
      *    
      * @Template()
      */
-    public function hannopokazAction(Request $Request, $page) {
+    public function hannopokazAction(Request $Request, $status, $page) {
         $queryParams = array(
             'idLike' => $Request->query->get('idLike'),
-
+            'status' => $status
         ); 
      
         $StatZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperklinar');
-        //$statistics = $StatUser->getStatistics();
+        $statistics = $StatZam->getStatisticsHannoPanel();
         
-        $qb = $StatZam->getHannoBuilder($queryParams);
+        $qb = $StatZam->getHannoPanelBuilder($queryParams);
         
         $paginationLimit = $this->container->getParameter('admin.pagination_limit');
         $limits = array(2, 5, 10, 15);
@@ -280,7 +283,9 @@ class HannoController extends Controller {
         $pagination = $paginator->paginate($qb, $page, $limit);
         
         $statusesList = array(
-            'Nowe' => 'nowe',
+            //'Nowe' => 'nowe',
+            'Do wysłania' => 'dowyslania',
+            'Wysłane' => 'wyslane',
             'Zrealizowane' => 'zrealizowane',
             'Wszystkie' => 'all'
         );
@@ -293,6 +298,10 @@ class HannoController extends Controller {
             'currLimit' => $limit,
             'statusesList' => $statusesList,
             'pagination' => $pagination,
+                            'statusesList' => $statusesList,
+            'currStatus' => $status,
+            'statistics' => $statistics,
+            'currStatus' => $status,
             'deleteTokenName' => $this->deleteTokenName,
             'csrfProvider' => $this->get('form.csrf_provider')
             //'updateTokenName' => $this->updateTokenName,
@@ -305,7 +314,7 @@ class HannoController extends Controller {
     /**
      * @Route(
      *      "/hanno/b/pokaz/usun/{id}/{token}", 
-     *      name="marcin_admin_shoper_hanno_delete",
+     *      name="marcin_admin_hanno_delete",
      *      requirements={"id"="\d+"}
      * )
      * 

@@ -143,12 +143,14 @@ kom.:+48 600280602
 {% endfor %}
 #}
 {{ form_start(form) }}
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="box box-default color-palette-box">
                         <div class="box-header with-border">
                             <h3 class="box-title"><i class="fa fa-tag"></i> Edycja użytkownika</h3>
                         </div>
                         <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_row(form.imie) }}
                             </div>
@@ -164,6 +166,8 @@ kom.:+48 600280602
                             <div class="form-group">
                                 {{ form_row(form.adres2) }}
                             </div>
+                                </div>
+                            <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_row(form.miejscowosc) }}
                             </div>
@@ -176,28 +180,60 @@ kom.:+48 600280602
                             <div class="form-group">
                                 {{ form_row(form.uwagi) }}
                             </div>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                {% for shoper in form.shoper1 %}
+                </div>
+                <div class="row">
+                <div class="col-md-12">
+                
                     <div class="box box-default color-palette-box">
                         <div class="box-header with-border">
                             <h3 class="box-title"><i class="fa fa-tag"></i> Edycja produktów</h3>
                         </div> 
                         <div class="box-body">
-                             {{ form_row(shoper.nazwa) }}
-                             {{ form_row(shoper.wariant) }}
-                             {{ form_row(shoper.ilosc) }}
-                             {{ form_row(shoper.uwagi) }}<br>
-                             <div class="alert alert-info" role="alert"><strong>Dodanie nowego pliku nadpisuje stery!</strong></div>
-                            <div class="fileUpload btn btn-primary">
+                          {#  <div clss="row">
+                            <div class="col-md-2">
+                             {{ form_row(shoper.nazwa) }}</div>
+                             <div class="col-md-2">{{ form_row(shoper.wariant) }}</div>
+                             <div class="col-md-2">{{ form_row(shoper.ilosc) }}</div>
+                                <div class="col-md-2"> {{ form_row(shoper.uwagi) }}</div>
+                            <div class="col-md-2"> {#<div class="alert alert-info" role="alert"><strong>Dodanie nowego pliku nadpisuje stery!</strong></div>#}
+                            {#<div class="fileUpload btn btn-primary">
                                 {{ form_row(shoper.files) }}
-                            </div><br>
-                             {{ form_row(shoper.klinaryt) }}
+                            </div></div>
+                             <div class="col-md-2">{{ form_row(shoper.klinaryt) }}
+                            </div>>#}
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>nazwa</th>
+                                        <th>wariant</th>
+                                        <th>ilosc</th>
+                                        <th>uwagi</th>
+                                        <th>zalacznik</th>
+                                        <th>klinaryt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                            {% for shoper in form.shoper1 %}
+                                <tr>
+                                    <td>{{ form_row(shoper.nazwa) }}</td>
+                                    <td>{{ form_row(shoper.wariant) }}</td>
+                                    <td>{{ form_row(shoper.ilosc) }}</td>
+                                    <td>{{ form_row(shoper.uwagi) }}</td>
+                                    <td>Dodanie nadpisuje stary! {{ form_row(shoper.files) }}</td>
+                                    <td>{{ form_row(shoper.klinaryt) }}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
+                            
                     </div>
-                {% endfor %}
+                
                 </div>
                 <div class="form-group">
                     {{ form_rest(form) }}

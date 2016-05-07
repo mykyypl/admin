@@ -2,6 +2,37 @@ marcin_site_klinar:
     resource: "@MarcinSiteBundle/Controller/KlinarController.php"
     type: annotation
     prefix: /zarzadzanie/3384567321/klinar
-#    path:     /zarzadzanie/123456789
+    
+marcin_site_awax:
+    resource: "@MarcinSiteBundle/Controller/AwaxController.php"
+    type: annotation
+    prefix: /zarzadzanie/4483567321/awax
+    
+marcin_site_invest:
+    resource: "@MarcinSiteBundle/Controller/InvestController.php"
+    type: annotation
+    prefix: /zarzadzanie/5582567321/invest
+    
+marcin_site_partnerplast:
+    resource: "@MarcinSiteBundle/Controller/PartnerplastController.php"
+    type: annotation
+    prefix: /zarzadzanie/6681467321/partnerplast
+    
+marcin_site_selena:
+    resource: "@MarcinSiteBundle/Controller/SelenaController.php"
+    type: annotation
+    prefix: /zarzadzanie/7772467321/selena
+    
+marcin_site_stier:
+    resource: "@MarcinSiteBundle/Controller/StierController.php"
+    type: annotation
+    prefix: /zarzadzanie/8873467321/stier
+    
+marcin_site_zygmar:
+    resource: "@MarcinSiteBundle/Controller/ZygmarController.php"
+    type: annotation
+    prefix: /zarzadzanie/9991367321/zygmar
+    
+#    path:     /zarzadzanie/3384567321
 #    defaults: { _controller: MarcinSiteBundle:Klinar:index }
 

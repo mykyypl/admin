@@ -132,6 +132,13 @@ class Shoperklinar {
      * 
      */
     private $klinaryt = null;  
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     * 
+     */
+    private $calosc = null;  
 
     /**
      * @ORM\ManyToMany(
@@ -152,9 +159,10 @@ class Shoperklinar {
     protected $shoper1;
     
     /**
-     * @ORM\Column(type="array")
+     * @var array
+     * @ORM\Column(type="array", nullable=true)
      */
-    private $nrlistu;
+    private $nrlistu = null;
     
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -481,7 +489,7 @@ class Shoperklinar {
     public function __construct() {
         $this->date = new \DateTime();
         $this->shoper1 = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->nrlistu = new \Doctrine\Common\Collections\ArrayCollection();
+        //$this->nrlistu = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
 //    public function addNrlistu(Nrlistu $nrlistu)
@@ -595,7 +603,7 @@ class Shoperklinar {
     /**
      * Set nrlistu
      *
-     * @param string $nrlistu
+     * @param array $nrlistu
      * @return Shoperklinar
      */
     public function setNrlistu($nrlistu) {
@@ -603,20 +611,37 @@ class Shoperklinar {
 
         return $this;
     }
+//    public function setNrlistu($nrlistu) {
+//        $this->nrlistu = array();
+//        
+//        foreach ($nrlistu as $nr)
+//        {
+//            $this->addNrlistu($nr);
+//        }
+//    }
+    
+//        public function addNrlistu($nr)
+//    {
+//        if (!in_array($nr, $this->nrlistu, true)) {
+//            $this->nrlistu[] = $nr;
+//        }
+//
+//        return $this;
+//    }
 
     /**
      * Get nrlistu
      *
-     * @return string 
+     * @return array 
      */
     public function getNrlistu() {
         return $this->nrlistu;
     }
     
-    public function removeNrlistu(Nrlistu $nrlistu)
-    {
-        $this->nrlistu->removeElement($nrlistu);
-    }
+//    public function removeNrlistu(Nrlistu $nrlistu)
+//    {
+//        $this->nrlistu->removeElement($nrlistu);
+//    }
     
     /**
      * Set uwagiklinar
@@ -660,6 +685,28 @@ class Shoperklinar {
     public function getKlinaryt()
     {
         return $this->klinaryt;
+    }
+    
+    /**
+     * Set calosc
+     *
+     * @param string $calosc
+     *
+     * @return Shoperklinar
+     */
+    public function setCalosc($calosc)
+    {
+        $this->calosc = $calosc;
+        return $this;
+    }
+    /**
+     * Get calosc
+     *
+     * @return string
+     */
+    public function getCalosc()
+    {
+        return $this->calosc;
     }
     
     /**

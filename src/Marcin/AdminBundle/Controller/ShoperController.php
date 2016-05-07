@@ -443,6 +443,8 @@ class ShoperController extends Controller {
         
         $statusesList = array(
             'Nowe' => 'nowe',
+            'Do wysłania' => 'dowyslania',
+            'Wysłane' => 'wyslane',
             'Zrealizowane' => 'zrealizowane',
             'Wszystkie' => 'all'
         );
@@ -566,6 +568,7 @@ class ShoperController extends Controller {
         $zamowienia_klinar->setDatawygenerowania(new \DateTime());
         $zamowienia_klinar->setDatamaxdo(new \DateTime('+ 2 days'));
         $zamowienia_klinar->setKategoria("Klinar");
+        $zamowienia_klinar->setNrlistu(NULL);
         
         $em->persist($zamowienia_klinar);
         $em->flush();
@@ -614,24 +617,24 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/klinar/b/pokaz/{page}",
+     *       "/klinar/b/pokaz/{status}/{page}",
      *       name="marcin_admin_shoper_klinar_pokaz",
      *       requirements={"page"="\d+"},
-     *       defaults={"page"=1}
+     *       defaults={"status"="dowyslania", "page"=1}
      * )
      *    
      * @Template()
      */
-    public function klinarpokazAction(Request $Request, $page) {
+    public function klinarpokazAction(Request $Request, $status, $page) {
         $queryParams = array(
             'idLike' => $Request->query->get('idLike'),
-
+            'status' => $status
         ); 
      
         $StatZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperklinar');
-        //$statistics = $StatUser->getStatistics();
+        $statistics = $StatZam->getStatisticsKlinarPanel();
         
-        $qb = $StatZam->getKlinarBuilder($queryParams);
+        $qb = $StatZam->getKlinarPanelBuilder($queryParams);
         
         $paginationLimit = $this->container->getParameter('admin.pagination_limit');
         $limits = array(2, 5, 10, 15);
@@ -642,7 +645,9 @@ class ShoperController extends Controller {
         $pagination = $paginator->paginate($qb, $page, $limit);
         
         $statusesList = array(
-            'Nowe' => 'nowe',
+            //'Nowe' => 'nowe',
+            'Do wysłania' => 'dowyslania',
+            'Wysłane' => 'wyslane',
             'Zrealizowane' => 'zrealizowane',
             'Wszystkie' => 'all'
         );
@@ -655,6 +660,10 @@ class ShoperController extends Controller {
             'currLimit' => $limit,
             'statusesList' => $statusesList,
             'pagination' => $pagination,
+            'statusesList' => $statusesList,
+            'currStatus' => $status,
+            'statistics' => $statistics,
+            'currStatus' => $status,
             'deleteTokenName' => $this->deleteTokenName,
             'csrfProvider' => $this->get('form.csrf_provider')
             //'updateTokenName' => $this->updateTokenName,

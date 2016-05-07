@@ -22,25 +22,25 @@ class KlinarpType extends AbstractType
     {
         $builder
             ->add('nazwa', 'text', array(
-                'label' => 'Nazwa produktu',
+                'label' => false,//'Nazwa produktu',
                 'attr' => array(
                     'class' => 'form-control',
                 )
             ))
             ->add('wariant', 'text', array(
-                'label' => 'Warianty produktu',
+                'label' => false,//'Warianty produktu',
                 'attr' => array(
                     'class' => 'form-control',
                 )
             ))
             ->add('ilosc', 'text', array(
-                'label' => 'Ilości produktu',
+                'label' => false,//'Ilości produktu',
                 'attr' => array(
                     'class' => 'form-control',
                 )
             ))
             ->add('uwagi', 'textarea', array(
-                'label' => 'Profil produktu',
+                'label' => false,//'Profil produktu',
                 'attr' => array(
                     'class' => 'form-control',
                     'required'    => true,
