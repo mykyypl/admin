@@ -86,8 +86,10 @@ class AwaxController extends Controller {
               //  $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
                 foreach($qb_sprawdzanie as $posredniknew)
                  {
+                  if ($posredniknew->getZrealizowano() == "1" ) {
                     $posredniknew->setZamok('1');
                      $em->flush();
+                  }
                  }
             }
             catch (UserException $exc) {
