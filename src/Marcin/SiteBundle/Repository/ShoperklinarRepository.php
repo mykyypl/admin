@@ -1104,4 +1104,61 @@ class ShoperklinarRepository extends EntityRepository
         return $qb;
     }
     
+        public function getStatisticsAllzam() {
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_wyslane = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_zrealizowane = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $dowyslania = $qb->andWhere('a.datawyslania IS NULL AND a.calosc IS NULL')
+                  ->getQuery()    
+                  ->getSingleScalarResult();
+        $wyslane = $qb_wyslane->andWhere('a.datawyslania IS NOT NULL')
+                   ->andWhere('a.nrlistu IS NULL OR a.pdf IS NULL OR a.calosc IS NULL')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $zrealizowane = $qb_zrealizowane->andWhere('a.nrlistu IS NOT NULL AND a.pdf IS NOT NULL AND a.calosc = :test AND a.datawyslania IS NOT NULL')
+                        ->setParameter('test', '1')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        return array(
+            'dowyslania' => $dowyslania,
+            'wyslane' => $wyslane,
+            'zrealizowane' => $zrealizowane
+        );
+    }
+    
+    public function getAllzamBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s, t')
+                //->leftJoin('MarcinAdminBundle:Shoperzamowienia', 'ct', 'WITH', 'ct.idposrednik = s.id');
+                ->leftJoin('s.shoper1', 't')
+              ->addOrderBy('s.id', 'DESC');
+        
+        if(!empty($params['status'])){
+            if('zrealizowane' == $params['status']){
+                $qb->andwhere('s.nrlistu IS NOT NULL AND s.pdf IS NOT NULL AND s.calosc = :test AND s.datawyslania IS NOT NULL')
+                       // ->andWhere('s.datawyslania IS NOT NULL');
+                        ->setParameter('test', '1');
+            } else if('wyslane' == $params['status']){
+               $qb->andwhere('s.datawyslania IS NOT NULL')
+                       ->andwhere('s.nrlistu IS NULL OR s.pdf IS NULL OR s.calosc IS NULL');
+        } else if('dowyslania' == $params['status']){
+               $qb->andwhere('s.datawyslania IS NULL AND s.calosc IS NULL');
+        }else if('all' == $params['status']){
+               //$qb->andwhere('s.datawyslania IS NULL AND s.calosc IS NULL');
+        }
+        }
+        if(!empty($params['idLike'])){
+            $jakie_zamLike = '%'.$params['idLike'].'%';
+            $qb->andWhere('s.id LIKE :idLike')
+                    ->setParameter('idLike', $jakie_zamLike);
+        }
+        
+        
+        return $qb;
+    }
+    
 }

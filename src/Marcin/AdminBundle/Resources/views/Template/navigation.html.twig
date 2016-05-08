@@ -67,4 +67,5 @@
                     <li class="{% if app.request.get('_route') == 'marcin_admin_zygmar_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_zygmar_pokaz') }}"><i class="fa fa-circle-o"></i> Zygmar podsumowanie</a></li>
                 </ul>
             </li>
+            <li class="{% if app.request.get('_route') == 'marcin_admin_allzam' %}active{% endif %}"><a href="{{ path('marcin_admin_allzam') }}"><i class="fa fa-shopping-basket"></i> <span>Nasze zamówienia</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>
           </ul>

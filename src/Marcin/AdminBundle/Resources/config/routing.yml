@@ -47,6 +47,12 @@ marcin_admin_zygmar:
     type: annotation
     prefix: /z/zygmar
     
+marcin_admin_allzam:
+    resource: "@MarcinAdminBundle/Controller/AllzamowieniaController.php"
+    type: annotation
+    prefix: /all/zamowienia
+    
+
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
 #    prefix: /u/user/form/{id}
