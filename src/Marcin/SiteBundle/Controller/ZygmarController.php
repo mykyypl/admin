@@ -84,6 +84,11 @@ class ZygmarController extends Controller {
                 $userManager = $this->get('user_manager');
                 $userManager->checkKlinar($id);
               //  $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
+                foreach($qb_sprawdzanie as $posredniknew)
+                 {
+                    $posredniknew->setZamok('1');
+                     $em->flush();
+                 }
             }
             catch (UserException $exc) {
                     $this->addFlash('error', $exc->getMessage());

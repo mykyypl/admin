@@ -53,8 +53,9 @@ class ShoperzamowieniaRepository extends EntityRepository
             }else if('zrealizowane' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '66')
-                        ->andwhere('s.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                       // ->andwhere('s.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('s.zamok IS NOT NULL')
                 ->andwhere('s.wyslane IS NOT NULL');
             }else if('dowyslania' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
@@ -64,7 +65,8 @@ class ShoperzamowieniaRepository extends EntityRepository
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '66')
                         ->andwhere('s.wyslane IS NOT NULL')
-                        ->andwhere('s.zrealizowano IS NULL');
+                        //->andwhere('s.zrealizowano IS NULL')
+                        ->andwhere('s.zamok IS NULL');
             }else if('all' == $params['status']){
             }
         }
@@ -122,13 +124,15 @@ class ShoperzamowieniaRepository extends EntityRepository
         $wyslane = $qb_wyslane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Klinar')
                  ->andwhere('a.wyslane IS NOT NULL')
-                        ->andwhere('a.zrealizowano IS NULL')
+                        //->andwhere('a.zrealizowano IS NULL')
+                ->andwhere('a.zamok IS NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Klinar')
-                       ->andwhere('a.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                       //->andwhere('a.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                ->andwhere('a.zamok IS NOT NULL')
                         ->andwhere('a.wyslane IS NOT NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
@@ -177,8 +181,9 @@ class ShoperzamowieniaRepository extends EntityRepository
             }else if('zrealizowane' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '55')
-                        ->andwhere('s.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                        //->andwhere('s.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('s.zamok IS NOT NULL')
                 ->andwhere('s.wyslane IS NOT NULL');
             }else if('dowyslania' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
@@ -188,7 +193,9 @@ class ShoperzamowieniaRepository extends EntityRepository
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '55')
                         ->andwhere('s.wyslane IS NOT NULL')
-                        ->andwhere('s.zrealizowano IS NULL');
+                       // ->andwhere('s.zrealizowano IS NULL OR s.zrealizowano =:zrealizowano')
+                       // ->setParameter('zrealizowano', '0')
+                        ->andwhere('s.zamok IS NULL');
             }else if('all' == $params['status']){
             }
         }
@@ -249,14 +256,16 @@ class ShoperzamowieniaRepository extends EntityRepository
                         ->getSingleScalarResult();
         $wyslane = $qb_wyslane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Invest')
-                 ->andwhere('a.wyslane IS NOT NULL')
-                        ->andwhere('a.zrealizowano IS NULL')
+                 ->andwhere('a.wyslane IS NOT NULL')  
+                        ->andwhere('a.zamok IS NULL')
+                        //->andwhere('a.zrealizowano IS NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Invest')
-                       ->andwhere('a.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                       //->andwhere('a.zrealizowano = :zrealizowano')
+                       // ->setParameter('zrealizowano', '1')
+                        ->andwhere('a.zamok IS NOT NULL')
                         ->andwhere('a.wyslane IS NOT NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
@@ -296,8 +305,9 @@ class ShoperzamowieniaRepository extends EntityRepository
             }else if('zrealizowane' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '44')
-                        ->andwhere('s.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                        //->andwhere('s.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('s.zamok IS NOT NULL')
                 ->andwhere('s.wyslane IS NOT NULL');
             }else if('dowyslania' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
@@ -307,7 +317,8 @@ class ShoperzamowieniaRepository extends EntityRepository
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '44')
                         ->andwhere('s.wyslane IS NOT NULL')
-                        ->andwhere('s.zrealizowano IS NULL');
+                        //->andwhere('s.zrealizowano IS NULL')
+                        ->andwhere('s.zamok IS NULL');
             }else if('all' == $params['status']){
             }
         }
@@ -369,13 +380,15 @@ class ShoperzamowieniaRepository extends EntityRepository
         $wyslane = $qb_wyslane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'PartnerPlast')
                  ->andwhere('a.wyslane IS NOT NULL')
-                        ->andwhere('a.zrealizowano IS NULL')
+                        //->andwhere('a.zrealizowano IS NULL')
+                        ->andwhere('a.zamok IS NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'PartnerPlast')
-                       ->andwhere('a.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                        ->andwhere('a.zamok IS NOT NULL')
+                       //->andwhere('a.zrealizowano = :zrealizowano')
+                       // ->setParameter('zrealizowano', '1')
                         ->andwhere('a.wyslane IS NOT NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
@@ -416,8 +429,9 @@ class ShoperzamowieniaRepository extends EntityRepository
             }else if('zrealizowane' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '33')
-                        ->andwhere('s.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                        //->andwhere('s.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('s.zamok IS NOT NULL')
                 ->andwhere('s.wyslane IS NOT NULL');
             }else if('dowyslania' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
@@ -427,7 +441,8 @@ class ShoperzamowieniaRepository extends EntityRepository
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '33')
                         ->andwhere('s.wyslane IS NOT NULL')
-                        ->andwhere('s.zrealizowano IS NULL');
+                       // ->andwhere('s.zrealizowano IS NULL')
+                        ->andwhere('s.zamok IS NULL');
             }else if('all' == $params['status']){
             }
         }
@@ -489,13 +504,15 @@ class ShoperzamowieniaRepository extends EntityRepository
         $wyslane = $qb_wyslane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Selena')
                  ->andwhere('a.wyslane IS NOT NULL')
-                        ->andwhere('a.zrealizowano IS NULL')
+                        //->andwhere('a.zrealizowano IS NULL')
+                            ->andwhere('a.zamok IS NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Selena')
-                       ->andwhere('a.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                       //->andwhere('a.zrealizowano = :zrealizowano')
+                       // ->setParameter('zrealizowano', '1')
+                     ->andwhere('a.zamok IS NOT NULL')
                         ->andwhere('a.wyslane IS NOT NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
@@ -535,8 +552,9 @@ class ShoperzamowieniaRepository extends EntityRepository
             }else if('zrealizowane' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '22')
-                        ->andwhere('s.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                        //->andwhere('s.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('s.zamok IS NOT NULL')
                 ->andwhere('s.wyslane IS NOT NULL');
             }else if('dowyslania' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
@@ -546,7 +564,8 @@ class ShoperzamowieniaRepository extends EntityRepository
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '22')
                         ->andwhere('s.wyslane IS NOT NULL')
-                        ->andwhere('s.zrealizowano IS NULL');
+                        //->andwhere('s.zrealizowano IS NULL')
+                        ->andwhere('s.zamok IS NULL');
             }else if('all' == $params['status']){
             }
         }
@@ -608,13 +627,15 @@ class ShoperzamowieniaRepository extends EntityRepository
         $wyslane = $qb_wyslane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Hanno')
                  ->andwhere('a.wyslane IS NOT NULL')
-                        ->andwhere('a.zrealizowano IS NULL')
+                        //->andwhere('a.zrealizowano IS NULL')
+                        ->andwhere('a.zamok IS NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Hanno')
-                       ->andwhere('a.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                       //->andwhere('a.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('a.zamok IS NOT NULL')
                         ->andwhere('a.wyslane IS NOT NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
@@ -654,8 +675,9 @@ class ShoperzamowieniaRepository extends EntityRepository
             }else if('zrealizowane' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '77')
-                        ->andwhere('s.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                        //->andwhere('s.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('s.zamok IS NOT NULL')
                 ->andwhere('s.wyslane IS NOT NULL');
             }else if('dowyslania' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
@@ -665,7 +687,8 @@ class ShoperzamowieniaRepository extends EntityRepository
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '77')
                         ->andwhere('s.wyslane IS NOT NULL')
-                        ->andwhere('s.zrealizowano IS NULL');
+                        //->andwhere('s.zrealizowano IS NULL')
+                        ->andwhere('s.zamok IS NULL');
             }else if('all' == $params['status']){
             }
         }
@@ -727,13 +750,15 @@ class ShoperzamowieniaRepository extends EntityRepository
         $wyslane = $qb_wyslane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'AWAX')
                  ->andwhere('a.wyslane IS NOT NULL')
-                        ->andwhere('a.zrealizowano IS NULL')
+                       // ->andwhere('a.zrealizowano IS NULL')
+                ->andwhere('a.zamok IS NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'AWAX')
-                       ->andwhere('a.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                      // ->andwhere('a.zrealizowano = :zrealizowano')
+                       // ->setParameter('zrealizowano', '1')
+                ->andwhere('a.zamok IS NOT NULL')
                         ->andwhere('a.wyslane IS NOT NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
@@ -773,8 +798,9 @@ class ShoperzamowieniaRepository extends EntityRepository
             }else if('zrealizowane' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '88')
-                        ->andwhere('s.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                        //->andwhere('s.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('s.zamok IS NOT NULL')
                 ->andwhere('s.wyslane IS NOT NULL');
             }else if('dowyslania' == $params['status']){
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
@@ -784,7 +810,8 @@ class ShoperzamowieniaRepository extends EntityRepository
                 $qb->andwhere('s.zaznaczono = :zaznaczono')
                         ->setParameter('zaznaczono', '88')
                         ->andwhere('s.wyslane IS NOT NULL')
-                        ->andwhere('s.zrealizowano IS NULL');
+                       // ->andwhere('s.zrealizowano IS NULL')
+                        ->andwhere('s.zamok IS NULL');
             }else if('all' == $params['status']){
             }
         }
@@ -846,13 +873,15 @@ class ShoperzamowieniaRepository extends EntityRepository
         $wyslane = $qb_wyslane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Zygmar')
                  ->andwhere('a.wyslane IS NOT NULL')
-                        ->andwhere('a.zrealizowano IS NULL')
+                       // ->andwhere('a.zrealizowano IS NULL')
+                ->andwhere('a.zamok IS NULL')
                         ->getQuery()
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Zygmar')
-                       ->andwhere('a.zrealizowano = :zrealizowano')
-                        ->setParameter('zrealizowano', '1')
+                       //->andwhere('a.zrealizowano = :zrealizowano')
+                       // ->setParameter('zrealizowano', '1')
+                    ->andwhere('a.zamok IS NOT NULL')
                         ->andwhere('a.wyslane IS NOT NULL')
                         ->getQuery()
                         ->getSingleScalarResult();

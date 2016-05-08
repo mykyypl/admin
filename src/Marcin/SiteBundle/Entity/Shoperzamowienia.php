@@ -173,6 +173,13 @@ class Shoperzamowienia {
      * 
      * 
      */
+    private $zamok = null;  
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     * 
+     */
     private $wyslane = null;  
     
     /**
@@ -755,6 +762,29 @@ class Shoperzamowienia {
     public function getKlinaryt()
     {
         return $this->klinaryt;
+    }
+    
+    /**
+     * Set zamok
+     *
+     * @param string $zamok
+     *
+     * @return Shoperzamowienia
+     */
+    public function setZamok($zamok)
+    {
+        $this->zamok = $zamok;
+        return $this;
+    }
+    
+    /**
+     * Get zamok
+     *
+     * @return string
+     */
+    public function getZamok()
+    {
+        return $this->zamok;
     }
     
     /**
