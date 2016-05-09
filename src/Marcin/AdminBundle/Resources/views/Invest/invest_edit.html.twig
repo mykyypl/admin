@@ -174,11 +174,17 @@ kom.:+48 600280602
                             <div class="form-group">
                                 {{ form_row(form.kodpocztowy) }}
                             </div>
+                             <div class="form-group">
+                                {{ form_row(form.telefon) }}
+                            </div>
                             <div class="form-group">
                                 {{ form_row(form.datamaxdo) }}
                             </div>
                             <div class="form-group">
                                 {{ form_row(form.uwagi) }}
+                            </div>
+                            <div class="form-group">
+                                <a href="#" class="btn btn-primary" id="danemagnum">Wczytaj dane Magnum</a>
                             </div>
                             </div>
                             </div>
@@ -212,9 +218,9 @@ kom.:+48 600280602
                                         <th>nazwa</th>
                                         <th>wariant</th>
                                         <th>ilosc</th>
+                                         <th>jednostka</th>
                                         <th>uwagi</th>
                                         <th>zalacznik</th>
-                                        <th>klinaryt</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -223,9 +229,9 @@ kom.:+48 600280602
                                     <td>{{ form_row(shoper.nazwa) }}</td>
                                     <td>{{ form_row(shoper.wariant) }}</td>
                                     <td>{{ form_row(shoper.ilosc) }}</td>
+                                    <td>{{ form_row(shoper.jednostka) }}</td>
                                     <td>{{ form_row(shoper.uwagi) }}</td>
                                     <td>Dodanie nadpisuje stary! {{ form_row(shoper.files) }}</td>
-                                    <td>{{ form_row(shoper.klinaryt) }}</td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>
@@ -395,4 +401,18 @@ kom.:+48 600280602
                             //// KONIEC uwagi do zamowienia
         </script>#}
                 <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+                                <script>
+$(document).ready(function(){
+  $("#danemagnum").click(function(){
+    $("#marcin_adminbundle_invest_adres1").val("Tuchowska 62");
+    $("#marcin_adminbundle_invest_adres2").val("");
+    $("#marcin_adminbundle_invest_miejscowosc").val("Tarnów");
+    $("#marcin_adminbundle_invest_kodpocztowy").val("33-100");
+    $("#marcin_adminbundle_invest_imie").val("Tadeusz");
+    $("#marcin_adminbundle_invest_nazwisko").val("Romański");
+    $("#marcin_adminbundle_invest_firma").val("Magnum Tadeusz Romański");
+    $("#marcin_adminbundle_invest_telefon").val("600 280 602");
+  });
+});
+</script>     
         {% endblock %}

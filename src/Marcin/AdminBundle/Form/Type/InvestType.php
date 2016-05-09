@@ -12,11 +12,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class KlinarType extends AbstractType
+class InvestType extends AbstractType
 {
     public function getName()
     {
-        return 'marcin_adminbundle_klin';
+        return 'marcin_adminbundle_invest';
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -86,7 +86,7 @@ class KlinarType extends AbstractType
                 )
             ))
             ->add('shoper1', CollectionType::class, array(
-                'entry_type' => KlinarpType::class
+                'entry_type' => InvestpType::class
                     ))
             ->add('save', 'submit', array(
                 'label' => 'Zapisz i przejdź do podsumowania',

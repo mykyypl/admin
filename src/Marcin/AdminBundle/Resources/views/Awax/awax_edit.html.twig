@@ -175,10 +175,16 @@ kom.:+48 600280602
                                 {{ form_row(form.kodpocztowy) }}
                             </div>
                             <div class="form-group">
+                                {{ form_row(form.telefon) }}
+                            </div>
+                            <div class="form-group">
                                 {{ form_row(form.datamaxdo) }}
                             </div>
                             <div class="form-group">
                                 {{ form_row(form.uwagi) }}
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" id="danemagnum">Wczytaj dane Magnum</button>
                             </div>
                             </div>
                             </div>
@@ -395,4 +401,18 @@ kom.:+48 600280602
                             //// KONIEC uwagi do zamowienia
         </script>#}
                 <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+                                <script>
+$(document).ready(function(){
+  $("#danemagnum").click(function(){
+    $("#marcin_adminbundle_klin_adres1").val("Tuchowska 62");
+    $("#marcin_adminbundle_klin_adres2").val("");
+    $("#marcin_adminbundle_klin_miejscowosc").val("Tarnów");
+    $("#marcin_adminbundle_klin_kodpocztowy").val("33-100");
+    $("#marcin_adminbundle_klin_imie").val("Tadeusz");
+    $("#marcin_adminbundle_klin_nazwisko").val("Romański");
+    $("#marcin_adminbundle_klin_firma").val("Magnum Tadeusz Romański");
+    $("#marcin_adminbundle_klin_telefon").val("600 280 602");
+  });
+});
+</script>
         {% endblock %}

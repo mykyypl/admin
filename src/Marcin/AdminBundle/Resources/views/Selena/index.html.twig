@@ -30,7 +30,7 @@
                                                                       {% for key,val in statusesList %}
                               {% if val == 'all' %}
                             {% else %}
-                    <div class="col-xs-12 col-md-1 col-lg-1 padding-bottom-15">
+                    <div class="col-xs-12 col-md-2 col-lg-1 padding-bottom-15">
                         <a class="btn btn-block {{ currStatus == val ? 'btn-default':'btn-primary' }}" href="{{ path('marcin_admin_selena', {'status': val}) }}">
                             {{ key }} ({{ statistics[val] }})
                             

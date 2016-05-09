@@ -10,7 +10,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{% if app.request.get('_route') == 'marcin_admin_shoper_klinar' %}active on{% endif %}"><a href="{{ path('marcin_admin_shoper_klinar') }}"><i class="fa fa-circle-o"></i> Klinar</a></li>
-                    <li class="{% if app.request.get('_route') == 'marcin_admin_shoper_klinar_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_shoper_klinar_pokaz') }}"><i class="fa fa-circle-o"></i> Klinar podsumowanie</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_site_klinar' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_klinar') }}"><i class="fa fa-circle-o"></i> Klinar panel</a></li>
                 </ul>
             </li>
             <li class="treeview {% if app.request.get('_route') == 'marcin_admin_invest' %}active{% endif %}">
@@ -19,7 +19,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{% if app.request.get('_route') == 'marcin_admin_invest' %}active on{% endif %}"><a href="{{ path('marcin_admin_invest') }}"><i class="fa fa-circle-o"></i> Invest</a></li>
-                    <li class="{% if app.request.get('_route') == 'marcin_admin_invest_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_invest_pokaz') }}"><i class="fa fa-circle-o"></i> Invest podsumowanie</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_site_invest' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_invest') }}"><i class="fa fa-circle-o"></i> Invest panel</a></li>
                 </ul>
             </li>
             <li class="treeview {% if app.request.get('_route') == 'marcin_admin_partnerplast' %}active{% endif %}">
@@ -28,7 +28,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{% if app.request.get('_route') == 'marcin_admin_partnerplast' %}active on{% endif %}"><a href="{{ path('marcin_admin_partnerplast') }}"><i class="fa fa-circle-o"></i> PartnerPlast</a></li>
-                    <li class="{% if app.request.get('_route') == 'marcin_admin_partnerplast_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_partnerplast_pokaz') }}"><i class="fa fa-circle-o"></i> PartnerPlast podsumowanie</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_site_partnerplast' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_partnerplast') }}"><i class="fa fa-circle-o"></i> PartnerPlast panel</a></li>
                 </ul>
             </li>
             <li class="treeview {% if app.request.get('_route') == 'marcin_admin_selena' %}active{% endif %}">
@@ -37,7 +37,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{% if app.request.get('_route') == 'marcin_admin_selena' %}active on{% endif %}"><a href="{{ path('marcin_admin_selena') }}"><i class="fa fa-circle-o"></i> Selena</a></li>
-                    <li class="{% if app.request.get('_route') == 'marcin_admin_selena_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_selena_pokaz') }}"><i class="fa fa-circle-o"></i> Selena podsumowanie</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_site_selena' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_selena') }}"><i class="fa fa-circle-o"></i> Selena panel</a></li>
                 </ul>
             </li>
             <li class="treeview {% if app.request.get('_route') == 'marcin_admin_hanno' %}active{% endif %}">
@@ -46,7 +46,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{% if app.request.get('_route') == 'marcin_admin_hanno' %}active on{% endif %}"><a href="{{ path('marcin_admin_hanno') }}"><i class="fa fa-circle-o"></i> Hanno</a></li>
-                    <li class="{% if app.request.get('_route') == 'marcin_admin_hanno_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_hanno_pokaz') }}"><i class="fa fa-circle-o"></i> Hanno podsumowanie</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_site_stier' %}active on{% endif %}"><a target="_panel" href="{{ path('marcin_site_stier') }}"><i class="fa fa-circle-o"></i> Hanno panel</a></li>
                 </ul>
             </li>
             <li class="treeview {% if app.request.get('_route') == 'marcin_admin_awax' %}active{% endif %}">
@@ -55,7 +55,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{% if app.request.get('_route') == 'marcin_admin_awax' %}active on{% endif %}"><a href="{{ path('marcin_admin_awax') }}"><i class="fa fa-circle-o"></i> Awax</a></li>
-                    <li class="{% if app.request.get('_route') == 'marcin_admin_awax_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_awax_pokaz') }}"><i class="fa fa-circle-o"></i> Awax podsumowanie</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_site_awax' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_awax') }}"><i class="fa fa-circle-o"></i> Awax panel</a></li>
                 </ul>
             </li>
             <li class="treeview {% if app.request.get('_route') == 'marcin_admin_zygmar' %}active{% endif %}">
@@ -64,7 +64,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{% if app.request.get('_route') == 'marcin_admin_zygmar' %}active on{% endif %}"><a href="{{ path('marcin_admin_zygmar') }}"><i class="fa fa-circle-o"></i> Zygmar</a></li>
-                    <li class="{% if app.request.get('_route') == 'marcin_admin_zygmar_pokaz' %}active on{% endif %}"><a href="{{ path('marcin_admin_zygmar_pokaz') }}"><i class="fa fa-circle-o"></i> Zygmar podsumowanie</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_site_zygmar' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_zygmar') }}"><i class="fa fa-circle-o"></i> Zygmar panel</a></li>
                 </ul>
             </li>
             <li class="{% if app.request.get('_route') == 'marcin_admin_allzam' %}active{% endif %}"><a href="{{ path('marcin_admin_allzam') }}"><i class="fa fa-shopping-basket"></i> <span>Nasze zamówienia</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>
