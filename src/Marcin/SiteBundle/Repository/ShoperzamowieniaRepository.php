@@ -17,6 +17,14 @@ class ShoperzamowieniaRepository extends EntityRepository
                 ->select('s')
               ->addOrderBy('s.id', 'DESC');
 
+        if(!empty($params['status'])){
+            if('nowe' == $params['status']){
+                $qb->andwhere('s.producent IS NULL');
+            }else if('przypisane' == $params['status']){
+                $qb->andwhere('s.producent IS NOT NULL');
+        }
+        }
+        
           if(!empty($params['orderBy'])){
             $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
             $qb->orderBy($params['orderBy'], $orderDir);
@@ -29,6 +37,29 @@ class ShoperzamowieniaRepository extends EntityRepository
         }
         
         return $qb;
+    }
+    
+    public function getStatisticsShoperprodukty() {
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+//        $all = $qb->andWhere('a.producent = :currDate')
+//                        ->setParameter('currDate', 'Klinar')
+//                        ->getQuery()    
+//                        ->getSingleScalarResult();
+        $qb_dowyslania = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $nowe = $qb->andWhere('a.producent IS NULL')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $przypisane = $qb_dowyslania->andwhere('a.producent IS NOT NULL')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+
+        return array(
+            //'all' => $all,
+            'nowe' => $nowe,
+            'przypisane' => $przypisane
+        );
     }
     
     public function getKlinarBuilder(array $params = array()){

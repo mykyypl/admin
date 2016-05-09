@@ -25,6 +25,15 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
+                        {% for key,val in statusesList %}
+
+                    <div class="col-xs-12 col-md-2 col-lg-1 padding-bottom-15">
+                        <a class="btn btn-block {{ currStatus == val ? 'btn-default':'btn-primary' }}" href="{{ path('marcin_admin_shoper', {'status': val}) }}">
+                            {{ key }} ({{ statistics[val] }})
+                            
+                        </a>
+                    </div>
+                            {% endfor%}
                         <a href="{{ path('marcin_admin_shoper-dodawanie') }}" class="btn btn-primary">pobierz zamówienia</a>
                         <a href="{{ path('marcin_admin_shoper_form') }}" class="btn btn-warning">Dodaj</a>
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">

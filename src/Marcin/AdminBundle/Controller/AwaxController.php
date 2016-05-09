@@ -19,6 +19,8 @@ use Marcin\SiteBundle\Entity\Shoperklinar;
 use Marcin\AdminBundle\Form\Type\ShoperType;
 use Marcin\AdminBundle\Form\Type\KlinarType;
 use Marcin\AdminBundle\Form\Type\KlinarpType;
+use Marcin\AdminBundle\Form\Type\InvestType;
+use Marcin\AdminBundle\Form\Type\InvestpType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -230,7 +232,7 @@ class AwaxController extends Controller {
             $newShoperyForm = TRUE;
         }
 
-        $form = $this->createForm(new KlinarType(), $Shoper);
+        $form = $this->createForm(new InvestType(), $Shoper);
 
         $form->handleRequest($Request);
         if ($form->isValid()) {

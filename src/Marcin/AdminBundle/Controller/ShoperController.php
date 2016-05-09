@@ -206,12 +206,26 @@ class ShoperController extends Controller {
             $Shoper = new Shoperzamowienia();
             $newShoperyForm = TRUE;
         }
+        $em = $this->getDoctrine()->getManager();
+        $qb_klinar = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 //->where('a.zaznaczono = :identifier AND a.producent = :Klinar')
+                 //->andWhere('a.producent = Klinar' )
+               // ->setParameter('idzam', $idzam)
+                ->orderBy('a.id', 'DESC')
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
 
         $form = $this->createForm(new ShoperType(), $Shoper);
 
         $form->handleRequest($Request);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $Shoper->setIdzam($qb_klinar[0]->getIdzam());
+            $Shoper->setSuma('0');
+            $Shoper->setDate($qb_klinar[0]->getDate());
+            //$Shoper->setKod($qb_klinar[0]->getKod());
             $em->persist($Shoper);
             $em->flush();
             $message = (isset($newShoperyForm)) ? 'Poprawnie dodano.' : 'Dane zostały zaaktualizowane.';
@@ -369,22 +383,22 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/{page}",
+     *       "/{status}/{page}",
      *       name="marcin_admin_shoper",
      *       requirements={"page"="\d+"},
-     *       defaults={"page"=1}
+     *       defaults={"status"="nowe", "page"=1}
      * )
      *    
      * @Template()
      */
-    public function indexAction(Request $Request, $page) {
+    public function indexAction(Request $Request, $status, $page) {
         $queryParams = array(
             'idLike' => $Request->query->get('idLike'),
-
+            'status' => $status
         ); 
      
         $StatZam = $this->getDoctrine()->getRepository('MarcinSiteBundle:Shoperzamowienia');
-        //$statistics = $StatUser->getStatistics();
+        $statistics = $StatZam->getStatisticsShoperprodukty();
         
         $qb = $StatZam->getQueryBuilder($queryParams);
         
@@ -396,6 +410,10 @@ class ShoperController extends Controller {
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate($qb, $page, $limit);
         
+        $statusesList = array(
+            'Nowe' => 'nowe',
+            'Przypisane' => 'przypisane',
+        );
         
         return $this->render('MarcinAdminBundle:Shoper:index.html.twig',
             array(
@@ -403,6 +421,9 @@ class ShoperController extends Controller {
             'queryParams' => $queryParams,
             'limits' => $limits,
             'currLimit' => $limit,
+            'statusesList' => $statusesList,
+            'currStatus' => $status,
+            'statistics' => $statistics,
             'pagination' => $pagination
             //'updateTokenName' => $this->updateTokenName,
             //'aktywacjaTokenName' => $this->aktywacjaTokenName,

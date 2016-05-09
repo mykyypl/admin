@@ -39,11 +39,11 @@ class Shoperzamowienia {
     private $idzam;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * 
      * 
      */
-    private $suma;
+    private $suma = null;
 
     /**
      * @ORM\Column(type="string")

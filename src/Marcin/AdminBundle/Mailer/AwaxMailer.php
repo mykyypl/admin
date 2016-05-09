@@ -25,7 +25,7 @@ class AwaxMailer {
         $message = \Swift_Message::newInstance()
                         ->setSubject($subject)
                         ->setFrom($this->fromEmail, $this->fromName)
-                        ->setTo('marcin@grupamagnum.eu')
+                        ->setTo('awax@awax.pl')
                         ->setCc('sklep@grupamagnum.eu')
                         ->setBody($htmlBody, 'text/html');
         

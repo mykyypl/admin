@@ -25,7 +25,7 @@ class InvestMailer {
         $message = \Swift_Message::newInstance()
                         ->setSubject($subject)
                         ->setFrom($this->fromEmail, $this->fromName)
-                        ->setTo('marcin@grupamagnum.eu')
+                        ->setTo('investpol@pro.onet.pl')
                         ->setCc('sklep@grupamagnum.eu')
                         ->setBody($htmlBody, 'text/html');
         

@@ -25,7 +25,7 @@ class SelenaMailer {
         $message = \Swift_Message::newInstance()
                         ->setSubject($subject)
                         ->setFrom($this->fromEmail, $this->fromName)
-                        ->setTo('marcin@grupamagnum.eu')
+                        ->setTo('monika.zybula@selena.com')
                         ->setCc('sklep@grupamagnum.eu')
                         ->setBody($htmlBody, 'text/html');
         

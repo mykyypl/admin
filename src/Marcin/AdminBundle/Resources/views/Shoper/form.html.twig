@@ -27,6 +27,21 @@
                          {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
                         {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
                         <div class="form-group">
+                            {{ form_row(form.nazwa) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.wariant) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.ilosc) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_row(form.jednostka) }}
+                        </div>
+                         <div class="form-group">
+                            {{ form_row(form.kod) }}
+                        </div>
+                        <div class="form-group">
                             {{ form_row(form.imie) }}
                         </div>
                         <div class="form-group">
@@ -43,18 +58,6 @@
                         </div>
                         <div class="form-group">
                             {{ form_row(form.kodpocztowy) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_row(form.nazwa) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_row(form.wariant) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_row(form.ilosc) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_row(form.jednostka) }}
                         </div>
                         <div class="form-group">
                             {{ form_rest(form) }}

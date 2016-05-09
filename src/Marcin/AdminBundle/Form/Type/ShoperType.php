@@ -23,6 +23,7 @@ class ShoperType extends AbstractType
         $builder
             ->add('imie', 'text', array(
                 'label' => 'Imię',
+                'data' => 'Tadeusz',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',
@@ -30,6 +31,31 @@ class ShoperType extends AbstractType
             ))
             ->add('nazwisko', 'text', array(
                 'label' => 'Nazwisko',
+                'data' => 'Romański',
+                'attr' => array(
+                    'autocomplete' => 'off',
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('firma', 'text', array(
+                'label' => 'Firma',
+                'data' => 'Magnum Tadeusz Romański',
+                'attr' => array(
+                    'autocomplete' => 'off',
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('telefon', 'text', array(
+                'label' => 'Telefon',
+                'data' => '600 280 602',
+                'attr' => array(
+                    'autocomplete' => 'off',
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('nip', 'text', array(
+                'label' => 'NIP',
+                'data' => '8731017278',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',
@@ -37,6 +63,7 @@ class ShoperType extends AbstractType
             ))
             ->add('adres1', 'text', array(
                 'label' => 'Adres',
+                'data' => 'Tuchowska 62',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',
@@ -44,6 +71,7 @@ class ShoperType extends AbstractType
             ))
             ->add('adres2', 'text', array(
                 'label' => 'Adres',
+                'data' => ' ',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',
@@ -51,6 +79,7 @@ class ShoperType extends AbstractType
             ))
             ->add('miejscowosc', 'text', array(
                 'label' => 'Miejscowosc',
+                'data' => 'Tarnów',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',
@@ -58,6 +87,7 @@ class ShoperType extends AbstractType
             ))
             ->add('kodpocztowy', 'text', array(
                 'label' => 'Kod pocztowy',
+                'data' => '33-100',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',
@@ -86,6 +116,13 @@ class ShoperType extends AbstractType
             ))
             ->add('jednostka', 'text', array(
                 'label' => 'jednostka przedmiotu',
+                'attr' => array(
+                    'autocomplete' => 'off',
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('kod', 'text', array(
+                'label' => 'Kod produktu',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',

@@ -218,9 +218,9 @@ kom.:+48 600280602
                                         <th>nazwa</th>
                                         <th>wariant</th>
                                         <th>ilosc</th>
+                                        <th>Jednos.</th>
                                         <th>uwagi</th>
                                         <th>zalacznik</th>
-                                        <th>klinaryt</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -229,9 +229,9 @@ kom.:+48 600280602
                                     <td>{{ form_row(shoper.nazwa) }}</td>
                                     <td>{{ form_row(shoper.wariant) }}</td>
                                     <td>{{ form_row(shoper.ilosc) }}</td>
+                                    <td>{{ form_row(shoper.jednostka) }}</td>
                                     <td>{{ form_row(shoper.uwagi) }}</td>
                                     <td>Dodanie nadpisuje stary! {{ form_row(shoper.files) }}</td>
-                                    <td>{{ form_row(shoper.klinaryt) }}</td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>
@@ -404,15 +404,15 @@ kom.:+48 600280602
                                 <script>
 $(document).ready(function(){
   $("#danemagnum").click(function(){
-    $("#marcin_adminbundle_klin_adres1").val("Tuchowska 62");
-    $("#marcin_adminbundle_klin_adres2").val("");
-    $("#marcin_adminbundle_klin_miejscowosc").val("Tarnów");
-    $("#marcin_adminbundle_klin_kodpocztowy").val("33-100");
-    $("#marcin_adminbundle_klin_imie").val("Tadeusz");
-    $("#marcin_adminbundle_klin_nazwisko").val("Romański");
-    $("#marcin_adminbundle_klin_firma").val("Magnum Tadeusz Romański");
-    $("#marcin_adminbundle_klin_telefon").val("600 280 602");
+    $("#marcin_adminbundle_invest_adres1").val("Tuchowska 62");
+    $("#marcin_adminbundle_invest_adres2").val("");
+    $("#marcin_adminbundle_invest_miejscowosc").val("Tarnów");
+    $("#marcin_adminbundle_invest_kodpocztowy").val("33-100");
+    $("#marcin_adminbundle_invest_imie").val("Tadeusz");
+    $("#marcin_adminbundle_invest_nazwisko").val("Romański");
+    $("#marcin_adminbundle_invest_firma").val("Magnum Tadeusz Romański");
+    $("#marcin_adminbundle_invest_telefon").val("600 280 602");
   });
 });
-</script>
+</script>     
         {% endblock %}
