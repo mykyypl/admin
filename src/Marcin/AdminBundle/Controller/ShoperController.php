@@ -29,7 +29,7 @@ class ShoperController extends Controller {
     private $deleteTokenName = 'delete-zam-%d';
     
     /**
-     * @Route("/form/update-complete", 
+     * @Route("/kk/form/update-complete", 
      *       name="marcin_admin_shoper_ajax",
      *       requirements={
      *          "_format": "json",
@@ -140,7 +140,7 @@ class ShoperController extends Controller {
     }
     
     /**
-     * @Route("/form/send", 
+     * @Route("/kk/form/send", 
      *       name="marcin_admin_shoper_send",
      *       requirements={
      *          "_format": "json",
@@ -247,7 +247,7 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/dodawanie-zamowien",
+     *       "/kk/dodawanie-zamowien",
      *       name="marcin_admin_shoper-dodawanie"
      * )
      *    
@@ -323,7 +323,7 @@ class ShoperController extends Controller {
             $suma_zamowienia = $order['sum'];
             $data_zamowienia = $order['date'];
             
-            $deliveryAddress = (Array)$order['billingAddress'];
+            $deliveryAddress = (Array)$order['deliveryAddress'];
             $firma_zamowienia = $deliveryAddress['company'];
             $nip_zamowienia = $deliveryAddress['tax_id'];
             $imie_zamowienia = $deliveryAddress['firstname'];
@@ -434,7 +434,7 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/klinar/{status}/{page}",
+     *       "/kk/klinar/{status}/{page}",
      *       name="marcin_admin_shoper_klinar",
      *       requirements={"page"="\d+"},
      *      defaults={"status"="nowe", "page"=1}
@@ -489,7 +489,7 @@ class ShoperController extends Controller {
     }
     
     /**
-     * @Route("/form/send_klinar/{id}/{idzam}", 
+     * @Route("/kk/form/send_klinar/{id}/{idzam}", 
      *       name="marcin_admin_shoper_send_klinar"
      * )
      *
@@ -531,7 +531,7 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *      "/klinar/show/zamowienie/{idzam}", 
+     *      "/kk/klinar/show/zamowienie/{idzam}", 
      *      name="marcin_admin_shoper_klinar_show",
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
@@ -638,7 +638,7 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/klinar/b/pokaz/{status}/{page}",
+     *       "/kk/klinar/b/pokaz/{status}/{page}",
      *       name="marcin_admin_shoper_klinar_pokaz",
      *       requirements={"page"="\d+"},
      *       defaults={"status"="dowyslania", "page"=1}
@@ -696,7 +696,7 @@ class ShoperController extends Controller {
     
 //    /**
 //     * @Route(
-//     *       "/klinar/b/odczytanie/obrazek/{id}.png",
+//     *       "/kk/klinar/b/odczytanie/obrazek/{id}.png",
 //     *       name="marcin_admin_shoper_klinar_odczytanie",
 //     *       requirements={"id"="\d+"},
 //     * )
@@ -750,7 +750,7 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *       "/klinar/b/podglad/{id}",
+     *       "/kk/klinar/b/podglad/{id}",
      *       name="marcin_admin_shoper_klinar_podglad",
      *       requirements={"id"="\d+"}
      * )
@@ -839,7 +839,7 @@ class ShoperController extends Controller {
     
     /**
      * @Route(
-     *      "/klinar/b/pokaz/usun/{id}/{token}", 
+     *      "/kk/klinar/b/pokaz/usun/{id}/{token}", 
      *      name="marcin_admin_shoper_klinar_pokaz_delete",
      *      requirements={"id"="\d+"}
      * )

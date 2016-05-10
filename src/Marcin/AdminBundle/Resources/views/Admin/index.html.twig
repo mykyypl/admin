@@ -168,11 +168,11 @@
                                             <a  href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf" target="_blank" class="ajax-task-complete btn btn-primary">
                                                 <span class="glyphicon glyphicon-print"></span>
                                             </a>
-                                        </div> {% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
+                                        </div> {% if is_granted('ROLE_ADMIN') %}{% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
                                             {% set deleteUrl = path('marcin_admin_dashboard_delete', {'id': article.id, 'token': tokenName}) %}
                                         <a id="potwierdzenie" href="{{ deleteUrl }}" class="potwierdzenie btn btn-danger" data-confirmAction="">
                                             <span class="glyphicon glyphicon-trash"></span>
-                                        </a></th>
+                                        </a>{% endif %}</th>
                                         <th><div class="checkbox checkbox-success">
                                                 <input style="flat-red" id="spr" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderPay('{{ article.id }}', event)" {% if article.zaplacono == '1' %}checked {% endif %} /><label for="checkbox1">
     </label></div></th>

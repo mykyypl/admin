@@ -11,11 +11,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class InvestpType extends AbstractType
+class AwaxpType extends AbstractType
 {
     public function getName()
     {
-        return 'marcin_sitebundle_investp';
+        return 'marcin_sitebundle_awaxp';
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -30,7 +30,7 @@ class InvestpType extends AbstractType
                     'read_only' => true
                 )
             ))
-            ->add('wariant', 'text', array(
+            ->add('kod', 'text', array(
             'disabled' => true,
             // 'label' => 'Nazwa',
                 'label' => false,

@@ -18,6 +18,8 @@ use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\SiteBundle\Entity\Shoperklinar;
 use Marcin\SiteBundle\Form\Type\KlinarType;
 use Marcin\SiteBundle\Form\Type\KlinarpType;
+use Marcin\SiteBundle\Form\Type\AwaxType;
+use Marcin\SiteBundle\Form\Type\AwaxpType;
 
 class AwaxController extends Controller {
     
@@ -36,7 +38,7 @@ class AwaxController extends Controller {
              $this->addFlash('error', 'Brak takiego zamówienia!');
              return $this->redirect($this->generateUrl('marcin_site_awax'));
         }
-        $form = $this->createForm(new KlinarType(), $Shoper);
+        $form = $this->createForm(new AwaxType(), $Shoper);
         $em = $this->getDoctrine()->getManager();
         $form->handleRequest($Request);
         $qb_klinar = $em->createQueryBuilder()

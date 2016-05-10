@@ -9,3 +9,8 @@ common_user:
 marcin_admin:
     resource: "@MarcinAdminBundle/Resources/config/routing.yml"
     prefix:   /panel
+    
+common_user_admin:
+    resource: "@CommonUserBundle/Resources/config/admin-routing.yml"
+    prefix:   /panel/u/uzytkownicy
+    

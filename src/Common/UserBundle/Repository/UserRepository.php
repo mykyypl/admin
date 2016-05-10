@@ -21,4 +21,16 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
             ->getQuery()
             ->getOneOrNullResult();
     }
+    
+    public function getQueryBuilder(array $params = array()) {
+        $qb = $this->createQueryBuilder('u');
+        
+        if(!empty($params['usernameLike'])){
+            $usernameLike = '%'.$params['usernameLike'].'%';
+            $qb->andWhere('u.username LIKE :usernameLike')
+                    ->setParameter('usernameLike', $usernameLike);
+        }
+        
+        return $qb;
+    }
 }

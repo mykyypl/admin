@@ -8,7 +8,7 @@ namespace Common\UserBundle\Entity;
  */
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -37,6 +37,18 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=64)
      */
     private $password;
+    
+    /**
+     * @Assert\NotBlank(
+     *      groups = {"Registration", "ChangePassword"}
+     * )
+     * 
+     * @Assert\Length(
+     *      min = 8,
+     *      groups = {"Registration", "ChangePassword"}
+     * )
+     */
+    private $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
@@ -47,7 +59,46 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
+    
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $roles;
+    
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled = false;
+    
+    /**
+     * @ORM\Column(name="account_non_expired", type="boolean")
+     */
+    private $accountNonExpired = true;
+    
+    /**
+     * @ORM\Column(name="account_non_locked", type="boolean")
+     */
+    private $accountNonLocked = true;
+    
+    /**
+     * @ORM\Column(name="credentials_non_expired", type="boolean")
+     */
+    private $credentialsNonExpired = true;
 
+    
+    public function isAccountNonExpired() {
+        return $this->accountNonExpired;
+    }
+    public function isAccountNonLocked() {
+        return $this->accountNonLocked;
+    }
+    public function isCredentialsNonExpired() {
+        return $this->credentialsNonExpired;
+    }
+    public function isEnabled() {
+        return $this->enabled;
+    }
+    
     public function __construct()
     {
         $this->isActive = true;
@@ -55,10 +106,6 @@ class User implements UserInterface, \Serializable
         // $this->salt = md5(uniqid(null, true));
     }
 
-    public function getUsername()
-    {
-        return $this->username;
-    }
 
     public function getSalt()
     {
@@ -67,18 +114,9 @@ class User implements UserInterface, \Serializable
         return null;
     }
 
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function getRoles()
-    {
-        return array('ROLE_ADMIN');
-    }
-
     public function eraseCredentials()
     {
+         $this->plainPassword = null;
     }
 
     /** @see \Serializable::serialize() */
@@ -111,6 +149,23 @@ class User implements UserInterface, \Serializable
     public function setPlainPassword($plainPassword) {
         $this->plainPassword = $plainPassword;
     }
+    
+    public function getPassword() {
+        return $this->password;
+    }
+    
+    public function getRoles() {
+        if(empty($this->roles)){
+            return array('ROLE_USER');
+        }
+        
+        return $this->roles;
+    }
+    
+    public function getUsername() {
+        return $this->username;
+    }
+
 
     /**
      * Get id
@@ -192,5 +247,110 @@ class User implements UserInterface, \Serializable
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return User
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set accountNonExpired
+     *
+     * @param boolean $accountNonExpired
+     * @return User
+     */
+    public function setAccountNonExpired($accountNonExpired)
+    {
+        $this->accountNonExpired = $accountNonExpired;
+
+        return $this;
+    }
+
+    /**
+     * Get accountNonExpired
+     *
+     * @return boolean 
+     */
+    public function getAccountNonExpired()
+    {
+        return $this->accountNonExpired;
+    }
+
+    /**
+     * Set accountNonLocked
+     *
+     * @param boolean $accountNonLocked
+     * @return User
+     */
+    public function setAccountNonLocked($accountNonLocked)
+    {
+        $this->accountNonLocked = $accountNonLocked;
+
+        return $this;
+    }
+
+    /**
+     * Get accountNonLocked
+     *
+     * @return boolean 
+     */
+    public function getAccountNonLocked()
+    {
+        return $this->accountNonLocked;
+    }
+
+    /**
+     * Set credentialsNonExpired
+     *
+     * @param boolean $credentialsNonExpired
+     * @return User
+     */
+    public function setCredentialsNonExpired($credentialsNonExpired)
+    {
+        $this->credentialsNonExpired = $credentialsNonExpired;
+
+        return $this;
+    }
+
+    /**
+     * Get credentialsNonExpired
+     *
+     * @return boolean 
+     */
+    public function getCredentialsNonExpired()
+    {
+        return $this->credentialsNonExpired;
+    }
+
+    /**
+     * Set roles
+     *
+     * @param array $roles
+     * @return User
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 }

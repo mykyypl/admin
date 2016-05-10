@@ -1,0 +1,66 @@
+{% extends "MarcinAdminBundle::base.html.twig" %}
+
+{% block pageTitle %}{{ pageTitle|striptags }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/plugins/select2/select2.min.css') }}" />
+<style>
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        color: black !important;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="content-header">
+  <h1>{{ pageTitle|raw }}</h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+    <li class="active">Here</li>
+  </ol>
+</section>
+{% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+<section class="content" ng-controller="articleController">
+    <div class="row">
+    {{ form_start(manageUserForm, {'attr': {'novalidate': 'true'}}) }}
+        <div class="col-xs-12 {% if user.id is not null %}col-md-6{% endif %}">
+            <div class="box box-primary">
+              <div class="box-header with-border">
+                  <h3 class="box-title"><strong>{{ user.id is not null ? user.username :'{[{username}]}' }}</strong></h3>
+              </div>
+
+                <div class="box-body">
+                    {{ user.id is not null ? form_row(manageUserForm.username) : form_row(manageUserForm.username, {'attr': {'ng-model': 'username'}}) }}
+                    {{ form_rest(manageUserForm) }}
+                </div>
+
+            </div>
+        </div>
+    {{ form_end(manageUserForm) }}
+
+    {% if user.id is not null %}
+        <div class="col-xs-12 col-md-6">
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Zmiana hasła</h3>
+                </div>
+
+                <div class="box-body">
+                    {{ form(changePasswdForm, {'attr': {'novalidate': 'true'}}) }}
+                </div>
+
+            </div>
+        </div>
+    {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script type="text/javascript" src="{{ asset('bundles/marcinadmin/plugins/select2/select2.min.js') }}"></script>
+<script type="text/javascript">
+$(".select2").select2();
+</script>
+{% endblock %}

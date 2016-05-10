@@ -35,6 +35,14 @@ class InvestpType extends AbstractType
                     'required' => false,
                 )
             ))
+            ->add('kod', 'text', array(
+                'label' => false,//'Warianty produktu',
+                'required' => false,
+                'attr' => array(
+                    'class' => 'form-control',
+                    'required' => false,
+                )
+            ))
             ->add('ilosc', 'text', array(
                 'label' => false,//'Ilości produktu',
                 'attr' => array(
