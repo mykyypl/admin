@@ -14,6 +14,7 @@ use Marcin\AdminBundle\Mailer\SelenaMailer;
 use Marcin\AdminBundle\Mailer\HannoMailer;
 use Marcin\AdminBundle\Mailer\ZygmarMailer;
 use Marcin\AdminBundle\Mailer\AwaxMailer;
+use Marcin\AdminBundle\Mailer\VipMailer;
 use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -81,7 +82,12 @@ class UserManager {
      */
     protected $awaxMailer;
     
-    function __construct(Doctrine $doctrine, Router $router, Templating $templating, EncoderFactory $encoderFactory, UserMailer $userMailer, OwnMailer $ownMailer, InvestMailer $investMailer, PartnerMailer $partnerMailer, SelenaMailer $selenaMailer, HannoMailer $hannoMailer, ZygmarMailer $zygmarMailer, AwaxMailer $awaxMailer) {
+    /**
+     * @var vipMailer
+     */
+    protected $vipMailer;
+    
+    function __construct(Doctrine $doctrine, Router $router, Templating $templating, EncoderFactory $encoderFactory, UserMailer $userMailer, OwnMailer $ownMailer, InvestMailer $investMailer, PartnerMailer $partnerMailer, SelenaMailer $selenaMailer, HannoMailer $hannoMailer, ZygmarMailer $zygmarMailer, AwaxMailer $awaxMailer, VipMailer $vipMailer) {
         $this->doctrine = $doctrine;
         $this->router = $router;
         $this->templating = $templating;
@@ -94,6 +100,7 @@ class UserManager {
         $this->hannoMailer = $hannoMailer;
         $this->zygmarMailer = $zygmarMailer;
         $this->awaxMailer = $awaxMailer;
+        $this->vipMailer = $vipMailer;
     }
     
     public function registerUsername($id, $idzam) {
@@ -520,6 +527,58 @@ class UserManager {
         else {
                     $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 20);
                     $this->awaxMailer->send($userEmail, 'Zamówienie '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+        public function sendVip($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setDatawyslania(new \DateTime());
+            $em->flush();
+        }
+         foreach($qb as $wyslane)
+        {
+            $wyslane->setWyslane('1');
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:vip.html.twig', array(
+            'vip' => $qb,
+            'vip_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 25);
+                    $this->vipMailer->send($userEmail, 'Zamówienie '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 20);
+                    $this->vipMailer->send($userEmail, 'Zamówienie '.$tytul_email_nazwisko, $emaiBody);
         }
         
         return true;

@@ -67,6 +67,15 @@
                     <li class="{% if app.request.get('_route') == 'marcin_site_zygmar' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_zygmar') }}"><i class="fa fa-circle-o"></i> Zygmar panel</a></li>
                 </ul>
             </li>
+            <li class="treeview {% if app.request.get('_route') == 'marcin_admin_vip' %}active{% endif %}">
+                <a href="{{ path('marcin_admin_vip') }}">
+                    <i><b>VIP</B></i> <span>Zamówienia VIP</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{% if app.request.get('_route') == 'marcin_admin_vip' %}active on{% endif %}"><a href="{{ path('marcin_admin_vip') }}"><i class="fa fa-circle-o"></i> VIP</a></li>
+                    <li class="{% if app.request.get('_route') == 'marcin_site_vip' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_vip') }}"><i class="fa fa-circle-o"></i> VIP panel</a></li>
+                </ul>
+            </li>
             <li class="{% if app.request.get('_route') == 'marcin_admin_allzam' %}active{% endif %}"><a href="{{ path('marcin_admin_allzam') }}"><i class="fa fa-shopping-basket"></i> <span>Nasze zamówienia</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>
              {% if is_granted('ROLE_ADMIN') %}<li class="{% if app.request.get('_route') == 'common_user_admin_users' %}active{% endif %}"><a href="{{ path('common_user_admin_users') }}"><i class="fa fa-users" aria-hidden="true"></i> <span>Urzytkownicy panelu</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>{% endif %}
         </ul>

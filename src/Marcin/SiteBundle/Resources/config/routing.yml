@@ -33,6 +33,11 @@ marcin_site_zygmar:
     type: annotation
     prefix: /zarzadzanie/9991367321/zygmar
     
+marcin_site_vip:
+    resource: "@MarcinSiteBundle/Controller/VipController.php"
+    type: annotation
+    prefix: /zarzadzanie/9191362381/vip
+    
 #    path:     /zarzadzanie/3384567321
 #    defaults: { _controller: MarcinSiteBundle:Klinar:index }
 

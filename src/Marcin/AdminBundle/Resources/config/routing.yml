@@ -52,6 +52,10 @@ marcin_admin_allzam:
     type: annotation
     prefix: /all/zamowienia
     
+marcin_admin_vip:
+    resource: "@MarcinAdminBundle/Controller/VipController.php"
+    type: annotation
+    prefix: /v/vip
 
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"

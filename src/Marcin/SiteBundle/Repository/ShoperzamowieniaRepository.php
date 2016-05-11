@@ -19,9 +19,11 @@ class ShoperzamowieniaRepository extends EntityRepository
 
         if(!empty($params['status'])){
             if('nowe' == $params['status']){
-                $qb->andwhere('s.producent IS NULL');
+                $qb->andwhere('s.producent IS NULL OR s.producent = :wartosc')
+                ->setParameter('wartosc', '');
             }else if('przypisane' == $params['status']){
-                $qb->andwhere('s.producent IS NOT NULL');
+                $qb->andwhere('s.producent != :empty')
+                        ->setParameter('empty', '');
         }
         }
         
@@ -910,6 +912,100 @@ class ShoperzamowieniaRepository extends EntityRepository
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
                         ->setParameter('currDate', 'Zygmar')
+                       //->andwhere('a.zrealizowano = :zrealizowano')
+                       // ->setParameter('zrealizowano', '1')
+                    ->andwhere('a.zamok IS NOT NULL')
+                        ->andwhere('a.wyslane IS NOT NULL')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+//        $zrealizowane = $qb->andWhere('a.zaznaczono = :currDate')
+//                        ->setParameter('currDate', '66')
+//                        ->getQuery()
+//                        ->getSingleScalarResult();
+        return array(
+            //'all' => $all,
+            'nowe' => $nowe,
+            'dowyslania' => $dowyslania,
+            'wyslane' => $wyslane,
+            'zrealizowane' => $zrealizowane
+        );
+    }
+    
+    public function getVipBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.producent = :realizacja')
+                ->setParameter('realizacja', 'VIP')
+              ->addOrderBy('s.id', 'DESC');
+                    if(!empty($params['status'])){
+            if('nowe' == $params['status']){
+                $qb->andwhere('s.idposrednik IS NULL');
+            }else if('zrealizowane' == $params['status']){
+                $qb->andwhere('s.zaznaczono = :zaznaczono')
+                        ->setParameter('zaznaczono', '99')
+                        //->andwhere('s.zrealizowano = :zrealizowano')
+                        //->setParameter('zrealizowano', '1')
+                        ->andwhere('s.zamok IS NOT NULL')
+                ->andwhere('s.wyslane IS NOT NULL');
+            }else if('dowyslania' == $params['status']){
+                $qb->andwhere('s.zaznaczono = :zaznaczono')
+                        ->setParameter('zaznaczono', '99')
+                        ->andwhere('s.wyslane IS NULL');
+            }else if('wyslane' == $params['status']){
+                $qb->andwhere('s.zaznaczono = :zaznaczono')
+                        ->setParameter('zaznaczono', '99')
+                        ->andwhere('s.wyslane IS NOT NULL')
+                       // ->andwhere('s.zrealizowano IS NULL')
+                        ->andwhere('s.zamok IS NULL');
+            }else if('all' == $params['status']){
+            }
+        }
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.idzam LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getStatisticsvip() {
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+                $qb_dowyslania = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_wyslane = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_zrealizowane = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $nowe = $qb->andWhere('a.idposrednik IS NULL')
+                ->andWhere('a.producent = :currDate')
+                        ->setParameter('currDate', 'VIP')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $dowyslania = $qb_dowyslania->andwhere('a.wyslane IS NULL')
+                ->andWhere('a.producent = :currDate')
+                        ->setParameter('currDate', 'VIP')
+                ->andwhere('a.zaznaczono = :zaznaczono')
+                        ->setParameter('zaznaczono', '99')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $wyslane = $qb_wyslane->andWhere('a.producent = :currDate')
+                        ->setParameter('currDate', 'VIP')
+                 ->andwhere('a.wyslane IS NOT NULL')
+                       // ->andwhere('a.zrealizowano IS NULL')
+                ->andwhere('a.zamok IS NULL')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $zrealizowane = $qb_zrealizowane->andWhere('a.producent = :currDate')
+                        ->setParameter('currDate', 'VIP')
                        //->andwhere('a.zrealizowano = :zrealizowano')
                        // ->setParameter('zrealizowano', '1')
                     ->andwhere('a.zamok IS NOT NULL')

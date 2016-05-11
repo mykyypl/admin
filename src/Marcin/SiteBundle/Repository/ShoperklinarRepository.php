@@ -358,6 +358,44 @@ class ShoperklinarRepository extends EntityRepository
         
         return $qb;
     }
+    
+    public function getVipPanelBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s, t')
+                //->leftJoin('MarcinAdminBundle:Shoperzamowienia', 'ct', 'WITH', 'ct.idposrednik = s.id');
+                ->leftJoin('s.shoper1', 't')
+                ->where('s.kategoria = :zaznaczono')
+                ->setParameter('zaznaczono', 'VIP')
+              ->addOrderBy('s.id', 'DESC');
+        
+        if(!empty($params['status'])){
+//            if('nowe' == $params['status']){
+//                $qb->andwhere('s.nrlistu IS NULL AND s.pdf IS NULL AND s.datawyslania IS NULL');
+//                        //->andWhere('s.datawyslania IS NULL');
+//            } 
+            if('zrealizowane' == $params['status']){
+                $qb->andwhere('s.nrlistu IS NOT NULL AND s.pdf IS NOT NULL AND s.calosc = :test AND s.datawyslania IS NOT NULL')
+                       // ->andWhere('s.datawyslania IS NOT NULL');
+                        ->setParameter('test', '1');
+            } else if('wyslane' == $params['status']){
+               $qb->andwhere('s.datawyslania IS NOT NULL')
+                       ->andwhere('s.nrlistu IS NULL OR s.pdf IS NULL OR s.calosc IS NULL');
+        } else if('dowyslania' == $params['status']){
+               $qb->andwhere('s.datawyslania IS NULL AND s.calosc IS NULL');
+        }else if('all' == $params['status']){
+               //$qb->andwhere('s.datawyslania IS NULL AND s.calosc IS NULL');
+        }
+        }
+        if(!empty($params['idLike'])){
+            $jakie_zamLike = '%'.$params['idLike'].'%';
+            $qb->andWhere('s.id LIKE :idLike')
+                    ->setParameter('idLike', $jakie_zamLike);
+        }
+        
+        
+        return $qb;
+    }
      
     public function getKlinarSendBuilder($id){
         
@@ -438,6 +476,19 @@ class ShoperklinarRepository extends EntityRepository
     }
     
     public function getZygmarSendBuilder($id){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s, t')
+                //->leftJoin('MarcinAdminBundle:Shoperzamowienia', 'ct', 'WITH', 'ct.idposrednik = s.id');
+                ->leftJoin('s.shoper1', 't')
+                ->where('s.id = :zaznaczono')
+                ->setParameter('zaznaczono', $id)
+              ->addOrderBy('s.id', 'DESC');
+        
+        return $qb;
+    }
+    
+    public function getVipSendBuilder($id){
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s, t')
@@ -725,6 +776,42 @@ class ShoperklinarRepository extends EntityRepository
         );
     }
     
+    public function getStatisticsVipPanel() {
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_wyslane = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_zrealizowane = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $dowyslania = $qb->andWhere('a.datawyslania IS NULL AND a.calosc IS NULL')
+                ->andWhere('a.kategoria = :kategoria')
+                ->setParameter('kategoria', 'VIP')
+                  ->getQuery()    
+                  ->getSingleScalarResult();
+        $wyslane = $qb_wyslane->andWhere('a.datawyslania IS NOT NULL')
+                       // ->setParameter('currDate', NULL)
+                   ->andWhere('a.nrlistu IS NULL OR a.pdf IS NULL OR a.calosc IS NULL')
+                                ->andWhere('a.kategoria = :kategoria')
+                ->setParameter('kategoria', 'VIP')
+                       // ->setParameter('producent', 'Klinar')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $zrealizowane = $qb_zrealizowane->andWhere('a.nrlistu IS NOT NULL AND a.pdf IS NOT NULL AND a.calosc = :test AND a.datawyslania IS NOT NULL')
+                       // ->setParameter('currDate', NULL)
+                        ->setParameter('test', '1')
+                                ->andWhere('a.kategoria = :kategoria')
+                ->setParameter('kategoria', 'VIP')
+                  // ->andWhere('a.nrlistu IS NULL OR a.pdf IS NULL OR a.calosc IS NULL')
+                       // ->setParameter('producent', 'Klinar')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        return array(
+            'dowyslania' => $dowyslania,
+            'wyslane' => $wyslane,
+            'zrealizowane' => $zrealizowane
+        );
+    }
+    
     public function getStatisticsKlinar() {
         $qb = $this->createQueryBuilder('a')
                 ->select('COUNT(a)')
@@ -880,6 +967,31 @@ class ShoperklinarRepository extends EntityRepository
                 ->select('COUNT(a)')
                 ->andWhere('a.kategoria = :producent')
                 ->setParameter('producent', 'Zygmar');
+         $all = $qb->andWhere('a.datawyslania IS NOT NULL')
+                  ->getQuery()    
+                  ->getSingleScalarResult();
+        $nowe = $qb->andWhere('a.nrlistu IS NULL OR a.pdf IS NULL OR a.calosc IS NULL')
+                       // ->setParameter('currDate', NULL)
+                   ->andWhere('a.datawyslania IS NOT NULL')
+                       // ->setParameter('producent', 'Klinar')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+//        $zrealizowane = $qb->andWhere('a.zaznaczono = :currDate')
+//                        ->setParameter('currDate', '66')
+//                        ->getQuery()
+//                        ->getSingleScalarResult();
+        return array(
+            'all' => $all,
+            'nowe' => $nowe,
+            'zrealizowane' => ($all - $nowe)
+        );
+    }
+    
+    public function getStatisticsVip() {
+        $qb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)')
+                ->andWhere('a.kategoria = :producent')
+                ->setParameter('producent', 'VIP');
          $all = $qb->andWhere('a.datawyslania IS NOT NULL')
                   ->getQuery()    
                   ->getSingleScalarResult();
@@ -1078,6 +1190,40 @@ class ShoperklinarRepository extends EntityRepository
                 ->leftJoin('s.shoper1', 't')
                 ->where('s.kategoria = :zaznaczono')
                 ->setParameter('zaznaczono', 'Zygmar')
+              ->addOrderBy('s.id', 'DESC');
+        
+        if(!empty($params['status'])){
+             if('nowe' == $params['status']){
+                $qb->andwhere('s.nrlistu IS NULL OR s.pdf IS NULL OR s.calosc IS NULL')
+                        ->andWhere('s.datawyslania IS NOT NULL');
+                        //->andWhere('s.datawyslania IS NULL');
+            }
+            else if('zrealizowane' == $params['status']){
+                $qb->andwhere('s.nrlistu IS NOT NULL AND s.pdf IS NOT NULL')
+                        ->andWhere('s.datawyslania IS NOT NULL')
+                        ->andwhere('s.calosc = :calosc')
+                        ->setParameter('calosc', '1');
+                       // ->setParameter('zaznaczono', 'IS NOT NULL');
+            }
+        }
+        
+        if(!empty($params['idLike'])){
+            $jakie_zamLike = '%'.$params['idLike'].'%';
+            $qb->andWhere('s.id LIKE :idLike')
+                    ->setParameter('idLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getVipBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s, t')
+                //->leftJoin('MarcinAdminBundle:Shoperzamowienia', 'ct', 'WITH', 'ct.idposrednik = s.id');
+                ->leftJoin('s.shoper1', 't')
+                ->where('s.kategoria = :zaznaczono')
+                ->setParameter('zaznaczono', 'VIP')
               ->addOrderBy('s.id', 'DESC');
         
         if(!empty($params['status'])){

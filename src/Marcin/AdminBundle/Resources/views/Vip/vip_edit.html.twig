@@ -1,0 +1,420 @@
+{% extends 'MarcinAdminBundle::base.html.twig' %}
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
+   <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
+{% endblock %}
+{% block body %} 
+ <section class="content-header">
+          <h1>
+            Pulpit
+            <small>zarządzania GM</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
+            <li class="active">tutaj</li>
+          </ol>
+        </section>
+                    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+        <!-- Main content -->
+        <section class="content">
+        {#    <div class="box box-default color-palette-box">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-tag"></i> Podgląd wiadomości E-mail</h3>
+            </div>
+            <div class="box-body">#}
+                <div class="row">
+{#
+<body style="margin: 0; padding: 0;">
+   {% for shoper in dane  %}
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+ <tr>
+  <td align="left" style="padding: 40px 0 30px 0;"><b>
+  MAGNUM Tadeusz Romański 	</br>
+ul. Tuchowska 62 	</br>
+33-100 Tarnów 	</br>
+NIP: 873-101-72-78 	</b>
+</td>
+<td align="right" style="padding: 40px 0 30px 0;">
+<b>Tarnów </br> {{ shoper.datawygenerowania|date("Y-m-d H:i:s") }}</b>
+</td>
+ </tr>
+ </table>
+
+	
+	
+
+	<center>
+	<font color="red" size="6">Proszę o przybijanie stempla:</br>
+ <b>GrupaMAGNUM.eu</b></font></center> 	
+	
+
+	
+	
+	
+ <table align="center" border="1" cellpadding="0" cellspacing="0" width="600">
+ <tr>
+  <td align="center" bgcolor="#70bbd9" style="padding: 40px 0 30px 0;">
+ <img src="http://sklep.grupamagnum.eu/skins/store_user/store_f911069ce623f5403826ef94b1232662_2/images/logo.png" alt="Sklep GrupaMAGNUM.eu" width="220" height="68" style="display: block;" />
+</td>
+ </tr>
+ <tr>
+     
+  <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">  <table border="1" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">
+    Klient: 
+   </td>
+   <td align="center"><b>{{ shoper.imie }} {{ shoper.nazwisko }}</b></td>
+  </tr>
+   <tr><td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Firma:</td><td align="center"><b>{{ shoper.firma }}</b></td></tr>
+  <tr><td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Adres:</td><td align="center"><b>{{ shoper.adres1 }} {{ shoper.adres2 }}</b></td></tr>
+  <tr><td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Miasto</td><td align="center"><b>{{ shoper.miejscowosc }}</b></td></tr>
+  <tr><td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Telefon</td><td align="center"><b>{{ shoper.telefon }}</b></td></tr>
+  <tr>
+ <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0"><font color="red">Realizacja max do:</font></td>
+  <td bgcolor="#ffffff" align="center">  <font color="red">{{ shoper.datamaxdo|date("Y-m-d") }}</font>
+  </td>
+ </tr> 
+ </table></br></br>
+ <table border="1" cellpadding="0" cellspacing="0" width="100%">
+     <tr><td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Uwagi do zamówienia:</td><td id="uwagii{{ shoper.id }}" align="center"><div id="uwagi_zamowienie{{ shoper.id }}"><font color="red"><b>{{ shoper.uwagi }}<button onclick="changeOrderUzamowienie('{{ shoper.id }}', event)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></b></font></div><div id="uwagi_zamowienie_edit{{ shoper.id }}" style="display:none;"><div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeUzamowienie('{{ shoper.id }}', '{{ shoper.idzam }}', event)" type="text" value="{{ shoper.uwagi }}"></div><button class="btn btn-success" onclick="changeButtonUzamowienie('{{ shoper.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div></td></tr>
+ </table>
+</td>
+ </tr>
+ <tr>
+  <td bgcolor="#ffffff">
+  <table border="1" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">
+    Profil okna 
+   </td>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Ciepły parapet</td>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Wysokość</td>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Ilość szt</td>
+   <td align="center" bgcolor="#d9d9d9" cellpadding="0" cellspacing="0">Ilość mb</td>
+  </tr>
+     {% for shoper_pro in produkty  %}
+         <tr>       <td id="uwagi_pro{{ shoper_pro.id }}">
+                        <div id="uwagi{{ shoper_pro.id }}"><b>{{ shoper_pro.uwagi }}</b><button onclick="changeOrderText('{{ shoper_pro.id }}', event)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></div>
+                        <div id="uwagi_edit{{ shoper_pro.id }}" style="display:none;"> <div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeUwagi('{{ shoper_pro.id }}', '{{ shoper_pro.idzam }}', event)" type="text" value="{{ shoper_pro.uwagi }}"></div><button class="btn btn-success" onclick="changeButton('{{ shoper_pro.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>
+                    </td>
+                    <td id="nazwa_pro{{ shoper_pro.id }}" style="padding: 15px;">
+                        <div id="nazwa{{ shoper_pro.id }}"><b>{{ shoper_pro.nazwa }}</b><button onclick="changeOrderTextNazwa('{{ shoper_pro.id }}', event)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></div>
+                        <div id="nazwa_edit{{ shoper_pro.id }}" style="display:none;"> <div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeNazwa('{{ shoper_pro.id }}', '{{ shoper_pro.idzam }}', event)" type="text" value="{{ shoper_pro.nazwa }}"></div><button class="btn btn-success" onclick="changeButtonNazwa('{{ shoper_pro.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>
+                    </td>
+                    <td style="padding: 15px;">
+                        <b>{{ shoper_pro.wariant }}</b>
+                    </td>
+                    <td align="center" >
+                        <b>{{ shoper_pro.ilosc/1.2 }}</b>
+                    </td>
+                    <td align="center">
+                        <b>{{ shoper_pro.ilosc }}</b>
+                    </td></tr>
+      {% endfor %}
+</tr>   <tr>
+ </tr>  
+ </table>
+  </td>
+ </tr>
+ <tr>
+ <td align="center"><b><font color="red" size="4">{#Suma: 21 sztuk/25.2  mb.#}{#</font></b></td>
+ </tr>
+ <tr>
+  <td bgcolor="#ffffff" align="center">
+   <b>Do klienta proszę wysłać WZ a do nas nr listu przewozowego oraz fakturę mailem.<br><font color="red">Również proszę o zakładanie taśmy rozprężnej.</font></b>
+  </td>
+ </tr>
+</table>
+</br>
+Pozdrawiam,</br>
+</br>
+Tadeusz Romański</br>
+kom.:+48 600280602
+</br>
+</br>
+<font size="2">ID zamówienia: <a href="https://sklep.grupamagnum.eu/admin/orders/view/id/{{ shoper.idzam }}">{{ shoper.idzam }}</a>
+       
+
+<br><br>
+        <a href="{{ path('marcin_admin_shoper_send_klinar', {'id': shoper.id, 'idzam': shoper.idzam}) }}" class="btn btn-success fixedposition">wyślij zamówienie</a>
+        <a href="{{ path('marcin_admin_shoper_klinar_pokaz') }}" class="btn btn-primary fixedposition_down">Zapisz podsumowanie</a>
+{% endfor %}
+#}
+{{ form_start(form) }}
+                <div class="col-md-12">
+                    <div class="box box-default color-palette-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-tag"></i> Edycja użytkownika</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_row(form.imie) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(form.nazwisko) }}
+                            </div>{# , {'attr': {'disabled':'true'} } #}
+                            <div class="form-group">
+                                {{ form_row(form.firma) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(form.adres1) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(form.adres2) }}
+                            </div>
+                                </div>
+                            <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_row(form.miejscowosc) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(form.kodpocztowy) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(form.telefon) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(form.datamaxdo) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(form.uwagi) }}
+                            </div>
+                            <div class="form-group">
+                                <a href="#" class="btn btn-primary" id="danemagnum">Wczytaj dane Magnum</a>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                <div class="col-md-12">
+                
+                    <div class="box box-default color-palette-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-tag"></i> Edycja produktów</h3>
+                        </div> 
+                        <div class="box-body">
+                          {#  <div clss="row">
+                            <div class="col-md-2">
+                             {{ form_row(shoper.nazwa) }}</div>
+                             <div class="col-md-2">{{ form_row(shoper.wariant) }}</div>
+                             <div class="col-md-2">{{ form_row(shoper.ilosc) }}</div>
+                                <div class="col-md-2"> {{ form_row(shoper.uwagi) }}</div>
+                            <div class="col-md-2"> {#<div class="alert alert-info" role="alert"><strong>Dodanie nowego pliku nadpisuje stery!</strong></div>#}
+                            {#<div class="fileUpload btn btn-primary">
+                                {{ form_row(shoper.files) }}
+                            </div></div>
+                             <div class="col-md-2">{{ form_row(shoper.klinaryt) }}
+                            </div>>#}
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>nazwa</th>
+                                        <th>wariant</th>
+                                        <th>kod</th>
+                                        <th>ilosc</th>
+                                        <th>jednostka</th>
+                                        <th>uwagi</th>
+                                        <th>zalacznik</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                            {% for shoper in form.shoper1 %}
+                                <tr>
+                                    <td>{{ form_row(shoper.nazwa) }}</td>
+                                    <td>{{ form_row(shoper.wariant) }}</td>
+                                    <td>{{ form_row(shoper.kod) }}</td>
+                                    <td>{{ form_row(shoper.ilosc) }}</td>
+                                    <td>{{ form_row(shoper.jednostka) }}</td>
+                                    <td>{{ form_row(shoper.uwagi) }}</td>
+                                    <td>Dodanie nadpisuje stary! {{ form_row(shoper.files) }}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                            
+                    </div>
+                
+                </div>
+                <div class="form-group">
+                    {{ form_rest(form) }}
+                    {{ form_row(form.save) }} 
+                </div>
+                        {{ form_end(form) }}
+        </div><!-- /.box-body -->
+            
+       {#   </div>
+            </div> #}
+</section>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+{% endblock %}
+    {% block javascripts %}
+        {{parent()}}
+       {# <script type="text/javascript">
+
+     function changeOrderKlinar(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var zaplacono = 1;
+        } else {
+             console.log('odznaczono!');
+             var zaplacono = 0;
+        }
+                                
+                                var url = '{{ path('marcin_admin_shoper_send') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        zaznaczono: zaplacono
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log(order_id);
+                                    }
+                                });
+
+                            }#}
+                                {#   
+                                // UWAGI (PRÓG) DANEJ POZYCJI !
+                            function changeUwagi(id, idzam, event) {
+                                var order_id = id;
+                                var idzam = idzam;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                var uwagi = $(element).val();
+                                var url = '{{ path('marcin_admin_shoper_update_podglad') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        uwagi: uwagi,
+                                        idzam: idzam
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log(idzam);
+                                    }
+                                });
+
+                            }
+                            
+                            function changeButton(id, event) {
+                                var button_id = id;
+                                $('#uwagi_pro'+button_id).load(document.URL + ' #uwagi_pro'+button_id);
+                            }
+                            
+                            function changeOrderText(id, event) {
+                                 var order_id = id;
+                                  if($('#uwagi'+order_id).css('display')!='none'){
+                                       $('#uwagi_edit'+order_id).html($('#uwagi_edit'+order_id).html()).show().siblings('div').hide();
+                                  }
+                            }
+                            
+                            //// KONIEC EDYCJI UWAG (PROGU) POZYCJI
+                            
+                            // NAZWA (Ciepły parapet) DANEJ POZYCJI !
+                            function changeNazwa(id, idzam, event) {
+                                var order_id = id;
+                                var idzam = idzam;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                var nazwa = $(element).val();
+                                var url = '{{ path('marcin_admin_shoper_update_podglad') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        nazwa: nazwa,
+                                        idzam: idzam
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log(idzam);
+                                    }
+                                });
+
+                            }
+                            
+                            function changeButtonNazwa(id, event) {
+                                var button_id = id;
+                                $('#nazwa_pro'+button_id).load(document.URL + ' #nazwa_pro'+button_id);
+                            }
+                            
+                            function changeOrderTextNazwa(id, event) {
+                                 var order_id = id;
+                                  if($('#nazwa'+order_id).css('display')!='none'){
+                                       $('#nazwa_edit'+order_id).html($('#nazwa_edit'+order_id).html()).show().siblings('div').hide();
+                                  }
+                            }
+                            
+                            //// KONIEC EDYCJI Nazwy (Ciepły parapet) POZYCJI
+                            
+                            // uwagi do zamowienia
+                            function changeUzamowienie(id, idzam, event) {
+                                var order_id = id;
+                                var idzam = idzam;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                var uwagi = $(element).val();
+                                var url = '{{ path('marcin_admin_shoper_update_podglad_zam') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        uwagi: uwagi,
+                                        idzam: idzam
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log(idzam);
+                                    }
+                                });
+
+                            }
+                            
+                            function changeButtonUzamowienie(id, event) {
+                                var button_id = id;
+                                $('#uwagii'+button_id).load(document.URL + ' #uwagii'+button_id);
+                            }
+                            
+                            function changeOrderUzamowienie(id, event) {
+                                 var order_id = id;
+                                  if($('#uwagi_zamowienie'+order_id).css('display')!='none'){
+                                       $('#uwagi_zamowienie_edit'+order_id).html($('#uwagi_zamowienie_edit'+order_id).html()).show().siblings('div').hide();
+                                  }
+                            }
+                            
+                            //// KONIEC uwagi do zamowienia
+        </script>#}
+                <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+                                <script>
+$(document).ready(function(){
+  $("#danemagnum").click(function(){
+    $("#marcin_adminbundle_invest_adres1").val("Tuchowska 62");
+    $("#marcin_adminbundle_invest_adres2").val("");
+    $("#marcin_adminbundle_invest_miejscowosc").val("Tarnów");
+    $("#marcin_adminbundle_invest_kodpocztowy").val("33-100");
+    $("#marcin_adminbundle_invest_imie").val("Tadeusz");
+    $("#marcin_adminbundle_invest_nazwisko").val("Romański");
+    $("#marcin_adminbundle_invest_firma").val("Magnum Tadeusz Romański");
+    $("#marcin_adminbundle_invest_telefon").val("600 280 602");
+  });
+});
+</script>      
+        {% endblock %}
