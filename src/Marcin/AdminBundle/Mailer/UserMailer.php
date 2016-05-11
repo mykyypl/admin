@@ -1,7 +1,7 @@
 <?php
 namespace Marcin\AdminBundle\Mailer;
 
-use Marcin\SiteBundle\Entity\Username;
+//use Marcin\SiteBundle\Entity\Username;
 
 class UserMailer {
     

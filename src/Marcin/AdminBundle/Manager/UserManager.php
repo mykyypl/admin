@@ -17,6 +17,7 @@ use Marcin\AdminBundle\Mailer\AwaxMailer;
 use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Common\UserBundle\Entity\User;
 
 class UserManager {
     
@@ -462,11 +463,11 @@ class UserManager {
         if (!$tytul == '')
         {
                     $tytul_email = substr($tytul, 0, 25);
-                    $this->hannoMailer->send($userEmail, 'Zamówienie '.$tytul_email, $emaiBody);
+                    $this->zygmarMailer->send($userEmail, 'Zamówienie '.$tytul_email, $emaiBody);
         }
         else {
                     $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 20);
-                    $this->hannoMailer->send($userEmail, 'Zamówienie '.$tytul_email_nazwisko, $emaiBody);
+                    $this->zygmarMailer->send($userEmail, 'Zamówienie '.$tytul_email_nazwisko, $emaiBody);
         }
         
         return true;
@@ -514,13 +515,46 @@ class UserManager {
         if (!$tytul == '')
         {
                     $tytul_email = substr($tytul, 0, 25);
-                    $this->hannoMailer->send($userEmail, 'Zamówienie '.$tytul_email, $emaiBody);
+                    $this->awaxMailer->send($userEmail, 'Zamówienie '.$tytul_email, $emaiBody);
         }
         else {
                     $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 20);
-                    $this->hannoMailer->send($userEmail, 'Zamówienie '.$tytul_email_nazwisko, $emaiBody);
+                    $this->awaxMailer->send($userEmail, 'Zamówienie '.$tytul_email_nazwisko, $emaiBody);
         }
         
+        return true;
+    }
+    
+    public function registerUser(User $User) {
+        
+        if(null !== $User->getId()){
+            throw new UserException('Użytkownik jest już zarejestrowany');
+        }
+        
+        $encoder = $this->encoderFactory->getEncoder($User);
+        $encodedPasswd = $encoder->encodePassword($User->getPlainPassword(), $User->getSalt());
+        
+        $User->setPassword($encodedPasswd);
+        $User->setEnabled(false);
+        
+        $em = $this->doctrine->getManager();
+        $em->persist($User);
+        $em->flush();
+        
+        return true;
+    }
+    
+    public function changePassword(User $User){
+        
+        if(null == $User->getPlainPassword()){
+            throw new UserException('Nie ustawiono nowego hasła!');
+        }
+        $encoder = $this->encoderFactory->getEncoder($User);
+        $encoderPassword = $encoder->encodePassword($User->getPlainPassword(), $User->getSalt());
+        $User->setPassword($encoderPassword);
+        $em = $this->doctrine->getManager();
+        $em->persist($User);
+        $em->flush();
         return true;
     }
 }
