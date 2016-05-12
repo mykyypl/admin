@@ -15,6 +15,15 @@ use Marcin\AdminBundle\Mailer\HannoMailer;
 use Marcin\AdminBundle\Mailer\ZygmarMailer;
 use Marcin\AdminBundle\Mailer\AwaxMailer;
 use Marcin\AdminBundle\Mailer\VipMailer;
+
+use Marcin\AdminBundle\Mailer\AwaxcheckMailer;
+use Marcin\AdminBundle\Mailer\VipcheckMailer;
+use Marcin\AdminBundle\Mailer\InvestcheckMailer;
+use Marcin\AdminBundle\Mailer\PartnercheckMailer;
+use Marcin\AdminBundle\Mailer\SelenacheckMailer;
+use Marcin\AdminBundle\Mailer\HannocheckMailer;
+use Marcin\AdminBundle\Mailer\ZygmarcheckMailer;
+
 use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -87,7 +96,64 @@ class UserManager {
      */
     protected $vipMailer;
     
-    function __construct(Doctrine $doctrine, Router $router, Templating $templating, EncoderFactory $encoderFactory, UserMailer $userMailer, OwnMailer $ownMailer, InvestMailer $investMailer, PartnerMailer $partnerMailer, SelenaMailer $selenaMailer, HannoMailer $hannoMailer, ZygmarMailer $zygmarMailer, AwaxMailer $awaxMailer, VipMailer $vipMailer) {
+    /**
+     * @var awaxcheckMailer
+     */
+    protected $awaxcheckMailer;
+    
+    /**
+     * @var vipcheckMailer
+     */
+    protected $vipcheckMailer;
+    
+    /**
+     * @var hannocheckMailer
+     */
+    protected $hannocheckMailer;
+    
+    /**
+     * @var investcheckMailer
+     */
+    protected $investcheckMailer;
+    
+    /**
+     * @var partnercheckMailer
+     */
+    protected $partnercheckMailer;
+    
+    /**
+     * @var selenacheckMailer
+     */
+    protected $selenacheckMailer;
+    
+    /**
+     * @var zygmarcheckMailer
+     */
+    protected $zygmarcheckMailer;
+    
+    
+    function __construct(Doctrine $doctrine,
+            Router $router,
+            Templating $templating,
+            EncoderFactory $encoderFactory,
+            UserMailer $userMailer,
+            OwnMailer $ownMailer,
+            InvestMailer $investMailer,
+            PartnerMailer $partnerMailer,
+            SelenaMailer $selenaMailer,
+            HannoMailer $hannoMailer,
+            ZygmarMailer $zygmarMailer,
+            AwaxMailer $awaxMailer,
+            VipMailer $vipMailer,
+            AwaxcheckMailer $awaxcheckMailer,
+            VipcheckMailer $vipcheckMailer,
+            InvestcheckMailer $investcheckMailer,
+            PartnercheckMailer $partnercheckMailer,
+            SelenacheckMailer $selenacheckMailer,
+            HannocheckMailer $hannocheckMailer,
+            ZygmarcheckMailer $zygmarcheckMailer
+            )
+            {
         $this->doctrine = $doctrine;
         $this->router = $router;
         $this->templating = $templating;
@@ -101,6 +167,14 @@ class UserManager {
         $this->zygmarMailer = $zygmarMailer;
         $this->awaxMailer = $awaxMailer;
         $this->vipMailer = $vipMailer;
+        $this->awaxcheckMailer = $awaxcheckMailer;
+        $this->vipcheckMailer = $vipcheckMailer;
+        $this->investcheckMailer = $investcheckMailer;
+        $this->partnercheckMailer = $partnercheckMailer;
+        $this->selenacheckMailer = $selenacheckMailer;
+        $this->hannocheckMailer = $hannocheckMailer;
+        $this->zygmarcheckMailer = $zygmarcheckMailer;
+        
     }
     
     public function registerUsername($id, $idzam) {
@@ -614,6 +688,335 @@ class UserManager {
         $em = $this->doctrine->getManager();
         $em->persist($User);
         $em->flush();
+        return true;
+    }
+    
+    public function checkPartner($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setOstzmianapofaktura(new \DateTime());
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:partnercheck.html.twig', array(
+            'partner' => $qb,
+            'partner_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 35);
+                    $this->partnercheckMailer->send($userEmail, 'Zmiana w panelu PartnerPlast '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 30);
+                    $this->partnercheckMailer->send($userEmail, 'Zmiana w panelu PartnerPlast '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+        public function checkInvest($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setOstzmianapofaktura(new \DateTime());
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:investcheck.html.twig', array(
+            'invest' => $qb,
+            'invest_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 35);
+                    $this->investcheckMailer->send($userEmail, 'Zmiana w panelu Invest '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 30);
+                    $this->investcheckMailer->send($userEmail, 'Zmiana w panelu Invest '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+        public function checkSelena($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setOstzmianapofaktura(new \DateTime());
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:selenacheck.html.twig', array(
+            'selena' => $qb,
+            'selena_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 35);
+                    $this->selenacheckMailer->send($userEmail, 'Zmiana w panelu Selena '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 30);
+                    $this->selenacheckMailer->send($userEmail, 'Zmiana w panelu Selena '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+    public function checkHanno($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setOstzmianapofaktura(new \DateTime());
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:hannocheck.html.twig', array(
+            'hanno' => $qb,
+            'hanno_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 35);
+                    $this->hannocheckMailer->send($userEmail, 'Zmiana w panelu Stier '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 30);
+                    $this->hannocheckMailer->send($userEmail, 'Zmiana w panelu Stier '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+    public function checkAwax($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setOstzmianapofaktura(new \DateTime());
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:awaxcheck.html.twig', array(
+            'awax' => $qb,
+            'awax_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 35);
+                    $this->awaxcheckMailer->send($userEmail, 'Zmiana w panelu Awax '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 30);
+                    $this->awaxcheckMailer->send($userEmail, 'Zmiana w panelu Awax '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+    public function checkZygmar($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setOstzmianapofaktura(new \DateTime());
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:zygmarcheck.html.twig', array(
+            'zygmar' => $qb,
+            'zygmar_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 35);
+                    $this->zygmarcheckMailer->send($userEmail, 'Zmiana w panelu Zygmar '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 30);
+                    $this->zygmarcheckMailer->send($userEmail, 'Zmiana w panelu Zygmar '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
+        return true;
+    }
+    
+    public function checkVip($id) {
+       
+        $em = $this->doctrine->getManager();
+        
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperzamowienia', 'a')
+                 ->where('a.idposrednik = :identifier')
+                 ->setParameter('identifier', $id)
+               //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+        $qb_dane = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinSiteBundle:Shoperklinar', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+        
+        foreach($qb_dane as $odznaczenie)
+        {
+                        $odznaczenie->setOstzmianapofaktura(new \DateTime());
+            $em->flush();
+        }
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:vipcheck.html.twig', array(
+            'vip' => $qb,
+            'vip_dane' => $qb_dane
+        ));
+        $tytul = $qb_dane[0]->getFirma();
+        $tytul_nazwisko = $qb_dane[0]->getNazwisko();
+        $userEmail = 'marcin@grupamagnum.eu';
+        if (!$tytul == '')
+        {
+                    $tytul_email = substr($tytul, 0, 35);
+                    $this->vipcheckMailer->send($userEmail, 'Zmiana w panelu VIP '.$tytul_email, $emaiBody);
+        }
+        else {
+                    $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 30);
+                    $this->vipcheckMailer->send($userEmail, 'Zmiana w panelu VIP '.$tytul_email_nazwisko, $emaiBody);
+        }
+        
         return true;
     }
 }

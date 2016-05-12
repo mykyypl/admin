@@ -1307,4 +1307,124 @@ class ShoperklinarRepository extends EntityRepository
         return $qb;
     }
     
+    public function getKlinar_stat() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.datawyslania IS NULL')
+                        ->andwhere('u.kategoria = :kategoria')
+                        ->setParameter('kategoria', 'Klinar');
+        
+        
+         $all_many = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_klinar' => $all_many
+        );
+    }
+    
+    public function getInvest_stat() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.datawyslania IS NULL')
+                        ->andwhere('u.kategoria = :kategoria')
+                        ->setParameter('kategoria', 'Invest');
+        
+        
+         $all_invest = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_invest' => $all_invest
+        );
+    }
+    
+    public function getPartner_stat() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.datawyslania IS NULL')
+                        ->andwhere('u.kategoria = :kategoria')
+                        ->setParameter('kategoria', 'PartnerPlast');
+        
+        
+         $all_partner = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_partner' => $all_partner
+        );
+    }
+    
+    public function getSelena_stat() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.datawyslania IS NULL')
+                        ->andwhere('u.kategoria = :kategoria')
+                        ->setParameter('kategoria', 'Selena');
+        
+        
+         $all_selena = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_selena' => $all_selena
+        );
+    }
+    
+    public function getHanno_stat() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.datawyslania IS NULL')
+                        ->andwhere('u.kategoria = :kategoria')
+                        ->setParameter('kategoria', 'Hanno');
+        
+        
+         $all_hanno = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_hanno' => $all_hanno
+        );
+    }
+    
+    public function getAwax_stat() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.datawyslania IS NULL')
+                        ->andwhere('u.kategoria = :kategoria')
+                        ->setParameter('kategoria', 'AWAX');
+        
+        
+         $all_awax = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_awax' => $all_awax
+        );
+    }
+    
+    public function getZygmar_stat() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.datawyslania IS NULL')
+                        ->andwhere('u.kategoria = :kategoria')
+                        ->setParameter('kategoria', 'Zygmar');
+        
+        
+         $all_zygmar = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_zygmar' => $all_zygmar
+        );
+    }
+    
+    public function getVip_stat() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.datawyslania IS NULL')
+                        ->andwhere('u.kategoria = :kategoria')
+                        ->setParameter('kategoria', 'VIP');
+        
+        
+         $all_vip = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_vip' => $all_vip
+        );
+    }
+    
 }

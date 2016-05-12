@@ -84,7 +84,7 @@ class AwaxController extends Controller {
             {
                  try {
                 $userManager = $this->get('user_manager');
-                $userManager->checkKlinar($id);
+                $userManager->checkAwax($id);
               //  $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
                 foreach($qb_sprawdzanie as $posredniknew)
                  {

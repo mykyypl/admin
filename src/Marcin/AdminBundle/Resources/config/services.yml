@@ -50,7 +50,36 @@ services:
     vip_mailer:
         class: Marcin\AdminBundle\Mailer\VipMailer
         arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    awaxcheck_mailer:
+        class: Marcin\AdminBundle\Mailer\AwaxcheckMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    vipcheck_mailer:
+        class: Marcin\AdminBundle\Mailer\VipcheckMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    investcheck_mailer:
+        class: Marcin\AdminBundle\Mailer\InvestcheckMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    partnercheck_mailer:
+        class: Marcin\AdminBundle\Mailer\PartnercheckMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    selenacheck_mailer:
+        class: Marcin\AdminBundle\Mailer\SelenacheckMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    hannocheck_mailer:
+        class: Marcin\AdminBundle\Mailer\HannocheckMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    zygmarcheck_mailer:
+        class: Marcin\AdminBundle\Mailer\ZygmarcheckMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+
 
     user_manager:
         class: Marcin\AdminBundle\Manager\UserManager
-        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer, @partner_mailer, @selena_mailer, @hanno_mailer, @zygmar_mailer, @awax_mailer, @vip_mailer]
+        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer, @partner_mailer, @selena_mailer, @hanno_mailer, @zygmar_mailer, @awax_mailer, @vip_mailer, @awaxcheck_mailer, @vipcheck_mailer, @investcheck_mailer, @partnercheck_mailer, @selenacheck_mailer, @hannocheck_mailer, @zygmarcheck_mailer]

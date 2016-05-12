@@ -172,7 +172,7 @@ class Shoperklinar {
     /**
      * @Assert\File(
      *      maxSize = "3M",
-     *      mimeTypes = {"application/pdf", "application/x-pdf"},
+     *      mimeTypes = {"application/pdf", "application/x-pdf", "application/x-excel", "application/x-msexcel", "application/excel", "application/vnd.ms-excel"},
      *      mimeTypesMessage = "Obsługiwany format plików: PDF"
      * )
      */

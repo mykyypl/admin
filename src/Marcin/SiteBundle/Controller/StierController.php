@@ -84,7 +84,7 @@ class StierController extends Controller {
             {
                  try {
                 $userManager = $this->get('user_manager');
-                $userManager->checkKlinar($id);
+                $userManager->checkHanno($id);
               //  $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
                 foreach($qb_sprawdzanie as $posredniknew)
                  {

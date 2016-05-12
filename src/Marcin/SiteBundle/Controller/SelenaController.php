@@ -84,7 +84,7 @@ class SelenaController extends Controller {
             {
                  try {
                 $userManager = $this->get('user_manager');
-                $userManager->checkKlinar($id);
+                $userManager->checkSelena($id);
               //  $this->addFlash('success', 'Poprawnie wysłano wiadomość!!');
                 foreach($qb_sprawdzanie as $posredniknew)
                  {

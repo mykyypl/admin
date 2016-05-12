@@ -113,8 +113,14 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('u')
                         ->select('COUNT(u)')
-                        ->where('u.status = :identifier')
-                        ->setParameter('identifier', 'oczekiwanie na zapłatę');
+                        ->where('u.do_zaplaty IS NOT NULL OR u.do_zaplaty = :dozaplaty')
+                        ->setParameter('dozaplaty', '0')
+                        ->andwhere('u.zaplacono = :zaplacono')
+                        ->setParameter('zaplacono', '0')
+                        ->andWhere('u.status != :status')
+                        ->setParameter('status', 'przesłane do realizacji');
+//                        ->where('u.status = :identifier')
+//                        ->setParameter('identifier', 'oczekiwanie na zapłatę');
         
         
         $all_many = (int)$qb->getQuery()->getSingleScalarResult();

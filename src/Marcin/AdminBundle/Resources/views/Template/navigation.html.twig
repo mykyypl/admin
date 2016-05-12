@@ -4,6 +4,7 @@
             <li class="{% if app.request.get('_route') == 'marcin_admin_dashboard' %}active{% endif %}"><a href="{{ path('marcin_admin_dashboard') }}"><i class="fa fa-link"></i> <span>Panel</span><span class="label label-primary pull-right">{{ navigation.zamowienia.count.all }}</span></a></li>
             <li class="{% if app.request.get('_route') == 'marcin_admin_username' %}active{% endif %}"><a href="{{ path('marcin_admin_username') }}"><i class="fa fa-user"></i> <span>Użytkownicy</span><span class="label label-primary pull-right">{{ navigation.username.count.user }}</span></a></li>
             <li class="{% if app.request.get('_route') == 'marcin_admin_shoper' %}active{% endif %}"><a href="{{ path('marcin_admin_shoper') }}"><i class="fa fa-shopping-cart"></i> <span>Shoper</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>
+            <li class="{% if app.request.get('_route') == 'marcin_admin_allzam' %}active{% endif %}"><a href="{{ path('marcin_admin_allzam') }}"><i class="fa fa-shopping-basket"></i> <span>Nasze zamówienia</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>
             <li class="treeview {% if app.request.get('_route') == 'marcin_admin_shoper_klinar' %}active{% endif %}">
                 <a href="{{ path('marcin_admin_shoper_klinar') }}">
                     <i><b>KLI</B></i> <span>Zamówienia klinar</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}
@@ -76,6 +77,5 @@
                     <li class="{% if app.request.get('_route') == 'marcin_site_vip' %}active on{% endif %}"><a target="_blank" href="{{ path('marcin_site_vip') }}"><i class="fa fa-circle-o"></i> VIP panel</a></li>
                 </ul>
             </li>
-            <li class="{% if app.request.get('_route') == 'marcin_admin_allzam' %}active{% endif %}"><a href="{{ path('marcin_admin_allzam') }}"><i class="fa fa-shopping-basket"></i> <span>Nasze zamówienia</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>
              {% if is_granted('ROLE_ADMIN') %}<li class="{% if app.request.get('_route') == 'common_user_admin_users' %}active{% endif %}"><a href="{{ path('common_user_admin_users') }}"><i class="fa fa-users" aria-hidden="true"></i> <span>Urzytkownicy panelu</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>{% endif %}
         </ul>

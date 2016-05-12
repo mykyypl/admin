@@ -25,6 +25,15 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 class AllzamowieniaController extends Controller {
+    
+    private $klinar_stat;
+    private $invest_stat;
+    private $partner_stat;
+    private $selena_stat;
+    private $hanno_stat;
+    private $awax_stat;
+    private $zygmar_stat;
+    private $vip_stat;
 
     /**
      * @Route(
@@ -63,6 +72,31 @@ class AllzamowieniaController extends Controller {
            // 'Wszystkie' => 'all'
         );
         
+        if (!isset($this->klinar_stat)) {
+            $this->klinar_stat = $StatZam->getKlinar_stat();
+        }
+        if (!isset($this->invest_stat)) {
+            $this->invest_stat = $StatZam->getInvest_stat();
+        }
+        if (!isset($this->partner_stat)) {
+            $this->partner_stat = $StatZam->getPartner_stat();
+        }
+        if (!isset($this->selena_stat)) {
+            $this->selena_stat = $StatZam->getSelena_stat();
+        }
+        if (!isset($this->hanno_stat)) {
+            $this->hanno_stat = $StatZam->getHanno_stat();
+        }
+        if (!isset($this->awax_stat)) {
+            $this->awax_stat = $StatZam->getAwax_stat();
+        }
+        if (!isset($this->zygmar_stat)) {
+            $this->zygmar_stat = $StatZam->getZygmar_stat();
+        }
+        if (!isset($this->vip_stat)) {
+            $this->vip_stat = $StatZam->getVip_stat();
+        }
+        
         return $this->render('MarcinAdminBundle:Allzam:index.html.twig',
             array(
             'pageTitle'            => 'GM Panel Shoper zamówienia wszystkie',
@@ -73,7 +107,31 @@ class AllzamowieniaController extends Controller {
             'currStatus' => $status,
             'statistics' => $statistics,
             'pagination' => $pagination,
-            'currStatus' => $status
+            'currStatus' => $status,
+                    'klinar_stat' => array(
+                        'count' => $this->klinar_stat
+                    ),
+                    'invest_stat' => array(
+                        'count' => $this->invest_stat
+                    ),
+                    'partner_stat' => array(
+                        'count' => $this->partner_stat
+                    ),
+                    'selena_stat' => array(
+                        'count' => $this->selena_stat
+                    ),
+                    'hanno_stat' => array(
+                        'count' => $this->hanno_stat
+                    ),
+                    'awax_stat' => array(
+                        'count' => $this->awax_stat
+                    ),
+                    'zygmar_stat' => array(
+                        'count' => $this->zygmar_stat
+                    ),
+                    'vip_stat' => array(
+                        'count' => $this->vip_stat
+                    )
             //'updateTokenName' => $this->updateTokenName,
             //'aktywacjaTokenName' => $this->aktywacjaTokenName,
             //'csrfProvider' => $this->get('form.csrf_provider')

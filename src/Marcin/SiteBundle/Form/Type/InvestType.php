@@ -33,6 +33,7 @@ class InvestType extends AbstractType
     'entry_type'   => TextType::class,
     'allow_add' => true,
     'allow_delete' => true,
+    'label' => false,
    // 'label' => 'Nr listu przewozowego',
     //'prototype' => true,
     //'prototype_data' => 'New Tag Placeholder',
