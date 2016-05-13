@@ -18,6 +18,7 @@ use Marcin\AdminBundle\Entity\Username;
 use Marcin\AdminBundle\Form\Type\TestType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DashboardController extends Controller {
 
@@ -31,6 +32,7 @@ class DashboardController extends Controller {
      *          "methods": "POST"
      *      }
      * )
+     * @Security("has_role('ROLE_PROD')")
      *
      */
     public function updateZamAction(Request $Request) {
@@ -156,6 +158,7 @@ class DashboardController extends Controller {
      *      defaults={"id"=NULL}
      * )
      * 
+     * 
      * @Template()
      */
     public function formAction(Request $Request, Zamowienia $Zamowienia = NULL) {
@@ -222,6 +225,22 @@ class DashboardController extends Controller {
 //                ->getQuery()
 //                ->getResult();
 
+//        $usr= $this->get('security.token_storage')->getToken()->getUser();
+//        foreach ($usr->getRoles() as $test)
+//            {
+//                if($test == "ROLE_ZAM")
+//                    {
+//                       return $this->redirect($this->generateUrl('marcin_admin_allzam'));
+//                    }
+//            }
+
+//        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_PROD', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')) {
+//             return $this->redirect($this->generateUrl('marcin_admin_allzam'));
+//        }
+                if (false === $this->get('security.authorization_checker')->isGranted('ROLE_PROD')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_allzam'));
+         }
+        
         $queryParams = array(
             'userLike' => $Request->query->get('userLike'),
             'status' => $status,
@@ -322,6 +341,8 @@ class DashboardController extends Controller {
      *      name="marcin_admin_dashboard_delete",
      *      requirements={"id"="\d+"}
      * )
+     * 
+     * @Security("has_role('ROLE_ADMIN')")
      * 
      * @Template()
      */

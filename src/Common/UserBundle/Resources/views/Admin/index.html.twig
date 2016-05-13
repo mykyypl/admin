@@ -75,8 +75,8 @@
                         <td>{{ user.email }}</td>
                         <td>
                             {% for role in user.roles %}
-                                <span style="margin-right: 5px;" class="label label-{% if role == 'ROLE_USER' %}default{% elseif role == 'ROLE_EDITOR' %}info{% elseif role == 'ROLE_ADMIN' %}warning{% elseif role == 'ROLE_SUPER_ADMIN' %}danger{% endif %}">
-                                {% if role == 'ROLE_USER' %}Użytkownik{% elseif role == 'ROLE_EDITOR' %}Redaktor{% elseif role == 'ROLE_ADMIN' %}Administrator{% elseif role == 'ROLE_SUPER_ADMIN' %}Super administrator{% endif %}
+                                <span style="margin-right: 5px;" class="label label-{% if role == 'ROLE_USER' %}default{% elseif role == 'ROLE_PROD' %}default{% elseif role == 'ROLE_ZAM' %}default{% elseif role == 'ROLE_MAGNUM' %}info{% elseif role == 'ROLE_ADMIN' %}warning{% elseif role == 'ROLE_SUPER_ADMIN' %}danger{% endif %}">
+                                {% if role == 'ROLE_USER' %}Użytkownik{% elseif role == 'ROLE_ZAM' %}Zamówienia{% elseif role == 'ROLE_PROD' %}Produkcja{% elseif role == 'ROLE_MAGNUM' %}ADMIN Produkcja{% elseif role == 'ROLE_ADMIN' %}Administrator{% elseif role == 'ROLE_SUPER_ADMIN' %}Super administrator{% endif %}
                                 </span>
                             {% else %}
                                 <span class="label label-default">Użytkownik</span>

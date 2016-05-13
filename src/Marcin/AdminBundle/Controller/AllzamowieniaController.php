@@ -46,6 +46,10 @@ class AllzamowieniaController extends Controller {
      * @Template()
      */
     public function indexAction(Request $Request,$status ,$page) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
+        
         $queryParams = array(
             'idLike' => $Request->query->get('idLike'),
             'status' => $status    

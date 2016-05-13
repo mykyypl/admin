@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Marcin\AdminBundle\Entity\Username;
 use Marcin\AdminBundle\Form\Type\UzytkownicyType;
@@ -27,6 +28,7 @@ class UsernameController extends Controller {
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
      * )
+     * @Security("has_role('ROLE_MAGNUM')")
      * 
      * @Template()
      */
@@ -65,7 +67,9 @@ class UsernameController extends Controller {
      *       name="marcin_admin_username",
      *      requirements={"page"="\d+"},
      *      defaults={"page"=1}
+     * 
      * )
+     * @Security("has_role('ROLE_MAGNUM')")
      *    
      * @Template()
      */
@@ -121,6 +125,8 @@ class UsernameController extends Controller {
      *      requirements={"id"="\d+"}
      * )
      * 
+     * @Security("has_role('ROLE_MAGNUM')")
+     * 
      * @Template()
      */
     public function updateAction($id, $token) {
@@ -149,6 +155,8 @@ class UsernameController extends Controller {
      *      name="marcin_admin_username_aktywacja",
      *      requirements={"id"="\d+"}
      * )
+     * 
+     * @Security("has_role('ROLE_MAGNUM')")
      * 
      * @Template()
      */

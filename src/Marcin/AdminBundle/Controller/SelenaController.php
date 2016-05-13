@@ -24,6 +24,7 @@ use Marcin\AdminBundle\Form\Type\InvestpType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class SelenaController extends Controller {
@@ -38,9 +39,13 @@ class SelenaController extends Controller {
      *          "methods": "POST"
      *      }
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendAction(Request $Request) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
 
         $result = array(
             'id' => $Request->request->get('id'),
@@ -65,9 +70,13 @@ class SelenaController extends Controller {
      * @Route("/form/send_selena/{id}/{idzam}", 
      *       name="marcin_admin_selena_send_selena"
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendselenaAction($id, $idzam) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
         
           /////////////////////////////////////// WYSYŁANIE WIADOMOŚCI EMAIL
             try {
@@ -94,6 +103,10 @@ class SelenaController extends Controller {
      * @Template()
      */
     public function indexAction(Request $Request,$status ,$page) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
+         
         $queryParams = array(
             'idzamLike' => $Request->query->get('idzamLike'),
             'status' => $status
@@ -150,6 +163,9 @@ class SelenaController extends Controller {
      * @Template()
      */
     public function investshowAction(Request $Request, $idzam) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
             
         $zamowienia_klinar = new Shoperklinar();
         
@@ -227,6 +243,10 @@ class SelenaController extends Controller {
      * @Template()
      */
     public function ipodgladAction(Request $Request, $id, Shoperklinar $Shoper = NULL) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
+         
         if (null == $Shoper) {
             $Shoper = new Shoperklinar();
             $newShoperyForm = TRUE;
@@ -266,6 +286,10 @@ class SelenaController extends Controller {
      * @Template()
      */
     public function selenapokazAction(Request $Request, $status, $page) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
+        
         $queryParams = array(
             'idLike' => $Request->query->get('idLike'),
             'status' => $status
@@ -319,10 +343,14 @@ class SelenaController extends Controller {
      *      name="marcin_admin_selena_delete",
      *      requirements={"id"="\d+"}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      * 
      * @Template()
      */
     public function deleteAction($id, $token) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
 
         $tokenName = sprintf($this->deleteTokenName, $id);
         $csrfProvider = $this->get('form.csrf_provider');

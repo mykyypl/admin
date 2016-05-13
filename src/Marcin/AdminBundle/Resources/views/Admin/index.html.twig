@@ -43,6 +43,7 @@
                     </div>
                 </div>
             </div><!-- ./col -->
+            {% if is_granted('ROLE_MAGNUM') %}
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-aqua">
@@ -78,7 +79,7 @@
             <!-- /.info-box-content -->
           </div>
           <!-- /.info-box -->
-        </div>
+        </div>{% endif %}
         </div>
         <div class="box box-default color-palette-box">
             <div class="box-header with-border">
@@ -130,9 +131,9 @@
                                     <th>nr-user-zam</th>
                                     <th>Produkcja</th>
                                     <th>status</th>
-                                    <th>do zaplaty</th>
+                                    {% if is_granted('ROLE_MAGNUM') %}<th>do zaplaty</th>
                                     <th>akcje</th>
-                                    <th>zł</th>
+                                    <th>zł</th>{% endif %}
                                 </tr>
                             </thead>
 
@@ -159,7 +160,7 @@
                                             <option value="wyprodukowane"{% if article.status == 'wyprodukowane' %} selected="selected" {% endif %}>wyprodukowane</option>
                                             <option value="zrealizowane/odebrane"{% if article.status == 'zrealizowane/odebrane' %} selected="selected" {% endif %}>zrealizowane/odebrane</option></select>
                                         {#<h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4>#}</th>
-                                    <th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-warning" onclick="changeOrderText('{{ article.id }}', event)"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"> <div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value=""></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% else %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-danger" onclick="changeOrderText('{{ article.id }}', event)">{{ article.dozaplaty  }} zł</span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value="{{ article.dozaplaty }}"></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</div></th>
+                                    {% if is_granted('ROLE_MAGNUM') %}<th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-warning" onclick="changeOrderText('{{ article.id }}', event)"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"> <div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value=""></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% else %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-danger" onclick="changeOrderText('{{ article.id }}', event)">{{ article.dozaplaty  }} zł</span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value="{{ article.dozaplaty }}"></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</div></th>
                                     <th id="wynik_b{{ article.id }}">
                                         <div class="btn-group">
                                             <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
@@ -175,7 +176,7 @@
                                         </a>{% endif %}</th>
                                         <th><div class="checkbox checkbox-success">
                                                 <input style="flat-red" id="spr" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderPay('{{ article.id }}', event)" {% if article.zaplacono == '1' %}checked {% endif %} /><label for="checkbox1">
-    </label></div></th>
+    </label></div></th>{% endif %}
                                     </tr>
                                     {% endfor %}
                                     </table>

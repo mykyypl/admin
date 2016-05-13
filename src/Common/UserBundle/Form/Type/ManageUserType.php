@@ -78,7 +78,10 @@ class ManageUserType extends AbstractType
                 'label' => 'Uprawnienia',
                 'multiple' => true,
                 'choices' => array(
-                    'ROLE_USER' => 'Użytkownik',
+                    //'ROLE_USER' => 'Użytkownik',
+                    'ROLE_PROD' => 'Produkcja',
+                    'ROLE_ZAM' => 'Zamówienia',
+                    'ROLE_MAGNUM' => 'Admin produkcja',
                     'ROLE_ADMIN' => 'Administrator',
                     'ROLE_SUPER_ADMIN' => 'Super Administrator'
                 ),

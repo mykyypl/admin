@@ -24,6 +24,7 @@ use Marcin\AdminBundle\Form\Type\InvestpType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class ZygmarController extends Controller {
@@ -38,6 +39,7 @@ class ZygmarController extends Controller {
      *          "methods": "POST"
      *      }
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendAction(Request $Request) {
@@ -65,6 +67,7 @@ class ZygmarController extends Controller {
      * @Route("/form/send_zygmar/{id}/{idzam}", 
      *       name="marcin_admin_zygmar_send_zygmar"
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendzygmarAction($id, $idzam) {
@@ -90,6 +93,7 @@ class ZygmarController extends Controller {
      *       requirements={"page"="\d+"},
      *      defaults={"status"="nowe", "page"=1}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */
@@ -146,6 +150,7 @@ class ZygmarController extends Controller {
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      * 
      * @Template()
      */
@@ -223,6 +228,7 @@ class ZygmarController extends Controller {
      *       name="marcin_admin_zygmar_podglad",
      *       requirements={"id"="\d+"}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */
@@ -262,6 +268,7 @@ class ZygmarController extends Controller {
      *       requirements={"page"="\d+"},
      *       defaults={"status"="dowyslania", "page"=1}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */
@@ -319,6 +326,7 @@ class ZygmarController extends Controller {
      *      name="marcin_admin_zygmar_delete",
      *      requirements={"id"="\d+"}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      * 
      * @Template()
      */

@@ -24,6 +24,7 @@ use Marcin\AdminBundle\Form\Type\InvestpType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class PartnerplastController extends Controller {
@@ -38,9 +39,13 @@ class PartnerplastController extends Controller {
      *          "methods": "POST"
      *      }
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendAction(Request $Request) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
 
         $result = array(
             'id' => $Request->request->get('id'),
@@ -65,9 +70,13 @@ class PartnerplastController extends Controller {
      * @Route("/form/send_partnerplast/{id}/{idzam}", 
      *       name="marcin_admin_partnerplast_send_partnerplast"
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendpartnerplastAction($id, $idzam) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
         
           /////////////////////////////////////// WYSYŁANIE WIADOMOŚCI EMAIL
             try {
@@ -94,6 +103,9 @@ class PartnerplastController extends Controller {
      * @Template()
      */
     public function indexAction(Request $Request,$status ,$page) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
         $queryParams = array(
             'idzamLike' => $Request->query->get('idzamLike'),
             'status' => $status
@@ -150,6 +162,9 @@ class PartnerplastController extends Controller {
      * @Template()
      */
     public function partnerplastshowAction(Request $Request, $idzam) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
             
         $zamowienia_klinar = new Shoperklinar();
         
@@ -227,6 +242,9 @@ class PartnerplastController extends Controller {
      * @Template()
      */
     public function ppodgladAction(Request $Request, $id, Shoperklinar $Shoper = NULL) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
         if (null == $Shoper) {
             $Shoper = new Shoperklinar();
             $newShoperyForm = TRUE;
@@ -266,6 +284,9 @@ class PartnerplastController extends Controller {
      * @Template()
      */
     public function partnerplastpokazAction(Request $Request, $status, $page) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
         $queryParams = array(
             'idLike' => $Request->query->get('idLike'),
             'status' => $status
@@ -319,10 +340,14 @@ class PartnerplastController extends Controller {
      *      name="marcin_admin_partnerplast_delete",
      *      requirements={"id"="\d+"}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      * 
      * @Template()
      */
     public function deleteAction($id, $token) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ZAM')) {
+                 return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+         }
 
         $tokenName = sprintf($this->deleteTokenName, $id);
         $csrfProvider = $this->get('form.csrf_provider');
