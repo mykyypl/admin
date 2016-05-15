@@ -266,7 +266,7 @@ class DashboardController extends Controller {
         $qb = $RepoZam->getQueryBuilder($queryParams);
 
         $paginationLimit = $this->container->getParameter('admin.pagination_limit');
-        $limits = array(15, 20, 50);
+        $limits = array(15, 20, 30, 50, 100);
 
         $limit = $Request->query->get('limit', $paginationLimit);
 

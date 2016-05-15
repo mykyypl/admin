@@ -22,7 +22,7 @@ use Marcin\AdminBundle\Form\Type\KlinarpType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class ShoperController extends Controller {
@@ -37,6 +37,7 @@ class ShoperController extends Controller {
      *          "methods": "POST"
      *      }
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function updateZamAction(Request $Request) {
@@ -110,6 +111,7 @@ class ShoperController extends Controller {
      *          "methods": "POST"
      *      }
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function updateKlinarpodzamAction(Request $Request) {
@@ -148,6 +150,7 @@ class ShoperController extends Controller {
      *          "methods": "POST"
      *      }
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendAction(Request $Request) {
@@ -199,6 +202,7 @@ class ShoperController extends Controller {
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      * 
      * @Template()
      */
@@ -251,6 +255,7 @@ class ShoperController extends Controller {
      *       "/kk/dodawanie-zamowien",
      *       name="marcin_admin_shoper-dodawanie"
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */
@@ -389,6 +394,7 @@ class ShoperController extends Controller {
      *       requirements={"page"="\d+"},
      *       defaults={"status"="nowe", "page"=1}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */
@@ -440,6 +446,7 @@ class ShoperController extends Controller {
      *       requirements={"page"="\d+"},
      *      defaults={"status"="nowe", "page"=1}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */
@@ -493,6 +500,7 @@ class ShoperController extends Controller {
      * @Route("/kk/form/send_klinar/{id}/{idzam}", 
      *       name="marcin_admin_shoper_send_klinar"
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendklinarAction($id, $idzam) {
@@ -537,6 +545,7 @@ class ShoperController extends Controller {
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      * 
      * @Template()
      */
@@ -644,6 +653,7 @@ class ShoperController extends Controller {
      *       requirements={"page"="\d+"},
      *       defaults={"status"="dowyslania", "page"=1}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */
@@ -755,6 +765,7 @@ class ShoperController extends Controller {
      *       name="marcin_admin_shoper_klinar_podglad",
      *       requirements={"id"="\d+"}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */
@@ -844,6 +855,7 @@ class ShoperController extends Controller {
      *      name="marcin_admin_shoper_klinar_pokaz_delete",
      *      requirements={"id"="\d+"}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      * 
      * @Template()
      */

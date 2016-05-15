@@ -88,7 +88,7 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <form action="{{ path('marcin_admin_dashboard') }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
+                        <form action="{{ path('marcin_admin_dashboard', {'status': currStatus}) }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
                                                 {% for key,val in statusesList %}
                     <div class="col-xs-12 col-md-2 col-lg-2 padding-bottom-15">
                         <a class="btn btn-block {{ currStatus == val ? 'btn-default':'btn-primary' }}" href="{{ path('marcin_admin_dashboard', {'status': val}) }}">
