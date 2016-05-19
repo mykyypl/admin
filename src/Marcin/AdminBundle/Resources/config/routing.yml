@@ -56,6 +56,11 @@ marcin_admin_vip:
     resource: "@MarcinAdminBundle/Controller/VipController.php"
     type: annotation
     prefix: /v/vip
+    
+marcin_admin_trasa:
+    resource: "@MarcinAdminBundle/Controller/TrasaController.php"
+    type: annotation
+    prefix: /t/trasa
 
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"

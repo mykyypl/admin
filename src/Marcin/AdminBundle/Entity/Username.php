@@ -66,6 +66,13 @@ class Username {
     private $email; 
     
     /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $trasa;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -186,6 +193,29 @@ class Username {
     
       function __construct() {
         //$this->registerDate = new \DateTime();
+    }
+    
+    /**
+     * Set trasa
+     *
+     * @param integer $trasa
+     *
+     * @return Username
+     */
+    public function setTrasa($trasa)
+    {
+        $this->trasa = $trasa;
+        return $this;
+    }
+    
+    /**
+     * Get trasa
+     *
+     * @return integer
+     */
+    public function getTrasa()
+    {
+        return $this->trasa;
     }
 
     

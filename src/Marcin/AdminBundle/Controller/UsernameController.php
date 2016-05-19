@@ -14,12 +14,47 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Marcin\AdminBundle\Entity\Username;
+use Marcin\AdminBundle\Entity\Trasa;
 use Marcin\AdminBundle\Form\Type\UzytkownicyType;
 
 class UsernameController extends Controller {
     
     private $updateTokenName = 'update-user-%d';
     private $aktywacjaTokenName = 'aktywacja-user-%d';
+    
+    /**
+     * @Route("/form/update-complete", 
+     *       name="marcin_admin_username_update_trasa",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function updateZamAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'status' => $Request->request->get('status')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Username');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+        
+        $em = $this->getDoctrine()->getManager();
+        $Zamowienie->setTrasa($result['status']);
+        $em->flush();
+        
+        return new JsonResponse(true);
+
+    }
     
     /**
      * @Route(
@@ -82,7 +117,14 @@ class UsernameController extends Controller {
         ); 
      
         $StatUser = $this->getDoctrine()->getRepository('MarcinAdminBundle:Username');
-        //$statistics = $StatUser->getStatistics();
+
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery(
+            'SELECT p
+            FROM MarcinAdminBundle:Trasa p'
+        );
+
+        $trasa = $query->getResult();
         
         $qb = $StatUser->getQueryBuilder($queryParams);
         
@@ -100,6 +142,18 @@ class UsernameController extends Controller {
             'Wszystkie' => 'all'
         );
         
+        $nip_query = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Faktura', 'a')
+                 ->getQuery()
+                 ->getResult();
+        $a = 0;$b = 0;
+         foreach ($nip_query as $nip)
+         {
+             $dane[$a++]['nip'] = $nip->GetNip();
+             $dane[$b++]['user'] = $nip->GetUser();
+         }
+        
         return $this->render('MarcinAdminBundle:Username:index.html.twig',
             array(
             'pageTitle'            => 'GM Panel USER',
@@ -111,6 +165,8 @@ class UsernameController extends Controller {
             'statusesList' => $statusesList,
            // 'statistics' => $statistics,
             'pagination' => $pagination,
+                'trasa' => $trasa,
+                'dane' => $dane,
             'updateTokenName' => $this->updateTokenName,
             'aktywacjaTokenName' => $this->aktywacjaTokenName,
             'csrfProvider' => $this->get('form.csrf_provider')

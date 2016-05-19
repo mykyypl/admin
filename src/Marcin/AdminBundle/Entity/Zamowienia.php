@@ -99,6 +99,34 @@ class Zamowienia {
      * 
      */
     private $nrprodukcji;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $trasa;
+    
+    /**
+     * @ORM\Column(type="boolean")
+     * 
+     * 
+     */
+    private $trasaok; 
+    
+    /**
+     * @ORM\Column(type="integer")
+     * 
+     * 
+     */
+    private $id_dost; 
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $platnosc; 
 
     /**
      * Get id
@@ -349,5 +377,97 @@ class Zamowienia {
     {
         return $this->nrprodukcji;
     }
+    
+    /**
+     * Set trasa
+     *
+     * @param integer $trasa
+     *
+     * @return Zamowienia
+     */
+    public function setTrasa($trasa)
+    {
+        $this->trasa = $trasa;
+        return $this;
+    }
+    
+    /**
+     * Get trasa
+     *
+     * @return integer
+     */
+    public function getTrasa()
+    {
+        return $this->trasa;
+    }
+    
+    /**
+     * Set trasaok
+     *
+     * @param string $trasaok
+     *
+     * @return Zamowienia
+     */
+    public function setTrasaok($trasaok)
+    {
+        $this->trasaok = $trasaok;
+        return $this;
+    }
+    
+    /**
+     * Get trasaok
+     *
+     * @return string
+     */
+    public function getTrasaok()
+    {
+        return $this->trasaok;
+    }
+    
+    /**
+     * Set iddost
+     *
+     * @param string $id_dost
+     *
+     * @return Zamowienia
+     */
+    public function setIddost($id_dost)
+    {
+        $this->id_dost = $id_dost;
+        return $this;
+    }
+    
+    /**
+     * Get iddost
+     *
+     * @return string
+     */
+    public function getIddost()
+    {
+        return $this->id_dost;
+    }
+    
+    /**
+     * Set platnosc
+     *
+     * @param integer $platnosc
+     *
+     * @return Zamowienia
+     */
+    public function setPlatnosc($platnosc)
+    {
+        $this->platnosc = $platnosc;
+        return $this;
+    }
+    /**
+     * Get platnosc
+     *
+     * @return integer
+     */
+    public function getPlatnosc()
+    {
+        return $this->platnosc;
+    }
+    
 }
 

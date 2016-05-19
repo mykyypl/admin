@@ -27,8 +27,12 @@ class TestRepository extends EntityRepository
                 $qb->where('s.status = :wyprodukowane')
                         ->setParameter('wyprodukowane', 'wyprodukowane');
             }else if('zrealizowane' == $params['status']){
-                $qb->where('s.status = :zrealizowane')
-                        ->setParameter('zrealizowane', 'zrealizowane/odebrane');
+                $qb->where('s.status = :zrealizowane OR s.status = :anulowane OR s.status = :wyslane OR s.status = :wdostawie OR s.status = :gotowe')
+                        ->setParameter('zrealizowane', 'zrealizowane/odebrane')
+                        ->setParameter('anulowane', 'anulowane')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('wdostawie', 'w dostawie')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu');
             }
         }
         
@@ -55,21 +59,31 @@ class TestRepository extends EntityRepository
         public function getStatistics() {
         $qb = $this->createQueryBuilder('a')
                 ->select('COUNT(a)');
+        $qb_zrel = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_real = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_wyp = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
         $all = (int) $qb->getQuery()->getSingleScalarResult();
         $przeslane = $qb->andWhere('a.status = :currDate')
                         ->setParameter('currDate', 'przesłane do realizacji')
                         ->getQuery()
                         ->getSingleScalarResult();
-        $realizacja = $qb->andWhere('a.status = :currDate')
+        $realizacja = $qb_real->andWhere('a.status = :currDate')
                         ->setParameter('currDate', 'w realizacji')
                         ->getQuery()
                         ->getSingleScalarResult();
-        $wyprodukowane = $qb->andWhere('a.status = :currDate')
+        $wyprodukowane = $qb_wyp->andWhere('a.status = :currDate')
                         ->setParameter('currDate', 'wyprodukowane')
                         ->getQuery()
                         ->getSingleScalarResult();
-        $zrealizowane = $qb->andWhere('a.status = :currDate')
+        $zrealizowane = $qb_zrel->andWhere('a.status = :currDate OR a.status = :anulowane OR a.status = :wyslane OR a.status = :wdostawie OR a.status = :gotowe')
                         ->setParameter('currDate', 'zrealizowane/odebrane')
+                        ->setParameter('anulowane', 'anulowane')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('wdostawie', 'w dostawie')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
                         ->getQuery()
                         ->getSingleScalarResult();
         return array(
@@ -118,7 +132,7 @@ class TestRepository extends EntityRepository
                         ->andwhere('u.zaplacono = :zaplacono')
                         ->setParameter('zaplacono', '0')
                         ->andWhere('u.status != :status')
-                        ->setParameter('status', 'przesłane do realizacji');
+                        ->setParameter('status', 'zrealizowane/odebrane');
 //                        ->where('u.status = :identifier')
 //                        ->setParameter('identifier', 'oczekiwanie na zapłatę');
         
@@ -155,5 +169,315 @@ class TestRepository extends EntityRepository
  return array(
             'all_wyprodukowane' => $all_wyprodukowane
         );
+    }
+    
+    public function getTrasaBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaPoniedzialekBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'poniedzialek')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaWtorekBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'wtorek')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaSrodaBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'sroda')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaCzwartekBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'czwartek')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaPiatekBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'piatek')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaTarnowBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'tarnow')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaTadeuszBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'tadeusz')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaOdbiorBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'odbior')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaSalonBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'salon')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaTuchowskaBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'tuchowska')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaMontazBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'montaz')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
+    }
+    
+    public function getTrasaWysylkaBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->where('s.status = :status')
+                ->setParameter('status', 'wyprodukowane')
+                ->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'wysylka')
+              ->addOrderBy('s.sendDate', 'DESC');
+        
+          if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['idzamLike'])){
+            $jakie_zamLike = '%'.$params['idzamLike'].'%';
+            $qb->andWhere('s.id LIKE :idzamLike')
+                    ->setParameter('idzamLike', $jakie_zamLike);
+        }
+        
+        return $qb;
     }
 }

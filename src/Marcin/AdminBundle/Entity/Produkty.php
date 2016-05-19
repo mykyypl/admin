@@ -43,6 +43,43 @@ class Produkty {
     private $id_zam;
     
     /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $szerokosc_a;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $szerokosc_b;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $wysokosc_h;
+    
+    /**
+     * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
+     * 
+     */
+    private $typ;
+    
+    /**
+     * @ORM\Column(type="text")
+     * 
+     * @Assert\NotBlank
+     * 
+     */
+    private $kolor;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -105,5 +142,118 @@ class Produkty {
 
            return $qb;
         }   
+        
+    /**
+     * Set typ
+     *
+     * @param string $typ
+     *
+     * @return Produkty
+     */
+    public function setTyp($typ)
+    {
+        $this->typ = $typ;
+        return $this;
+    }
+    /**
+     * Get typ
+     *
+     * @return string
+     */
+    public function getTyp()
+    {
+        return $this->typ;
+    }
+    
+    /**
+     * Set kolor
+     *
+     * @param string $kolor
+     *
+     * @return Produkty
+     */
+    public function setKolor($kolor)
+    {
+        $this->kolor = $kolor;
+        return $this;
+    }
+    /**
+     * Get kolor
+     *
+     * @return string
+     */
+    public function getKolor()
+    {
+        return $this->kolor;
+    }
+    
+    /**
+     * Set szerokosc_a
+     *
+     * @param string $szerokosc_a
+     *
+     * @return Produkty
+     */
+    public function setSzerokosca($szerokosc_a)
+    {
+        $this->szerokosc_a = $szerokosc_a;
+        return $this;
+    }
+    
+    /**
+     * Get szerokosc_a
+     *
+     * @return string
+     */
+    public function getSzerokosca()
+    {
+        return $this->szerokosc_a;
+    }
+    
+    /**
+     * Set szerokosc_b
+     *
+     * @param string $szerokosc_b
+     *
+     * @return Produkty
+     */
+    public function setSzerokoscb($szerokosc_b)
+    {
+        $this->szerokosc_b = $szerokosc_b;
+        return $this;
+    }
+    
+    /**
+     * Get szerokosc_b
+     *
+     * @return string
+     */
+    public function getSzerokoscb()
+    {
+        return $this->szerokosc_b;
+    }
+    
+    /**
+     * Set wysokosc_h
+     *
+     * @param string $wysokosc_h
+     *
+     * @return Produkty
+     */
+    public function setWysokosch($wysokosc_h)
+    {
+        $this->wysokosc_h = $wysokosc_h;
+        return $this;
+    }
+    
+    /**
+     * Get wysokosc_h
+     *
+     * @return string
+     */
+    public function getWysokosch()
+    {
+        return $this->wysokosc_h;
+    }
     
 }

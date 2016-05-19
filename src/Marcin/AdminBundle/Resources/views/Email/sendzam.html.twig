@@ -1,0 +1,36 @@
+{% extends 'MarcinSiteBundle::base.html.twig' %}
+{% block title %}Dostawa GrupaMAGNUM{% endblock %}
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+{% block body %}
+    <h2>Witaj!<br></h2>
+    <h3>Dostawa z GrupaMAGNUM jest już w drodze na poniższe zamówienia!</h3><br>
+    {% set kasa = 0 %}
+    {% for danee in dane %}
+        <table border="1" width="100%">
+            <tr class="kolordruk" bgcolor="#C3C3C3"><th colspan="4"><center><b><font color="red"><dum>{{ danee.jakiezam }}</dum></font></b></center></th></tr>
+            <tr class="kolordruk" bgcolor="#C3C3C3"><th>Lp.</th><th>Zamówienie</th><th>Nr. zam. Klienta</th><th>Informacje</th></tr>
+            <tr class="kolordruk" height="30px" bgcolor="#C3C3C3"><td><b>{{ loop.index }}</b></td>
+                                                        <td><b><dum>{{ danee.nrprodukcji }}</dum></b></td> <td>{{ danee.nruser }}
+                                                            </td><td>  Kwota: <b><dum>{{ danee.dozaplaty }}</dum></b>, 
+                                                            {{ danee.platnosc }}</td></tr>{% set kasa = kasa + danee.dozaplaty %}
+        </table>
+        <table border="1" width="100%" style="margin: auto">
+        <tr><th>Lp.</th><th>Typ</th><th>Kolor</th><th>Szerokość</th><th>Wysokość</th></tr>
+        {% for listaa in lista if listaa.idzam == danee.id %}
+            <tr>
+                <td height="30px"><center>{{ loop.index }}</center>{#{{ listaprod.idzam }}#}</td><td style="margin: auto">  {{ listaa.typ }}</td> <td style="margin: auto"> {{ listaa.kolor }}</td><td style="margin: auto">  {{ listaa.szera }}</td> {#<td style="margin: auto">  {{ listaprod.szerb }}</td> #}<td style="margin: auto">  {{ listaa.wysh }}</td> 
+            </tr>
+        {% endfor %}
+        </table>
+    {% endfor %}
+    <h3>Do zapłaty łącznie: <font color="red">{{ kasa }}</font> zł</h3>
+    
+    <br><br><br>
+    Pozdrawiamy<br>
+    Produkcja GrupaMAGNUM
+{% endblock %}
+{% block javascripts %}
+    {{parent()}}
+{% endblock %}

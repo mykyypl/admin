@@ -24,6 +24,8 @@ use Marcin\AdminBundle\Mailer\SelenacheckMailer;
 use Marcin\AdminBundle\Mailer\HannocheckMailer;
 use Marcin\AdminBundle\Mailer\ZygmarcheckMailer;
 
+use Marcin\AdminBundle\Mailer\ZamowieniaMailer;
+
 use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\AdminBundle\Exception\UserException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -131,6 +133,11 @@ class UserManager {
      */
     protected $zygmarcheckMailer;
     
+    /**
+     * @var zamowieniaMailer
+     */
+    protected $zamowieniaMailer;
+    
     
     function __construct(Doctrine $doctrine,
             Router $router,
@@ -151,7 +158,8 @@ class UserManager {
             PartnercheckMailer $partnercheckMailer,
             SelenacheckMailer $selenacheckMailer,
             HannocheckMailer $hannocheckMailer,
-            ZygmarcheckMailer $zygmarcheckMailer
+            ZygmarcheckMailer $zygmarcheckMailer,
+            ZamowieniaMailer $zamowieniaMailer
             )
             {
         $this->doctrine = $doctrine;
@@ -174,6 +182,7 @@ class UserManager {
         $this->selenacheckMailer = $selenacheckMailer;
         $this->hannocheckMailer = $hannocheckMailer;
         $this->zygmarcheckMailer = $zygmarcheckMailer;
+        $this->zamowieniaMailer = $zamowieniaMailer;
         
     }
     
@@ -1016,6 +1025,257 @@ class UserManager {
                     $tytul_email_nazwisko = substr($tytul_nazwisko, 0, 30);
                     $this->vipcheckMailer->send($userEmail, 'Zmiana w panelu VIP '.$tytul_email_nazwisko, $emaiBody);
         }
+        
+        return true;
+    }
+    
+    public function sendEmail($trasastat, $user, $idzam) {
+        $em = $this->doctrine->getManager();
+        $qb_email = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Username', 'a')
+                 ->where('a.login = :identifier')
+                 ->setParameter('identifier', $user)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        foreach ($qb_email as $email) {
+            $daneEmail = $email->getEmail();
+        }
+        $qb_zamowienia = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.trasa = :identifier')
+                 ->setParameter('identifier', $trasastat)
+                ->andwhere('a.user = :user')
+                 ->setParameter('user', $user)
+                 ->andwhere('a.status = :status')
+                 ->setParameter('status', 'wyprodukowane')
+                ->andwhere('a.trasaok = :trasaok')
+                 ->setParameter('trasaok', '1')
+                 ->andwhere('a.id_dost = :dost')
+                 ->setParameter('dost', $idzam)
+                //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        if ($qb_zamowienia == null) {
+             //$this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
+              //return $this->redirect($this->generateUrl('marcin_admin_trasa'));
+            echo "BŁĄD - brak danych";
+           
+        }
+        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;
+        $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
+        foreach ($qb_zamowienia as $zamowienia)
+        {
+            $dane[$a++]['id'] = $zamowienia->getId();
+            $dane[$b++]['nruser'] = $zamowienia->GetNr_user_zam();
+            $dane[$c++]['dostawa'] = $zamowienia->GetIddost();
+            $dane[$d++]['platnosc'] = $zamowienia->GetPlatnosc();
+            $dane[$e++]['nrprodukcji'] = $zamowienia->GetNrprodukcji();
+            $dane[$f++]['dozaplaty'] = $zamowienia->GetDozaplaty();
+            $dane[$g++]['jakiezam'] = $zamowienia->GetJakie_zam();
+            //$dane[$h++]['id'] = $zamowienia->GetId();
+            $id_zam = $zamowienia->GetId();
+        
+                $query_zliczanie2 = $em->createQuery(
+                    'SELECT a
+                    FROM MarcinAdminBundle:Produkty a
+                    WHERE a.id_zam = :idzam'
+                )->setParameter('idzam', $id_zam);
+        $trasa_zliczanie2 = $query_zliczanie2->getResult();
+            foreach ($trasa_zliczanie2 as $lista)
+            {
+                $lista_prod[$aa++]['idzam'] = $lista->GetIdzam();
+                $lista_prod[$bb++]['typ'] = $lista->GetTyp();
+                $lista_prod[$cc++]['kolor'] = $lista->GetKolor();
+                $lista_prod[$dd++]['szera'] = $lista->GetSzerokosca();
+                $lista_prod[$ee++]['szerb'] = $lista->GetSzerokoscb();
+                $lista_prod[$ff++]['wysh'] = $lista->GetWysokosch();
+            }
+            $zamowienia->setStatus('w dostawie');
+             $em->flush();
+        }
+        
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:sendzam.html.twig', array(
+            'dane' => $dane,
+            'lista' => $lista_prod
+        ));
+        
+        $this->zamowieniaMailer->send($daneEmail, 'Dostawa zamówienia GrupaMAGNUM ', $emaiBody);
+        
+        return true;
+    }
+    
+    public function sendEmailo($trasastat, $user, $idzam) {
+        $em = $this->doctrine->getManager();
+        $qb_email = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Username', 'a')
+                 ->where('a.login = :identifier')
+                 ->setParameter('identifier', $user)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        foreach ($qb_email as $email) {
+            $daneEmail = $email->getEmail();
+        }
+        $qb_zamowienia = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.trasa = :identifier')
+                 ->setParameter('identifier', $trasastat)
+                ->andwhere('a.user = :user')
+                 ->setParameter('user', $user)
+                 ->andwhere('a.status = :status')
+                 ->setParameter('status', 'wyprodukowane')
+                ->andwhere('a.trasaok = :trasaok')
+                 ->setParameter('trasaok', '1')
+                 ->andwhere('a.id_dost = :dost')
+                 ->setParameter('dost', $idzam)
+                //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        if ($qb_zamowienia == null) {
+             //$this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
+              //return $this->redirect($this->generateUrl('marcin_admin_trasa'));
+            echo "BŁĄD - brak danych";
+           
+        }
+        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;
+        $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
+        foreach ($qb_zamowienia as $zamowienia)
+        {
+            $dane[$a++]['id'] = $zamowienia->getId();
+            $dane[$b++]['nruser'] = $zamowienia->GetNr_user_zam();
+            $dane[$c++]['dostawa'] = $zamowienia->GetIddost();
+            $dane[$d++]['platnosc'] = $zamowienia->GetPlatnosc();
+            $dane[$e++]['nrprodukcji'] = $zamowienia->GetNrprodukcji();
+            $dane[$f++]['dozaplaty'] = $zamowienia->GetDozaplaty();
+            $dane[$g++]['jakiezam'] = $zamowienia->GetJakie_zam();
+            //$dane[$h++]['id'] = $zamowienia->GetId();
+            $id_zam = $zamowienia->GetId();
+        
+                $query_zliczanie2 = $em->createQuery(
+                    'SELECT a
+                    FROM MarcinAdminBundle:Produkty a
+                    WHERE a.id_zam = :idzam'
+                )->setParameter('idzam', $id_zam);
+        $trasa_zliczanie2 = $query_zliczanie2->getResult();
+            foreach ($trasa_zliczanie2 as $lista)
+            {
+                $lista_prod[$aa++]['idzam'] = $lista->GetIdzam();
+                $lista_prod[$bb++]['typ'] = $lista->GetTyp();
+                $lista_prod[$cc++]['kolor'] = $lista->GetKolor();
+                $lista_prod[$dd++]['szera'] = $lista->GetSzerokosca();
+                $lista_prod[$ee++]['szerb'] = $lista->GetSzerokoscb();
+                $lista_prod[$ff++]['wysh'] = $lista->GetWysokosch();
+            }
+            $zamowienia->setStatus('gotowe do odbioru/montażu');
+             $em->flush();
+        }
+        
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:sendzamo.html.twig', array(
+            'dane' => $dane,
+            'lista' => $lista_prod
+        ));
+        
+        $this->zamowieniaMailer->send($daneEmail, 'Dostawa zamówienia GrupaMAGNUM ', $emaiBody);
+        
+        return true;
+    }
+    
+        public function sendEmailw($trasastat, $user, $idzam) {
+        $em = $this->doctrine->getManager();
+        $qb_email = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Username', 'a')
+                 ->where('a.login = :identifier')
+                 ->setParameter('identifier', $user)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        foreach ($qb_email as $email) {
+            $daneEmail = $email->getEmail();
+        }
+        $qb_zamowienia = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.trasa = :identifier')
+                 ->setParameter('identifier', $trasastat)
+                ->andwhere('a.user = :user')
+                 ->setParameter('user', $user)
+                 ->andwhere('a.status = :status')
+                 ->setParameter('status', 'wyprodukowane')
+                ->andwhere('a.trasaok = :trasaok')
+                 ->setParameter('trasaok', '1')
+                 ->andwhere('a.id_dost = :dost')
+                 ->setParameter('dost', $idzam)
+                //->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        if ($qb_zamowienia == null) {
+             //$this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
+              //return $this->redirect($this->generateUrl('marcin_admin_trasa'));
+            echo "BŁĄD - brak danych";
+           
+        }
+        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;
+        $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
+        $a1 = 0; $b1 = 0;
+        foreach ($qb_zamowienia as $zamowienia)
+        {
+            $dane[$a++]['id'] = $zamowienia->getId();
+            $dane[$b++]['nruser'] = $zamowienia->GetNr_user_zam();
+            $dane[$c++]['dostawa'] = $zamowienia->GetIddost();
+            $dane[$d++]['platnosc'] = $zamowienia->GetPlatnosc();
+            $dane[$e++]['nrprodukcji'] = $zamowienia->GetNrprodukcji();
+            $dane[$f++]['dozaplaty'] = $zamowienia->GetDozaplaty();
+            $dane[$g++]['jakiezam'] = $zamowienia->GetJakie_zam();
+            //$dane[$h++]['id'] = $zamowienia->GetId();
+            $id_zam = $zamowienia->GetId();
+        
+                $query_zliczanie2 = $em->createQuery(
+                    'SELECT a
+                    FROM MarcinAdminBundle:Produkty a
+                    WHERE a.id_zam = :idzam'
+                )->setParameter('idzam', $id_zam);
+        $trasa_zliczanie2 = $query_zliczanie2->getResult();
+            foreach ($trasa_zliczanie2 as $lista)
+            {
+                $lista_prod[$aa++]['idzam'] = $lista->GetIdzam();
+                $lista_prod[$bb++]['typ'] = $lista->GetTyp();
+                $lista_prod[$cc++]['kolor'] = $lista->GetKolor();
+                $lista_prod[$dd++]['szera'] = $lista->GetSzerokosca();
+                $lista_prod[$ee++]['szerb'] = $lista->GetSzerokoscb();
+                $lista_prod[$ff++]['wysh'] = $lista->GetWysokosch();
+            }
+            $zamowienia->setStatus('wysłane');
+             $em->flush();
+             $qb_list = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Nrlistu', 'a')
+                 ->where('a.idzam = :identifier')
+                 ->setParameter('identifier', $id_zam)
+                 ->orderBy('a.id', 'DESC')
+                 ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+            foreach ($qb_list as $nr)
+            {
+                $numer[$a1++]['nr'] = $nr->GetNr();
+                $numer[$b1++]['idzam'] = $nr->GetIdzam();
+            }
+        
+        }
+        
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:sendzamw.html.twig', array(
+            'dane' => $dane,
+            'lista' => $lista_prod,
+            'numer' => $numer
+        ));
+        
+        $this->zamowieniaMailer->send($daneEmail, 'Dostawa zamówienia GrupaMAGNUM ', $emaiBody);
         
         return true;
     }

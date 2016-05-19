@@ -1,6 +1,7 @@
 {% extends 'MarcinAdminBundle::base.html.twig' %}
 {% block stylesheets %}
 {{parent()}}
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
 {% endblock %}
 {% block body %}
             <section class="content-header">
@@ -22,7 +23,7 @@
             </div>
             <div class="box-body">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12">              
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
@@ -30,6 +31,7 @@
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Imie nazwisko</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Login</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Email</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Trasa</th>
                                     <th>akcje</th>
                                 </tr>
                             </thead>
@@ -37,8 +39,15 @@
     {% for article in pagination  %}
        <tr><th>{{ article.id }}</th> 
            <th>{{ article.imienazw }}</th>
-           <th>{{ article.login }}</th>
+           <th>{{ article.login }} NIP: {% for faktura in dane if faktura.user == article.login %}{{ faktura.nip }}{% endfor %}</th>
            <th>{{ article.email }}</th>
+           <th id="zmiana-trasa-{{ article.id }}">
+           <select name="status_select" class="selectpicker" data-style="btn-primary" id="{{ path('marcin_admin_username_update_trasa', {'id': article.id }) }}" onchange="changeOrderTrasa('{{ article.id }}', event)">
+                {% for trasy in trasa %}
+                <option value="{{ trasy.nazwa }}"{% if article.trasa == trasy.nazwa %} selected="selected" {% endif %}>{{ trasy.nazwa }}</option>
+                {% endfor %}
+           </select>
+           </th>
            <th>{% if article.new == '0' %}  {% else %}  
                {% set tokenName = csrfProvider.generateCsrfToken(updateTokenName|format(article.id)) %}
                                       {% set updateUrl = path('marcin_admin_username_update', {'id': article.id, 'token': tokenName}) %}
@@ -81,5 +90,29 @@
         {% endblock %}
 {% block javascripts %}
     {{parent()}}
+                            <script type="text/javascript">
+
+                            function changeOrderTrasa(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                               // var clicked = event.target;
+                                var status = $(element).val();
+                                var url = '{{ path('marcin_admin_username_update_trasa') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        status: status
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log(status);
+                                    }
+                                });
+
+                            }
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
 {% endblock %}
 
