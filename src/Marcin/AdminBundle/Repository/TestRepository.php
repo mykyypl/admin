@@ -131,8 +131,11 @@ class TestRepository extends EntityRepository
                         ->setParameter('dozaplaty', '0')
                         ->andwhere('u.zaplacono = :zaplacono')
                         ->setParameter('zaplacono', '0')
-                        ->andWhere('u.status != :status')
-                        ->setParameter('status', 'zrealizowane/odebrane');
+                        ->andWhere('u.status = :status OR u.status = :wyslane OR u.status = :wdostawie OR u.status = :gotowe')
+                        ->setParameter('status', 'zrealizowane/odebrane')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('wdostawie', 'w dostawie')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu');
 //                        ->where('u.status = :identifier')
 //                        ->setParameter('identifier', 'oczekiwanie na zapłatę');
         
@@ -479,5 +482,197 @@ class TestRepository extends EntityRepository
         }
         
         return $qb;
+    }
+    
+    public function getPon() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'poniedzialek');
+        
+        
+         $all_pon = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_pon' => $all_pon
+        );
+    }
+    
+    public function getWto() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'wtorek');
+        
+        
+         $all_wto = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_wto' => $all_wto
+        );
+    }
+    
+    public function getSro() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'sroda');
+        
+        
+         $all_sro = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_sro' => $all_sro
+        );
+    }
+    
+    public function getCzw() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'czwartek');
+        
+        
+         $all_czw = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_czw' => $all_czw
+        );
+    }
+    
+    public function getPia() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'piatek');
+        
+        
+         $all_pia = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_pia' => $all_pia
+        );
+    }
+    
+    public function getTar() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'tarnow');
+        
+        
+         $all_tar = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_tar' => $all_tar
+        );
+    }
+    
+    public function getTad() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'tadeusz');
+        
+        
+         $all_tad = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_tad' => $all_tad
+        );
+    }
+    
+    public function getOdb() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'odbior');
+        
+        
+         $all_odb = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_odb' => $all_odb
+        );
+    }
+    
+    public function getSal() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'salon');
+        
+        
+         $all_sal = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_sal' => $all_sal
+        );
+    }
+    
+    public function getTuch() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'tuchowska');
+        
+        
+         $all_tuch = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_tuch' => $all_tuch
+        );
+    }
+    
+    public function getMon() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'montaz');
+        
+        
+         $all_mon = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_mon' => $all_mon
+        );
+    }
+    
+    public function getWys() {
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.status = :status')
+                        ->setParameter('status', 'wyprodukowane')
+                        ->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'wysylka');
+        
+        
+         $all_wys = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'all_wys' => $all_wys
+        );
     }
 }

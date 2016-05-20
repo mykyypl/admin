@@ -23,6 +23,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class TrasaController extends Controller {
     
+    private $pon;
+    private $wto;
+    private $sro;
+    private $czw;
+    private $pia;
+    private $tar;
+    private $tad;
+    private $odb;
+    private $sal;
+    private $tuch;
+    private $mon;
+    private $wys;
+    
     /**
      * @Route("/trasa/gen/update-complete", 
      *       name="marcin_admin_trasa_update",
@@ -170,6 +183,33 @@ class TrasaController extends Controller {
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate($qb, $page, $limit);
         
+        if (!isset($this->pon)) {
+            $this->pon = $StatZam->getPon();
+        }
+        if (!isset($this->wto)) {
+            $this->wto = $StatZam->getWto();
+        }if (!isset($this->sro)) {
+            $this->sro = $StatZam->getSro();
+        }if (!isset($this->czw)) {
+            $this->czw = $StatZam->getCzw();
+        }if (!isset($this->pia)) {
+            $this->pia = $StatZam->getPia();
+        }if (!isset($this->tar)) {
+            $this->tar = $StatZam->getTar();
+        }if (!isset($this->tad)) {
+            $this->tad = $StatZam->getTad();
+        }if (!isset($this->odb)) {
+            $this->odb = $StatZam->getOdb();
+        }if (!isset($this->sal)) {
+            $this->sal = $StatZam->getSal();
+        }if (!isset($this->tuch)) {
+            $this->tuch = $StatZam->getTuch();
+        }if (!isset($this->mon)) {
+            $this->mon = $StatZam->getMon();
+        }if (!isset($this->wys)) {
+            $this->wys = $StatZam->getWys();
+        }
+        
         return $this->render('MarcinAdminBundle:Trasa:index.html.twig',
             array(
             'pageTitle'            => 'GM Panel Trasa',
@@ -180,7 +220,43 @@ class TrasaController extends Controller {
             //'currStatus' => $status,
             //'statistics' => $statistics,
             'pagination' => $pagination,
-                'trasa' => $trasa
+                'trasa' => $trasa,
+                'pon' => array(
+                        'count' => $this->pon
+                    ),
+                'wto' => array(
+                        'count' => $this->wto
+                    ),
+                'sro' => array(
+                        'count' => $this->sro
+                    ),
+                'czw' => array(
+                        'count' => $this->czw
+                    ),
+                'pia' => array(
+                        'count' => $this->pia
+                    ),
+                'tar' => array(
+                        'count' => $this->tar
+                    ),
+                'tad' => array(
+                        'count' => $this->tad
+                    ),
+                'odb' => array(
+                        'count' => $this->odb
+                    ),
+                'sal' => array(
+                        'count' => $this->sal
+                    ),
+                'tuch' => array(
+                        'count' => $this->tuch
+                    ),
+                'mon' => array(
+                        'count' => $this->mon
+                    ),
+                'wys' => array(
+                        'count' => $this->wys
+                    )
             //'currStatus' => $status
             //'updateTokenName' => $this->updateTokenName,
             //'aktywacjaTokenName' => $this->aktywacjaTokenName,

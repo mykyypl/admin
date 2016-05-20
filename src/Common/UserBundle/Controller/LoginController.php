@@ -26,6 +26,12 @@ class LoginController extends Controller
     */
    public function loginAction(Request $Request)
    {
+       
+    if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+    {
+        // redirect authenticated users to homepage
+        return $this->redirect($this->generateUrl('marcin_admin_dashboard'));
+    }
 //        $Session = $this->get('session');
 //        $authenticationUtils = $this->get('security.authentication_utils');
 //
