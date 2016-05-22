@@ -139,7 +139,7 @@
 
                             {% for article in pagination  %}
                                 <tr><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
-                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <h4><font color="red">M</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <h4><font color="red">MD</font></h4> {% else %} <h4><font color="red">R</font></h4>{# {{ article.jakie_zam }}#}{% endif %}</th>
+                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <h4><font color="red">M</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <h4><font color="red">MD</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <h4><font color="red">MR</font></h4> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <h4><font color="red">ZO</font></h4> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <h4><font color="red">EL</font></h4> {% else %} <h4><font color="red">R</font></h4>{# {{ article.jakie_zam }}#}{% endif %}</th>
                                     <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
                                     <th id="numerprodukcji{{ article.id }}">
