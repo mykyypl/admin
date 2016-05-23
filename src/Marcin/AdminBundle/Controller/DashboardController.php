@@ -103,6 +103,7 @@ class DashboardController extends Controller {
         $em->flush();
         if($result['status'] == "anulowane")
             {
+            
             try {
                     $userE = $result['login'];
                      //$em = $this->getDoctrine()->getManager();
