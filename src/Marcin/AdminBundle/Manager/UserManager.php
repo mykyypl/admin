@@ -25,6 +25,7 @@ use Marcin\AdminBundle\Mailer\HannocheckMailer;
 use Marcin\AdminBundle\Mailer\ZygmarcheckMailer;
 
 use Marcin\AdminBundle\Mailer\ZamowieniaMailer;
+use Marcin\AdminBundle\Mailer\AnulowanieMailer;
 
 use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\AdminBundle\Exception\UserException;
@@ -138,6 +139,11 @@ class UserManager {
      */
     protected $zamowieniaMailer;
     
+    /**
+     * @var anulowanieMailer
+     */
+    protected $anulowanieMailer;
+    
     
     function __construct(Doctrine $doctrine,
             Router $router,
@@ -159,7 +165,8 @@ class UserManager {
             SelenacheckMailer $selenacheckMailer,
             HannocheckMailer $hannocheckMailer,
             ZygmarcheckMailer $zygmarcheckMailer,
-            ZamowieniaMailer $zamowieniaMailer
+            ZamowieniaMailer $zamowieniaMailer,
+            AnulowanieMailer $anulowanieMailer
             )
             {
         $this->doctrine = $doctrine;
@@ -183,6 +190,7 @@ class UserManager {
         $this->hannocheckMailer = $hannocheckMailer;
         $this->zygmarcheckMailer = $zygmarcheckMailer;
         $this->zamowieniaMailer = $zamowieniaMailer;
+        $this->anulowanieMailer = $anulowanieMailer;
         
     }
     
@@ -1276,6 +1284,15 @@ class UserManager {
         ));
         
         $this->zamowieniaMailer->send($daneEmail, 'Dostawa zamówienia GrupaMAGNUM ', $emaiBody);
+        
+        return true;
+    }
+    
+    public function anulowanieZamowienia($userEmail)
+    {
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:anulowanie.html.twig');
+        
+        $this->anulowanieMailer->send($userEmail, 'Anulowanie zamówienia GrupaMAGNUM ', $emaiBody);
         
         return true;
     }

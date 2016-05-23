@@ -101,6 +101,28 @@ class DashboardController extends Controller {
         $Zamowienie->setStatus($result['status']);
         //$Zamowienie->setZaplacono($result['zaplacono']);
         $em->flush();
+        if($result['status'] == "anulowane")
+            {
+            try {
+                    $userE = $result['login'];
+                     //$em = $this->getDoctrine()->getManager();
+
+            $userEmail = $em->createQueryBuilder()
+                    ->select('a.email')
+                    ->from('MarcinAdminBundle:Username', 'a')
+                     ->where('a.login = :identifier')
+                     ->setParameter('identifier', $userE)
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+
+                    $userManager = $this->get('user_manager');
+                    $userManager->anulowanieZamowienia($userEmail);
+                }
+                catch (UserException $exc) {
+                        $this->addFlash('error', $exc->getMessage());
+                    }
+            }
         }
         return new JsonResponse(true);
 

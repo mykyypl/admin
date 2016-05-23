@@ -23,7 +23,8 @@
             </div>
             <div class="box-body">
                 <div class="row">
-                    <div class="col-sm-12">              
+                    <div class="col-sm-12">
+                        <div style="overflow-x: auto;">
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
@@ -42,7 +43,7 @@
            <th>{{ article.login }} NIP: {% for faktura in dane if faktura.user == article.login %}{{ faktura.nip }}{% endfor %}</th>
            <th>{{ article.email }}</th>
            <th id="zmiana-trasa-{{ article.id }}">
-           <select name="status_select" class="selectpicker" data-style="btn-primary" id="{{ path('marcin_admin_username_update_trasa', {'id': article.id }) }}" onchange="changeOrderTrasa('{{ article.id }}', event)">
+           <select name="status_select" data-container="body" class="selectpicker" data-style="btn-primary" id="{{ path('marcin_admin_username_update_trasa', {'id': article.id }) }}" onchange="changeOrderTrasa('{{ article.id }}', event)">
                 {% for trasy in trasa %}
                 <option value="{{ trasy.nazwa }}"{% if article.trasa == trasy.nazwa %} selected="selected" {% endif %}>{{ trasy.nazwa }}</option>
                 {% endfor %}
@@ -68,6 +69,7 @@
        </tr>
     {% endfor %}
         </table>
+    </div>
                     </div>
                 </div>
                 <div class="row">

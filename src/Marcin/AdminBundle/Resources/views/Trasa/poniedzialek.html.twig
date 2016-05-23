@@ -26,6 +26,7 @@
                 <div class="row">
                     <div class="col-sm-12">    
                         <a href="{{ path('marcin_admin_trasa_generowanie', {'trasastat': trasastat}) }}" class="btn btn-primary">generowanie</a>
+                        <div style="overflow-x: auto;">
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
@@ -46,7 +47,7 @@
            <td>{{ article.nrprodukcji }}</td>
            <td>{{ article.dozaplaty }}</td>
            <td id="zmiana-trasa-{{ article.id }}">
-           <select name="status_select" class="selectpicker" data-style="btn-primary" id="{{ path('marcin_admin_trasa_update_trasa', {'id': article.id }) }}" onchange="changeOrderTrasa('{{ article.id }}', event)">
+           <select name="status_select" data-container="body" class="selectpicker" data-style="btn-primary" id="{{ path('marcin_admin_trasa_update_trasa', {'id': article.id }) }}" onchange="changeOrderTrasa('{{ article.id }}', event)">
                 {% for trasy in trasa %}
                 <option value="{{ trasy.nazwa }}"{% if article.trasa == trasy.nazwa %} selected="selected" {% endif %}>{{ trasy.nazwa }}</option>
                 {% endfor %}
@@ -60,6 +61,7 @@
        </tr>
     {% endfor %}
         </table>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
