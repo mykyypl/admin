@@ -56,6 +56,79 @@ class TestRepository extends EntityRepository
         return $qb;
     }
     
+    public function getQueryPaneltrasaBuilder(array $params = array()){
+        
+        $qb = $this->createQueryBuilder('s')
+                ->select('s')
+                ->andwhere('s.status = :wdostawie OR s.status = :montaz OR s.status = :wyslane')
+                ->setParameter('wdostawie', 'w dostawie')
+                ->setParameter('montaz', 'gotowe do odbioru/montażu')
+                ->setParameter('wyslane', 'wysłane')
+                ->addOrderBy('s.sendDate', 'DESC');
+
+        if(!empty($params['status'])){
+            if('poniedzialek' == $params['status']){
+                $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'poniedzialek');
+            }else if('wtorek' == $params['status']){
+                $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'wtorek');
+            }else if('sroda' == $params['status']){
+                $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'sroda');
+            }else if('czwartek' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'czwartek');
+            }else if('piatek' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'piatek');
+            }else if('tarnow' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'tarnow');
+            }else if('tadeusz' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'tadeusz');
+            }else if('odbior' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'odbior');
+            }else if('salon' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'salon');
+            }else if('tuchowska' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'tuchowska');
+            }else if('montaz' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'montaz');
+            }else if('wysylka' == $params['status']){
+              $qb->andwhere('s.trasa = :trasa')
+                        ->setParameter('trasa', 'wysylka');
+            }else if('all' == $params['status']){
+              $qb->andwhere('s.trasa IS NOT NULL');
+            }
+        }
+        
+        
+     if(!empty($params['orderBy'])){
+            $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;
+            $qb->orderBy($params['orderBy'], $orderDir);
+        }
+
+        if(!empty($params['userLike'])){
+            $jakie_zamLike = '%'.$params['userLike'].'%';
+            $qb->andWhere('s.nr_user_zam LIKE :jakie_zamLike')
+                    ->setParameter('jakie_zamLike', $jakie_zamLike);
+        }
+        
+        
+        if (!empty($params['limit'])) {
+            $qb->setMaxResults($params['limit']);
+        }
+                
+        return $qb;
+    }
+    
+    
         public function getStatistics() {
         $qb = $this->createQueryBuilder('a')
                 ->select('COUNT(a)');
@@ -92,6 +165,154 @@ class TestRepository extends EntityRepository
             'realizacja' => $realizacja,
             'wyprodukowane' => $wyprodukowane,
             'zrealizowane' => $zrealizowane
+        );
+    }
+    
+    public function getStatisticsPaneltrasa() {
+        $qb_pon = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_wto = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_sro = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_czw = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_pia = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_tar = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_tad = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_odb = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_sal = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_tuch = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_mon = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_wys = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        $qb_all = $this->createQueryBuilder('a')
+                ->select('COUNT(a)');
+        
+        $all = (int) $qb_all->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa IS NOT NULL')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $poniedzialek = $qb_pon->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'poniedzialek')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $wtorek = $qb_wto->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'wtorek')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $sroda = $qb_sro->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'sroda')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $czwartek = $qb_czw->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'czwartek')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $piatek = $qb_pia->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'piatek')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $tarnow = $qb_tar->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'tarnow')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $tadeusz = $qb_tad->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'tadeusz')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $odbior = $qb_odb->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'odbior')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $salon = $qb_sal->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'salon')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $tuchowska = $qb_tuch->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'tuchowska')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $montaz = $qb_mon->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'montaz')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        $wysylka = $qb_wys->andWhere('a.status = :currDate OR a.status = :wyslane OR a.status = :gotowe')
+                        ->setParameter('currDate', 'w dostawie')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu')
+                        ->andWhere('a.trasa = :trasa')
+                        ->setParameter('trasa', 'wysylka')
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        return array(
+            'all' => $all,
+            'poniedzialek' => $poniedzialek,
+            'wtorek' => $wtorek,
+            'sroda' => $sroda,
+            'czwartek' => $czwartek,
+            'piatek' => $piatek,
+            'tarnow' => $tarnow,
+            'tadeusz' => $tadeusz,
+            'odbior' => $odbior,
+            'salon' => $salon,
+            'tuchowska' => $tuchowska,
+            'montaz' => $montaz,
+            'wysylka' => $wysylka
         );
     }
     

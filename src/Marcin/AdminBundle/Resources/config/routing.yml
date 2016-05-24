@@ -61,6 +61,11 @@ marcin_admin_trasa:
     resource: "@MarcinAdminBundle/Controller/TrasaController.php"
     type: annotation
     prefix: /t/trasa
+    
+marcin_admin_paneltrasa:
+    resource: "@MarcinAdminBundle/Controller/PaneltrasaController.php"
+    type: annotation
+    prefix: /panel/ptrasa
 
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
