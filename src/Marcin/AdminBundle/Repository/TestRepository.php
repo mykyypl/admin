@@ -18,8 +18,9 @@ class TestRepository extends EntityRepository
         
         if(!empty($params['status'])){
             if('przeslane' == $params['status']){
-                $qb->where('s.status = :przeslane')
-                        ->setParameter('przeslane', 'przesłane do realizacji');
+                $qb->where('s.status = :przeslane OR s.status = :oczekiwanie')
+                        ->setParameter('przeslane', 'przesłane do realizacji')
+                        ->setParameter('oczekiwanie', 'oczekiwanie na zapłatę');
             }else if('realizacja' == $params['status']){
                 $qb->where('s.status = :realizacja')
                         ->setParameter('realizacja', 'w realizacji');
@@ -149,8 +150,9 @@ class TestRepository extends EntityRepository
         $qb_wyp = $this->createQueryBuilder('a')
                 ->select('COUNT(a)');
         $all = (int) $qb->getQuery()->getSingleScalarResult();
-        $przeslane = $qb->andWhere('a.status = :currDate')
+        $przeslane = $qb->andWhere('a.status = :currDate OR a.status = :oczekiwanie')
                         ->setParameter('currDate', 'przesłane do realizacji')
+                        ->setParameter('oczekiwanie', 'oczekiwanie na zapłatę')
                         ->getQuery()
                         ->getSingleScalarResult();
         $realizacja = $qb_real->andWhere('a.status = :currDate')

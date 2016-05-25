@@ -1,0 +1,87 @@
+{% extends 'MarcinAdminBundle::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
+{% endblock %}
+{% block body %}
+            <section class="content-header">
+          <h1>
+            Pulpit
+            <small>zarządzania GM</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
+            <li class="active">tutaj</li>
+          </ol>
+        </section>
+                    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+        <!-- Main content -->
+        <section class="content">
+            <div class="box box-default color-palette-box">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-tag"></i> Newsletter</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="overflow-x: auto;">
+                        <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Tytul</th>
+                                    <th>akcje</th>
+                                </tr>
+                            </thead>
+        
+    {% for article in pagination  %}
+       <tr><th>{{ article.id }}</th> 
+           <th>{{ article.tytul }}</th>
+           <th><a href="{{ path('marcin_admin_newsletter_form', {'id': article.id}) }}" class="btn btn-primary">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                              {#  {% if is_granted('ROLE_ADMIN') %}{% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
+                                            {% set deleteUrl = path('marcin_admin_username_delete', {'id': article.id, 'username': article.login, 'token': tokenName}) %}
+                                        <a id="potwierdzenie" href="{{ deleteUrl }}" class="potwierdzenie btn btn-danger" data-confirmAction="">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </a>{% endif %}#}
+               
+           </th>
+       </tr>
+    {% endfor %}
+        </table>
+    </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+                            Wszystkich zamówień jest: {{ pagination.getTotalItemCount }}
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate">
+                            {{ knp_pagination_render(pagination, 'MarcinAdminBundle:Pagination:admin_pagination.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+            
+          </div>
+
+</section>
+        {% endblock %}
+{% block javascripts %}
+    {{parent()}}
+    <script>
+            var elems = document.getElementsByClassName('potwierdzenie');
+    var confirmIt = function (e) {
+        if (!confirm('Czy napewno usunąć?')) e.preventDefault();
+    };
+    for (var i = 0, l = elems.length; i < l; i++) {
+        elems[i].addEventListener('click', confirmIt, false);
+    }
+        </script>
+    <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}
+
