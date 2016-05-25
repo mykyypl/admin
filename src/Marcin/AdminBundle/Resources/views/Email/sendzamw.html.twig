@@ -13,8 +13,8 @@
             <tr class="kolordruk" bgcolor="#C3C3C3"><th>Lp.</th><th>Zamówienie</th><th>Nr. zam. Klienta</th><th>Informacje</th></tr>
             <tr class="kolordruk" height="30px" bgcolor="#C3C3C3"><td><b>{{ loop.index }}</b></td>
                                                         <td><b><dum>{{ danee.nrprodukcji }}</dum></b></td> <td>{{ danee.nruser }}
-                                                            </td><td>  Kwota: <b><dum>{{ danee.dozaplaty }}</dum></b>, 
-                                                            {{ danee.platnosc }}, Nr listu: {% for nrlistuu in numer if nrlistuu.idzam == danee.id %}{{ nrlistuu.nr }}{% endfor %}</td></tr>{% set kasa = kasa + danee.dozaplaty %}
+                                                            </td><td>  Kwota: <b><dum>{% if danee.zaplacono == '1' %}0{% else %}{{ danee.dozaplaty }}{% endif %}</dum></b>, 
+                                                            {{ danee.platnosc }}, Nr listu: {% for nrlistuu in numer if nrlistuu.idzam == danee.id %}{{ nrlistuu.nr }}{% endfor %}</td></tr>{% if danee.zaplacono == '1' %}{% set kasa = kasa + 0 %}{% else %}{% set kasa = kasa + danee.dozaplaty %}{% endif %}
         </table>
         <table border="1" width="100%" style="margin: auto">
         <tr><th>Lp.</th><th>Typ</th><th>Kolor</th><th>Szerokość</th><th>Wysokość</th></tr>

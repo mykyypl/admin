@@ -1072,7 +1072,7 @@ class UserManager {
             echo "BŁĄD - brak danych";
            
         }
-        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;
+        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;$i = 0;
         $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
         foreach ($qb_zamowienia as $zamowienia)
         {
@@ -1083,6 +1083,7 @@ class UserManager {
             $dane[$e++]['nrprodukcji'] = $zamowienia->GetNrprodukcji();
             $dane[$f++]['dozaplaty'] = $zamowienia->GetDozaplaty();
             $dane[$g++]['jakiezam'] = $zamowienia->GetJakie_zam();
+            $dane[$i++]['zaplacono'] = $zamowienia->GetZaplacono();
             //$dane[$h++]['id'] = $zamowienia->GetId();
             $id_zam = $zamowienia->GetId();
         
@@ -1150,7 +1151,7 @@ class UserManager {
             echo "BŁĄD - brak danych";
            
         }
-        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;
+        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;$i = 0;
         $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
         foreach ($qb_zamowienia as $zamowienia)
         {
@@ -1161,6 +1162,7 @@ class UserManager {
             $dane[$e++]['nrprodukcji'] = $zamowienia->GetNrprodukcji();
             $dane[$f++]['dozaplaty'] = $zamowienia->GetDozaplaty();
             $dane[$g++]['jakiezam'] = $zamowienia->GetJakie_zam();
+            $dane[$i++]['zaplacono'] = $zamowienia->GetZaplacono();
             //$dane[$h++]['id'] = $zamowienia->GetId();
             $id_zam = $zamowienia->GetId();
         
@@ -1228,7 +1230,7 @@ class UserManager {
             echo "BŁĄD - brak danych";
            
         }
-        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;
+        $a = 0;$b= 0; $c = 0; $d = 0; $e = 0; $f = 0; $g = 0; $h = 0;$i = 0;
         $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
         $a1 = 0; $b1 = 0;
         foreach ($qb_zamowienia as $zamowienia)
@@ -1240,6 +1242,7 @@ class UserManager {
             $dane[$e++]['nrprodukcji'] = $zamowienia->GetNrprodukcji();
             $dane[$f++]['dozaplaty'] = $zamowienia->GetDozaplaty();
             $dane[$g++]['jakiezam'] = $zamowienia->GetJakie_zam();
+            $dane[$i++]['zaplacono'] = $zamowienia->GetZaplacono();
             //$dane[$h++]['id'] = $zamowienia->GetId();
             $id_zam = $zamowienia->GetId();
         

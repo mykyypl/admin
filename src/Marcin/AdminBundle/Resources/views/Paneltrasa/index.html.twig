@@ -67,7 +67,8 @@
                                     <th>nr-user-zam</th>
                                     <th>Produkcja</th>
                                     <th>do zaplaty</th>
-                                    <th>akcje</th>
+                                    <th>dost/zapl</th>
+                                    <th>dost</th>
                                 </tr>
                             </thead>
 
@@ -97,6 +98,9 @@
                                     <th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}"><span class="label label-warning"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div>{% else %}<div id="dozaplaty{{ article.id }}"><span class="label label-danger">{{ article.dozaplaty  }} zł</span></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">{{ article.dozaplaty  }} zł</span></h4> {% endif %}</div></th>
                                         <th><div class="checkbox checkbox-success">
                                                 <input style="flat-red" id="spr" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderPay('{{ article.id }}', event)"{# {% if article.zaplacono == '1' %}checked {% endif %} #}/><label for="checkbox1">
+    </label></div></th>
+    <th><div class="checkbox checkbox-danger">
+                                                <input style="flat-red" id="spr1" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderNotPay('{{ article.id }}', event)"{# {% if article.zaplacono == '1' %}checked {% endif %} #}/><label for="checkbox2">
     </label></div></th>
                                     </tr>
                                     {% endfor %}
@@ -137,6 +141,35 @@
         } else {
              console.log('odznaczono!');
              var zaplacono = 0;
+        }
+                                var url = '{{ path('marcin_admin_paneltrasa_update') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        zaplacono: zaplacono
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                        {#  $('#wynik'+order_id).load(document.URL + ' #wynik'+order_id);#}
+                                                
+                                    }
+                                });
+
+                            }
+                            
+                            function changeOrderNotPay(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var zaplacono = 2;
+        } else {
+             console.log('odznaczono!');
+             var zaplacono = 3;
         }
                                 var url = '{{ path('marcin_admin_paneltrasa_update') }}';
 

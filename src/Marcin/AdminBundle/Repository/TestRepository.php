@@ -33,6 +33,16 @@ class TestRepository extends EntityRepository
                         ->setParameter('wyslane', 'wysłane')
                         ->setParameter('wdostawie', 'w dostawie')
                         ->setParameter('gotowe', 'gotowe do odbioru/montażu');
+            }else if('dozaplaty' == $params['status']){
+                $qb->where('s.do_zaplaty IS NOT NULL AND s.do_zaplaty != :dozaplaty')
+                        ->setParameter('dozaplaty', '0')
+                        ->andwhere('s.zaplacono = :zaplacono')
+                        ->setParameter('zaplacono', '0')
+                        ->andWhere('s.status = :status OR s.status = :wyslane OR s.status = :wdostawie OR s.status = :gotowe')
+                        ->setParameter('status', 'zrealizowane/odebrane')
+                        ->setParameter('wyslane', 'wysłane')
+                        ->setParameter('wdostawie', 'w dostawie')
+                        ->setParameter('gotowe', 'gotowe do odbioru/montażu');
             }
         }
         

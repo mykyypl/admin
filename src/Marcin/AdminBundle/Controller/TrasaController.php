@@ -1008,7 +1008,7 @@ class TrasaController extends Controller {
         } else {
         //$sprwadzam = array();
          $a = 0;$b = 0;$c = 0;$d = 0;$e = 0;$f = 0;$g = 0;$h = 0;
-         $a1 = 0;$b1 = 0;$c1 = 0;$d1 = 0;$e1 = 0;$f1 = 0;$g1 = 0;
+         $a1 = 0;$b1 = 0;$c1 = 0;$d1 = 0;$e1 = 0;$f1 = 0;$g1 = 0;$h1 = 0;
          $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
         foreach ($zamowienia_query as $zamowienia)
         {
@@ -1034,6 +1034,7 @@ class TrasaController extends Controller {
         $produkty[$d1++]['nrprodukcji'] = $zamowienia->GetNrprodukcji();
         $produkty[$e1++]['dozaplaty'] = $zamowienia->GetDozaplaty();
         $produkty[$f1++]['jakiezam'] = $zamowienia->GetJakie_zam();
+        $produkty[$h1++]['zaplacono'] = $zamowienia->GetZaplacono();
         $produkty[$g1++]['id'] = $zamowienia->GetId();
         $id_zam = $zamowienia->GetId();
         
