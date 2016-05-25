@@ -64,6 +64,11 @@
                 <a href="{{ path('marcin_admin_username_form', {'id': article.id}) }}" class="btn btn-primary">
                                                 <span class="glyphicon glyphicon-edit"></span>
                                             </a>
+                                                {% if is_granted('ROLE_ADMIN') %}{% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
+                                            {% set deleteUrl = path('marcin_admin_username_delete', {'id': article.id, 'username': article.login, 'token': tokenName}) %}
+                                        <a id="potwierdzenie" href="{{ deleteUrl }}" class="potwierdzenie btn btn-danger" data-confirmAction="">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </a>{% endif %}
                
            </th>
        </tr>
@@ -115,6 +120,15 @@
 
                             }
     </script>
+    <script>
+            var elems = document.getElementsByClassName('potwierdzenie');
+    var confirmIt = function (e) {
+        if (!confirm('Czy napewno usunąć?')) e.preventDefault();
+    };
+    for (var i = 0, l = elems.length; i < l; i++) {
+        elems[i].addEventListener('click', confirmIt, false);
+    }
+        </script>
     <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
 {% endblock %}
 

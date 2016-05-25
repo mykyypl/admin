@@ -15,12 +15,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Marcin\AdminBundle\Entity\Username;
 use Marcin\AdminBundle\Entity\Trasa;
+use Marcin\AdminBundle\Entity\Faktura;
+use Marcin\AdminBundle\Entity\Produkty;
+use Marcin\AdminBundle\Entity\Adresdostawa;
+use Marcin\AdminBundle\Entity\Zamowienia;
+
 use Marcin\AdminBundle\Form\Type\UzytkownicyType;
 
 class UsernameController extends Controller {
     
     private $updateTokenName = 'update-user-%d';
     private $aktywacjaTokenName = 'aktywacja-user-%d';
+    private $deleteTokenName = 'delete-user-%d';
     
     /**
      * @Route("/form/update-complete", 
@@ -169,6 +175,7 @@ class UsernameController extends Controller {
                 'dane' => $dane,
             'updateTokenName' => $this->updateTokenName,
             'aktywacjaTokenName' => $this->aktywacjaTokenName,
+            'deleteTokenName' => $this->deleteTokenName,
             'csrfProvider' => $this->get('form.csrf_provider')
                 )
         );
@@ -233,6 +240,61 @@ class UsernameController extends Controller {
             $this->addFlash('success', 'Poprawnie aktywowano konto.');
         }
         
+        return $this->redirect($this->generateUrl('marcin_admin_username'));
+    }
+    
+    /**
+     * @Route(
+     *      "/usun/{id}/{username}/{token}", 
+     *      name="marcin_admin_username_delete",
+     *      requirements={"id"="\d+"}
+     * )
+     * 
+     * @Security("has_role('ROLE_ADMIN')")
+     * 
+     * @Template()
+     */
+    public function deleteAction($id, $username, $token) {
+
+        $tokenName = sprintf($this->deleteTokenName, $id);
+        $csrfProvider = $this->get('form.csrf_provider');
+
+        if (!$csrfProvider->isCsrfTokenValid($tokenName, $token)) {
+            $this->addFlash('error', 'Niepoprawny token akcji.');
+        } else {
+
+//            $Zamid = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia')->find($id);
+            $em = $this->getDoctrine()->getManager();
+//            $em->remove($Zamid);
+//            $em->flush();
+
+//            $Proid = $this->getDoctrine()->getRepository('MarcinAdminBundle:Produkty')->findOneBy(array('id_zam' => $id));
+//            $em1 = $this->getDoctrine()->getManager();
+//            if (!$Proid) {
+//             throw $this->createNotFoundException(
+//            'No product found for id '.$id
+//                );
+//            }
+//            foreach ($Proid as $Proids) {
+//            $em1->remove($Proids);
+//            }
+//            $em1->remove($Proid);
+//            $em1->flush();
+            //$em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery("DELETE MarcinAdminBundle:Produkty c WHERE c.user = '$username'");
+            $query->execute();
+            $query_dane = $em->createQuery("DELETE MarcinAdminBundle:Adresdostawa c WHERE c.user = '$username'");
+            $query_dane->execute();
+            $query_faktura = $em->createQuery("DELETE MarcinAdminBundle:Faktura c WHERE c.user = '$username'");
+            $query_faktura->execute();
+            $query_zamowienia = $em->createQuery("DELETE MarcinAdminBundle:Zamowienia c WHERE c.user = '$username'");
+            $query_zamowienia->execute();
+            $query_username = $em->createQuery("DELETE MarcinAdminBundle:Username c WHERE c.login = '$username'");
+            $query_username->execute();
+
+            $this->addFlash('success', 'Poprawnie usunięto użytkownika z powiązaniami!.');
+        }
+
         return $this->redirect($this->generateUrl('marcin_admin_username'));
     }
 }
