@@ -33,6 +33,11 @@
                         </a>
                     </div>
                     {% endfor %}
+                    {% if currStatus != 'all' %}
+                    <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                        <a class="btn btn-block btn-danger" href="{{ path('marcin_admin_paneltrasa_generowanie', {'status': currStatus}) }}">zestawienie</a>
+                    </div>
+                    {% endif %}
                      <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
                         <div class="form-group limit">
                                <select name="limit" class="form-control select-block input-md" id="limit" placeholder="Pokaż" onchange="this.form.submit()">

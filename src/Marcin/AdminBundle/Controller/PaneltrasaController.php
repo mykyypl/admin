@@ -139,4 +139,117 @@ class PaneltrasaController extends Controller {
         );
     }
     
+    /**
+     * @Route(
+     *       "generowanie/trasy/{status}",
+     *       name="marcin_admin_paneltrasa_generowanie"
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *    
+     * @Template()
+     */
+    public function generowanieAction(Request $Request, $status) {
+        $queryParams = array(
+            'idzamLike' => $Request->query->get('idzamLike')
+
+        ); 
+     
+        $StatZam = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+       // $statistics = $StatZam->getStatisticszygmar();
+        
+       // $qb = $StatZam->getTrasaPoniedzialekBuilder($queryParams);
+        
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery(
+            'SELECT p
+            FROM MarcinAdminBundle:Trasa p'
+        );
+
+        $trasa = $query->getResult();
+
+        $zamowienia_query = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.trasa = :identifier')
+                 ->setParameter('identifier', $status)
+                 ->andwhere('a.status = :status')
+                 ->setParameter('status', 'w dostawie')
+                  ->andwhere('a.trasaok = :trasaok')
+                 ->setParameter('trasaok', '1')
+                 ->getQuery()
+                 ->getResult();
+        
+         if ($zamowienia_query == null) {
+             $this->addFlash('error', 'Błąd generowania formularza! sprawdź dane!');
+              return $this->redirect($this->generateUrl('marcin_admin_trasa'));
+           
+        } else {
+        //$sprwadzam = array();
+         $a = 0;$b = 0;$c = 0;$d = 0;$e = 0;$f = 0;$g = 0;$h = 0;
+         $a1 = 0;$b1 = 0;$c1 = 0;$d1 = 0;$e1 = 0;$f1 = 0;$g1 = 0;$h1 = 0;
+         $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
+        foreach ($zamowienia_query as $zamowienia)
+        {
+             $dostawa = $zamowienia->getIddost();
+            $query_zliczanie1 = $em->createQuery(
+            'SELECT p
+            FROM MarcinAdminBundle:Adresdostawa p
+            WHERE p.id = :poniedzialek'
+        )->setParameter('poniedzialek', $dostawa);
+        $trasa_zliczanie1 = $query_zliczanie1->getResult();
+        $dane[$a++]['user'] = $trasa_zliczanie1[0]->GetUser();
+        $dane[$b++]['ulica'] = $trasa_zliczanie1[0]->GetUlica();
+        $dane[$c++]['kod'] = $trasa_zliczanie1[0]->GetKodpocztowy();
+        $dane[$d++]['miejscowosc'] = $trasa_zliczanie1[0]->GetMiejscowowsc();
+        $dane[$e++]['telefon'] = $trasa_zliczanie1[0]->GetTelefon();
+        $dane[$f++]['nazwa'] = $trasa_zliczanie1[0]->GetNazwafirmy();
+       //s $dane[$h++]['trasa'] = $trasa_zliczanie1[0]->GetTrasa();
+        $dane[$g++]['id'] = $dostawa;
+        
+        $produkty[$a1++]['nruser'] = $zamowienia->GetNr_user_zam();
+        $produkty[$b1++]['dostawa'] = $zamowienia->GetIddost();
+        $produkty[$c1++]['platnosc'] = $zamowienia->GetPlatnosc();
+        $produkty[$d1++]['nrprodukcji'] = $zamowienia->GetNrprodukcji();
+        $produkty[$e1++]['dozaplaty'] = $zamowienia->GetDozaplaty();
+        $produkty[$f1++]['jakiezam'] = $zamowienia->GetJakie_zam();
+        $produkty[$h1++]['zaplacono'] = $zamowienia->GetZaplacono();
+        $produkty[$g1++]['id'] = $zamowienia->GetId();
+        $id_zam = $zamowienia->GetId();
+        
+        $query_zliczanie2 = $em->createQuery(
+            'SELECT a
+            FROM MarcinAdminBundle:Produkty a
+            WHERE a.id_zam = :idzam'
+        )->setParameter('idzam', $id_zam);
+        $trasa_zliczanie2 = $query_zliczanie2->getResult();
+            foreach ($trasa_zliczanie2 as $lista)
+            {
+                $lista_prod[$aa++]['idzam'] = $lista->GetIdzam();
+                $lista_prod[$bb++]['typ'] = $lista->GetTyp();
+                $lista_prod[$cc++]['kolor'] = $lista->GetKolor();
+                $lista_prod[$dd++]['szera'] = $lista->GetSzerokosca();
+                $lista_prod[$ee++]['szerb'] = $lista->GetSzerokoscb();
+                $lista_prod[$ff++]['wysh'] = $lista->GetWysokosch();
+            }
+        
+       
+        //$produkty[$g1++]['id'] = $dostawa;
+        }
+        $dane = array_map("unserialize", array_unique(array_map("serialize", $dane)));
+        //echo "testttttttttttt";
+        //print_r($lista_prod);
+        }
+        return $this->render('MarcinAdminBundle:Paneltrasa:generowanie.html.twig',
+            array(
+            'pageTitle'            => 'GM Panel Trasa',
+            'queryParams' => $queryParams,
+                'trasa' => $trasa,
+                'dane'=> $dane,
+                'produkty' => $produkty,
+                'lista' => $lista_prod,
+                'status' => $status
+                )
+        );
+    }
+    
 }

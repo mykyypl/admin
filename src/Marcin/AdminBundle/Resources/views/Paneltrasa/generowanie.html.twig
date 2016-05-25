@@ -1,0 +1,156 @@
+{% extends 'MarcinAdminBundle::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
+<style>
+    @media print
+{
+	dum {color: #ff0000 !important;
+		-webkit-print-color-adjust: exact; }
+		
+        brakdruku {
+            content: none !important;
+        }
+        tr.kolordruk {
+            background-color: #C3C3C3 !important;
+            -webkit-print-color-adjust: exact;
+        }
+	
+}
+</style>
+{% endblock %}
+{% block body %}
+            <section class="content-header">
+          <h1>
+            Pulpit
+            <small>zarządzania GM</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
+            <li class="active">tutaj</li>
+          </ol>
+        </section>
+                    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+        <!-- Main content -->
+        <section class="content">
+            <div class="box box-default color-palette-box">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-tag"></i> Użytkownicy</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">       
+                        <center>
+                            <div class="row">
+                                      <center>Zestawienie zbiorcze</center>
+                                      <center>Trasa: {{ status }}</center><br>
+                            </div>
+                          <div id="do_drukowania">
+                              {% set kasa_przeplata = 0 %}
+                              {% set kasa_odbior = 0 %}
+                              {% set kasa_przelew = 0 %}
+                            <table border="1" width="100%">
+                                <tr class="kolordruk" bgcolor="#C3C3C3">
+                                    <th><center>Firma</center></th>
+                                    <th><center>R</center></th>
+                                    <th><center>MO</center></th>
+                                    <th><center>MD</center></th>
+                                    <th><center>MR</center></th>
+                                    <th><center>ZO</center></th>
+                                    <th><center>ZL</center></th>
+                                </tr>
+                               {% for trasss in dane%}
+
+                                  
+                                        {#  <b><h4>KLIENT:</h4></b><br>
+                                          <b>{{ trasss.nazwa }}</b><br>
+                                      Ulica: {{ trasss.ulica }}, {{ trasss.kod }} {{ trasss.miejscowosc }}<br>
+                                           Telefon: {{ trasss.telefon }},<br>#}
+                                  {% set ilosc_r = 0 %}
+                                  {% set ilosc_m = 0 %}
+                                  {% set ilosc_md = 0 %}
+                                  {% set ilosc_mr = 0 %}
+                                  {% set ilosc_o = 0 %}
+                                  {% set ilosc_l = 0 %}
+                                            {% for prod in produkty if prod.dostawa == trasss.id %}
+                                                
+                                                {# obliczanie wartosci całego zestawienia #}
+                                                {% if prod.platnosc == 'Przedpłata 100%' %} 
+                                                    {% if prod.zaplacono == '1' %}{% set kasa_przeplata = kasa_przeplata + 0 %}{% else %}{% set kasa_przeplata = kasa_przeplata + prod.dozaplaty %}{% endif %}
+                                                {% elseif prod.platnosc == 'Gotówka przy odbiorze' %}
+                                                    {% if prod.zaplacono == '1' %}{% set kasa_odbior = kasa_odbior + 0 %}{% else %}{% set kasa_odbior = kasa_odbior + prod.dozaplaty %}{% endif %}
+                                                {% elseif prod.platnosc == 'Przelew (mniejszy rabat)' %}
+                                                    {% if prod.zaplacono == '1' %}{% set kasa_przelew = kasa_przelew + 0 %}{% else %}{% set kasa_przelew = kasa_przelew + prod.dozaplaty %}{% endif %}
+                                                {% endif %}
+                                                {# koniec obliczania wartosci #}           
+                                                
+                                                    {% for listaprod in lista if prod.id == listaprod.idzam %}
+                                                        
+                                                        {# obliczanie ilości produktów danego statusu #}
+                                                        {% if prod.jakiezam == 'zamówienie roletek'%}
+                                                            {% set ilosc_r = ilosc_r + 1 %}
+                                                        {% elseif prod.jakiezam == 'zamówienie moskitier'%}
+                                                            {% set ilosc_m = ilosc_m + 1 %}
+                                                        {% elseif prod.jakiezam == 'zamówienie moskitier drzwiowych'%}
+                                                            {% set ilosc_md = ilosc_md + 1 %}
+                                                        {% elseif prod.jakiezam == 'zamówienie moskitier rolowanych'%}
+                                                            {% set ilosc_mr = ilosc_mr + 1 %}
+                                                        {% elseif prod.jakiezam == 'zgłoszenie do odbioru'%}
+                                                            {% set ilosc_o = ilosc_o + 1 %}
+                                                        {% elseif prod.jakiezam == 'zamówienie elementów luzem'%}
+                                                            {% set ilosc_l = ilosc_l + 1 %}
+                                                        {% endif %}
+                                                        {# koniec obliczania ilosci produktów #}
+                                                        
+                                                        {% endfor %}
+                                            {% endfor %}
+                                            <tr>
+                                                <td><center>
+                                                    {{ trasss.nazwa }}<br>
+                                                    {{ trasss.ulica }}, {{ trasss.kod }} {{ trasss.miejscowosc }}<br>
+                                                    {{ trasss.telefon }}</center>
+                                                </td>
+                                                <td><center>{{ ilosc_r }}</center></td>
+                                                <td><center>{{ ilosc_m }}</center></td>
+                                                <td><center>{{ ilosc_md }}</center></td>
+                                                <td><center>{{ ilosc_mr }}</center></td>
+                                                <td><center>{{ ilosc_o }}</center></td>
+                                                <td><center>{{ ilosc_l }}</center></td>
+                                            </tr>
+                                {% endfor %}
+</table>
+                                <h4>Suma do zapłaty(Przedpłata 100%): <b>{{ kasa_przeplata }}</b> zł</h4>
+                                <h4>Suma do zapłaty(Gotówka przy odbiorze): <b>{{ kasa_odbior }}</b> zł</h4>
+                                <h4>Suma do zapłaty(Przelew): <b>{{ kasa_przelew }}</b> zł</h4><br>
+</div>
+                                 <FORM>
+                                                <div class="row"><div class="col-md-12"><INPUT TYPE="button" class="btn btn-warning btn-lg btn-block" onClick="printDiv('do_drukowania')" value="WYDRUKUJ LUB ZAPISZ DO PDF"></div></div></FORM> 
+                        </center>
+                               
+
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+            
+          </div>
+
+</section>
+        {% endblock %}
+{% block javascripts %}
+    {{parent()}}
+                           
+    <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+         <script>
+function printDiv(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+}
+</script>
+{% endblock %}
+
