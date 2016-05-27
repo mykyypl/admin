@@ -300,9 +300,10 @@ class DashboardController extends Controller {
         $produkty_query = $em->createQueryBuilder('a')
                 ->select('a')
                 ->from('MarcinAdminBundle:Produkty', 'a')
+                ->addOrderBy('a.id', 'DESC')
+                ->setMaxResults(800) //USTAWIENIE OPTYMALIZSUJE WYŚWIETLANIE ZAMOWIENIEŃ NA STRONIE GŁÓWNEJ PANELU!
                  ->getQuery()
-                 ->getResult();
-                 //->setMaxResults(500);      USTAWIENIE OPTYMALIZSUJE WYŚWIETLANIE ZAMOWIENIEŃ NA STRONIE GŁÓWNEJ PANELU!
+                 ->getResult();     
          $a = 0;$b = 0;$c = 0; $d = 0; $e = 0;
          foreach ($produkty_query as $prod)
          {
