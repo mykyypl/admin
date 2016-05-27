@@ -295,6 +295,23 @@ class DashboardController extends Controller {
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate($qb, $page, $limit);
+        
+        $em = $this->getDoctrine()->getManager();
+        $produkty_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Produkty', 'a')
+                 ->getQuery()
+                 ->getResult();
+                 //->setMaxResults(500);      USTAWIENIE OPTYMALIZSUJE WYŚWIETLANIE ZAMOWIENIEŃ NA STRONIE GŁÓWNEJ PANELU!
+         $a = 0;$b = 0;$c = 0; $d = 0; $e = 0;
+         foreach ($produkty_query as $prod)
+         {
+             $daneprodukty[$a++]['idzam'] = $prod->GetIdzam();
+             $daneprodukty[$b++]['typ'] = $prod->GetTyp();
+             $daneprodukty[$c++]['kolor'] = $prod->GetKolor();
+             $daneprodukty[$d++]['szer'] = $prod->GetSzerokosca();
+             $daneprodukty[$e++]['wysokosc'] = $prod->GetWysokosch();
+         }
 
         $statusesList = array(
             'Przesłane' => 'przeslane',
@@ -334,6 +351,7 @@ class DashboardController extends Controller {
                     'statistics' => $statistics,
                     'pagination' => $pagination,
                     'currStatus' => $status,
+                    'produkty' => $daneprodukty,
                     'deleteTokenName' => $this->deleteTokenName,
                     'csrfProvider' => $this->get('form.csrf_provider'),
                     'new_zam' => array(

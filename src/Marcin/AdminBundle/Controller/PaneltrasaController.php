@@ -188,6 +188,7 @@ class PaneltrasaController extends Controller {
          $a = 0;$b = 0;$c = 0;$d = 0;$e = 0;$f = 0;$g = 0;$h = 0;
          $a1 = 0;$b1 = 0;$c1 = 0;$d1 = 0;$e1 = 0;$f1 = 0;$g1 = 0;$h1 = 0;
          $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
+         $aaa = 0; $bbb = 0; $ccc = 0; $ddd = 0; $eee = 0; $fff = 0; $ggg = 0;
         foreach ($zamowienia_query as $zamowienia)
         {
              $dostawa = $zamowienia->getIddost();
@@ -197,6 +198,7 @@ class PaneltrasaController extends Controller {
             WHERE p.id = :poniedzialek'
         )->setParameter('poniedzialek', $dostawa);
         $trasa_zliczanie1 = $query_zliczanie1->getResult();
+        $uzytkonik = $trasa_zliczanie1[0]->GetUser();
         $dane[$a++]['user'] = $trasa_zliczanie1[0]->GetUser();
         $dane[$b++]['ulica'] = $trasa_zliczanie1[0]->GetUlica();
         $dane[$c++]['kod'] = $trasa_zliczanie1[0]->GetKodpocztowy();
@@ -231,8 +233,23 @@ class PaneltrasaController extends Controller {
                 $lista_prod[$ee++]['szerb'] = $lista->GetSzerokoscb();
                 $lista_prod[$ff++]['wysh'] = $lista->GetWysokosch();
             }
-        
-       
+         $query_zliczanie3 = $em->createQuery(
+            'SELECT a
+            FROM MarcinAdminBundle:Faktura a
+            WHERE a.user = :idzam'
+        )->setParameter('idzam', $uzytkonik);
+        $trasa_zliczanie3 = $query_zliczanie3->getResult();
+       foreach ($trasa_zliczanie3 as $fakturaa)
+            {
+                $faktura[$aaa++]['nazwafirmy'] = $fakturaa->GetNazwafirmy();
+                $faktura[$bbb++]['telefon'] = $fakturaa->GetTelefon();
+                $faktura[$ccc++]['miasto'] = $fakturaa->GetMiasto();
+                $faktura[$ddd++]['ulica'] = $fakturaa->GetUlica();
+                $faktura[$eee++]['kodpocztowy'] = $fakturaa->GetKodpocztowy();
+                $faktura[$fff++]['nip'] = $fakturaa->GetNip();
+                $faktura[$ggg++]['user'] = $fakturaa->GetUser();
+            }
+            
         //$produkty[$g1++]['id'] = $dostawa;
         }
         $dane = array_map("unserialize", array_unique(array_map("serialize", $dane)));
@@ -247,7 +264,8 @@ class PaneltrasaController extends Controller {
                 'dane'=> $dane,
                 'produkty' => $produkty,
                 'lista' => $lista_prod,
-                'status' => $status
+                'status' => $status,
+                'faktura' => $faktura
                 )
         );
     }

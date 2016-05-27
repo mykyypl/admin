@@ -140,7 +140,42 @@
 
                             {% for article in pagination  %}
                                 <tr><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
-                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <h4><font color="red">M</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <h4><font color="red">MD</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <h4><font color="red">MR</font></h4> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <h4><font color="red">ZO</font></h4> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <h4><font color="red">EL</font></h4> {% else %} <h4><font color="red">R</font></h4>{# {{ article.jakie_zam }}#}{% endif %}</th>
+                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <font color="red" size="4">M</font> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <font color="red" size="4">MD</font> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <font color="red" size="4">MR</font> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <font color="red" size="4">ZO</font> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <font color="red" size="4">EL</font> {% else %} <font color="red" size="4">R</font> {# {{ article.jakie_zam }}#}{% endif %}<div class="modal fade {{ article.id }}" id="{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ article.id }}">
+                                              <div class="modal-dialog modal-lg" role="document">                  
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">{{ article.jakie_zam }}</h4>
+                                                      </div>
+                                                      <div class="modal-body">                                                                                                                                                                                                                                                                                    
+                                                    <table class="table table-bordered table-hover dataTable" role="grid">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Typ</th>
+                                                            <th>Kolor</th>
+                                                            <th>Szer a</th>
+                                                            <th>Wys h</th>
+                                                        </tr>
+                                                        </thead>
+                                                        {% set ilosc = 0 %}
+                                                       {% for prod in produkty if prod.idzam == article.id %}
+                                                           {% set ilosc = ilosc + 1 %}
+                                                        <tr>
+                                                            <th>{{ prod.typ }}</th>
+                                                            <th>{{ prod.kolor }}</th>
+                                                            <th>{{ prod.szer }}</th>
+                                                            <th>{{ prod.wysokosc }}</th>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </table>
+                                                     </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>                                                                                                                                                                                                         
+                                                </div>
+                                              </div>
+                                              </div>
+                                        </div><font size="4">/ <a href="#" type="button" data-toggle="modal" data-target="#{{ article.id }}">{{ ilosc }}</a></font>
+                                        </th>
                                     <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
                                     <th id="numerprodukcji{{ article.id }}">

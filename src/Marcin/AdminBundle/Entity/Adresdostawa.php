@@ -67,7 +67,6 @@ class Adresdostawa {
     /**
      * @ORM\Column(type="text")
      * 
-     * @Assert\NotBlank
      * 
      */
     private $nazwa_firmy;

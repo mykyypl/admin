@@ -75,7 +75,7 @@ class TestRepository extends EntityRepository
                 ->setParameter('wdostawie', 'w dostawie')
                 ->setParameter('montaz', 'gotowe do odbioru/montażu')
                 ->setParameter('wyslane', 'wysłane')
-                ->addOrderBy('s.sendDate', 'DESC');
+                ->addOrderBy('s.nr_user_zam', 'DESC');
 
         if(!empty($params['status'])){
             if('poniedzialek' == $params['status']){

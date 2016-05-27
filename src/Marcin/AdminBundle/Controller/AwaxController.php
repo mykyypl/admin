@@ -40,8 +40,7 @@ class AwaxController extends Controller {
      *      }
      * )
      * 
-     * @Security("has_role('ROLE_PROD')")
-     *  @Security("has_role('ROLE_ZAM')")
+     * @Security("has_role('ROLE_ZAM')")
      *
      */
     public function sendAction(Request $Request) {

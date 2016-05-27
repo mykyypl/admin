@@ -42,6 +42,41 @@ class Faktura {
     private $user;
     
     /**
+     * @ORM\Column(type="text")
+     * 
+     * 
+     */
+    private $ulica;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $kod_pocztowy;
+    
+    /**
+     * @ORM\Column(type="text")
+     * 
+     * 
+     */
+    private $miasto;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $telefon;
+    
+    /**
+     * @ORM\Column(type="text")
+     * 
+     * 
+     */
+    private $nazwa_firmy;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -95,4 +130,120 @@ class Faktura {
     {
         return $this->user;
     }
+    
+    /**
+     * Set kod_pocztowy
+     *
+     * @param integer $kod_pocztowy
+     *
+     * @return Faktura
+     */
+    public function setKodpocztowy($kod_pocztowy)
+    {
+        $this->kod_pocztowy = $kod_pocztowy;
+        return $this;
+    }
+    
+    /**
+     * Get kod_pocztowy
+     *
+     * @return integer
+     */
+    public function getKodpocztowy()
+    {
+        return $this->kod_pocztowy;
+    }
+    
+    /**
+     * Set ulica
+     *
+     * @param string $ulica
+     *
+     * @return Faktura
+     */
+    public function setUlica($ulica)
+    {
+        $this->ulica = $ulica;
+        return $this;
+    }
+    
+    /**
+     * Get ulica
+     *
+     * @return string
+     */
+    public function getUlica()
+    {
+        return $this->ulica;
+    }
+    
+    /**
+     * Set miasto
+     *
+     * @param string $miasto
+     *
+     * @return Faktura
+     */
+    public function setMiasto($miasto)
+    {
+        $this->miasto = $miasto;
+        return $this;
+    }
+    
+    /**
+     * Get miasto
+     *
+     * @return string
+     */
+    public function getMiasto()
+    {
+        return $this->miasto;
+    }
+    
+    /**
+     * Set telefon
+     *
+     * @param string $telefon
+     *
+     * @return Faktura
+     */
+    public function setTelefon($telefon)
+    {
+        $this->telefon = $telefon;
+        return $this;
+    }
+    
+    /**
+     * Get telefon
+     *
+     * @return string
+     */
+    public function getTelefon()
+    {
+        return $this->telefon;
+    }
+    
+    /**
+     * Set nazwa_firmy
+     *
+     * @param string $nazwa_firmy
+     *
+     * @return Faktura
+     */
+    public function setNazwafirmy($nazwa_firmy)
+    {
+        $this->nazwa_firmy = $nazwa_firmy;
+        return $this;
+    }
+    
+    /**
+     * Get nazwa_firmy
+     *
+     * @return string
+     */
+    public function getNazwafirmy()
+    {
+        return $this->nazwa_firmy;
+    }
+   
 }

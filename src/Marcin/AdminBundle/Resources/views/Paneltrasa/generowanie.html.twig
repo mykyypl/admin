@@ -51,8 +51,10 @@
                               {% set kasa_przelew = 0 %}
                             <table border="1" width="100%">
                                 <tr class="kolordruk" bgcolor="#C3C3C3">
+                                    <th>Lp</th>
                                     <th><center>Firma</center></th>
-                                    <th><center>R</center></th>
+                                    <th><center>Zamawiający</center></th>
+                                    <th><center>RO</center></th>
                                     <th><center>MO</center></th>
                                     <th><center>MD</center></th>
                                     <th><center>MR</center></th>
@@ -72,6 +74,12 @@
                                   {% set ilosc_mr = 0 %}
                                   {% set ilosc_o = 0 %}
                                   {% set ilosc_l = 0 %}
+                                  {% set nazwafirmy = 0 %}
+                                  {% set ulica = 0 %}
+                                  {% set kodpocztowy = 0 %}
+                                  {% set telefon = 0 %}
+                                  {% set nip = 0 %}
+                                  {% set miasto = 0 %}
                                             {% for prod in produkty if prod.dostawa == trasss.id %}
                                                 
                                                 {# obliczanie wartosci całego zestawienia #}
@@ -103,19 +111,31 @@
                                                         {# koniec obliczania ilosci produktów #}
                                                         
                                                         {% endfor %}
+                                                        
+                                                        {%for firmowe in faktura if firmowe.user == trasss.user %}
+                                                            {% set nazwafirmy = firmowe.nazwafirmy %}
+                                                            {% set ulica = firmowe.ulica %} {% set kodpocztowy = firmowe.kodpocztowy %} {% set miasto = firmowe.miasto %}
+                                                            {% set nip = firmowe.nip %} {% set telefon = firmowe.telefon %}
+                                                    {% endfor %}
                                             {% endfor %}
                                             <tr>
+                                                <td></td>
                                                 <td><center>
                                                     {{ trasss.nazwa }}<br>
                                                     {{ trasss.ulica }}, {{ trasss.kod }} {{ trasss.miejscowosc }}<br>
                                                     {{ trasss.telefon }}</center>
                                                 </td>
-                                                <td><center>{{ ilosc_r }}</center></td>
-                                                <td><center>{{ ilosc_m }}</center></td>
-                                                <td><center>{{ ilosc_md }}</center></td>
-                                                <td><center>{{ ilosc_mr }}</center></td>
-                                                <td><center>{{ ilosc_o }}</center></td>
-                                                <td><center>{{ ilosc_l }}</center></td>
+                                                <td><center>
+                                                    {% if nazwafirmy == '0' %}{% else %}{{ nazwafirmy }}{% endif %}<br>
+                                                    {% if ulica == '0' %}{% else %}{{ ulica }}{% endif %}, {% if kodpocztowy == '0' %}{% else %}{{ kodpocztowy }}{% endif %} {% if miasto == '0' %}{% else %}{{ miasto }}{% endif %}<br>
+                                                    NIP: {% if nip == '0' %}{% else %}{{ nip }}{% endif %}, {% if telefon == '0' %}{% else %}{{ telefon }}{% endif %}
+                                                </center></td>
+                                                <td><center>{% if ilosc_r == '0' %}-{% else %}{{ ilosc_r }}{% endif %}</center></td>
+                                                <td><center>{% if ilosc_m == '0' %}-{% else %}{{ ilosc_m }}{% endif %}</center></td>
+                                                <td><center>{% if ilosc_md == '0' %}-{% else %}{{ ilosc_md }}{% endif %}</center></td>
+                                                <td><center>{% if ilosc_mr == '0' %}-{% else %}{{ ilosc_mr }}{% endif %}</center></td>
+                                                <td><center>{% if ilosc_o == '0' %}-{% else %}{{ ilosc_o }}{% endif %}</center></td>
+                                                <td><center>{% if ilosc_l == '0' %}-{% else %}{{ ilosc_l }}{% endif %}</center></td>
                                             </tr>
                                 {% endfor %}
 </table>
