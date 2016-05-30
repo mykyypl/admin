@@ -26,6 +26,7 @@ use Marcin\AdminBundle\Mailer\ZygmarcheckMailer;
 
 use Marcin\AdminBundle\Mailer\ZamowieniaMailer;
 use Marcin\AdminBundle\Mailer\AnulowanieMailer;
+use Marcin\AdminBundle\Mailer\NewsletterMailer;
 
 use Marcin\SiteBundle\Entity\Shoperzamowienia;
 use Marcin\AdminBundle\Exception\UserException;
@@ -144,6 +145,11 @@ class UserManager {
      */
     protected $anulowanieMailer;
     
+    /**
+     * @var newsletterMailer
+     */
+    protected $newsletterMailer;
+    
     
     function __construct(Doctrine $doctrine,
             Router $router,
@@ -166,7 +172,8 @@ class UserManager {
             HannocheckMailer $hannocheckMailer,
             ZygmarcheckMailer $zygmarcheckMailer,
             ZamowieniaMailer $zamowieniaMailer,
-            AnulowanieMailer $anulowanieMailer
+            AnulowanieMailer $anulowanieMailer,
+            NewsletterMailer $newsletterMailer
             )
             {
         $this->doctrine = $doctrine;
@@ -191,6 +198,7 @@ class UserManager {
         $this->zygmarcheckMailer = $zygmarcheckMailer;
         $this->zamowieniaMailer = $zamowieniaMailer;
         $this->anulowanieMailer = $anulowanieMailer;
+        $this->newsletterMailer = $newsletterMailer;
         
     }
     
@@ -1296,6 +1304,66 @@ class UserManager {
         $emaiBody = $this->templating->render('MarcinAdminBundle:Email:anulowanie.html.twig');
         
         $this->anulowanieMailer->send($userEmail, 'Anulowanie zamówienia GrupaMAGNUM ', $emaiBody);
+        
+        return true;
+    }
+    
+    public function testNewsletter($id)
+    {
+        $em = $this->doctrine->getManager();
+        $qb_email = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Newsletter', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        foreach ($qb_email as $email)
+            {
+                $newsletter[0]['test'] = $email->GetTest();
+                $newsletter[0]['tytul'] = $email->GetTytul();
+                $newsletter[0]['tekst'] = $email->GetTekst();
+                $newsletter[0]['bootstrap'] = $email->GetBootstrap();
+                $email_send = $email->GetTest();
+                $email_tytul = $email->GetTytul();
+            }
+            
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:newsletter.html.twig', array(
+            'newsletter' => $newsletter
+        ));
+        
+        $this->newsletterMailer->send($email_send, $email_tytul, $emaiBody);
+        
+        return true;
+    }
+    
+    public function sendNewsletter($id,$email_send)
+    {
+        $em = $this->doctrine->getManager();
+        $qb_email = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Newsletter', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $id)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        foreach ($qb_email as $email)
+            {
+                $newsletter[0]['test'] = $email->GetTest();
+                $newsletter[0]['tytul'] = $email->GetTytul();
+                $newsletter[0]['tekst'] = $email->GetTekst();
+                $newsletter[0]['bootstrap'] = $email->GetBootstrap();
+                //$email_send = $email->GetTest();
+                $email_tytul = $email->GetTytul();
+            }
+            
+        $emaiBody = $this->templating->render('MarcinAdminBundle:Email:newsletter.html.twig', array(
+            'newsletter' => $newsletter
+        ));
+        //sleep(5);
+        $this->newsletterMailer->send($email_send, $email_tytul, $emaiBody);
         
         return true;
     }

@@ -47,6 +47,25 @@ class TestRepository extends EntityRepository
             }
         }
         
+        if(!empty($params['trasy'])){
+            if('czwartek' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'czwartek');
+            }else if('poniedzialek' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'poniedzialek');
+            }else if('wtorek' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'wtorek');
+            }else if('sroda' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'sroda');
+            }else if('piatek' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'piatek');
+            }
+        }
+        
         
      if(!empty($params['orderBy'])){
             $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;

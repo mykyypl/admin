@@ -10,67 +10,67 @@ marcin_admin_dashboard:
 marcin_admin_username:
     resource: "@MarcinAdminBundle/Controller/UsernameController.php"
     type: annotation
-    prefix: /u/user
+    prefix: /p/u/user
     
 marcin_admin_shoper:
     resource: "@MarcinAdminBundle/Controller/ShoperController.php"
     type: annotation
-    prefix: /u/shoper
+    prefix: /p/u/shoper
     
 marcin_admin_invest:
     resource: "@MarcinAdminBundle/Controller/InvestController.php"
     type: annotation
-    prefix: /i/invest
+    prefix: /p/i/invest
     
 marcin_admin_partnerplast:
     resource: "@MarcinAdminBundle/Controller/PartnerplastController.php"
     type: annotation
-    prefix: /p/partner
+    prefix: /p/p/partner
     
 marcin_admin_selena:
     resource: "@MarcinAdminBundle/Controller/SelenaController.php"
     type: annotation
-    prefix: /s/selena
+    prefix: /p/s/selena
     
 marcin_admin_hanno:
     resource: "@MarcinAdminBundle/Controller/HannoController.php"
     type: annotation
-    prefix: /h/hanno
+    prefix: /p/h/hanno
     
 marcin_admin_awax:
     resource: "@MarcinAdminBundle/Controller/AwaxController.php"
     type: annotation
-    prefix: /a/awax
+    prefix: /p/a/awax
     
 marcin_admin_zygmar:
     resource: "@MarcinAdminBundle/Controller/ZygmarController.php"
     type: annotation
-    prefix: /z/zygmar
+    prefix: /p/z/zygmar
     
 marcin_admin_allzam:
     resource: "@MarcinAdminBundle/Controller/AllzamowieniaController.php"
     type: annotation
-    prefix: /all/zamowienia
+    prefix: /p/all/zamowienia
     
 marcin_admin_vip:
     resource: "@MarcinAdminBundle/Controller/VipController.php"
     type: annotation
-    prefix: /v/vip
+    prefix: /p/v/vip
     
 marcin_admin_trasa:
     resource: "@MarcinAdminBundle/Controller/TrasaController.php"
     type: annotation
-    prefix: /t/trasa
+    prefix: /p/t/trasa
     
 marcin_admin_paneltrasa:
     resource: "@MarcinAdminBundle/Controller/PaneltrasaController.php"
     type: annotation
-    prefix: /panel/ptrasa
+    prefix: /p/panel/ptrasa
     
 marcin_admin_newsletter:
     resource: "@MarcinAdminBundle/Controller/NewsletterController.php"
     type: annotation
-    prefix: /news/letter
+    prefix: /p/news/letter
 
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"

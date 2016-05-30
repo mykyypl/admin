@@ -1,6 +1,12 @@
 {% extends 'MarcinAdminBundle::base.html.twig' %}
 {% block stylesheets %}
 {{parent()}}
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/plugins/select2/select2.min.css') }}" />
+<style>
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        color: black !important;
+    }
+</style>
 {% endblock %}
 {% block body %}
             <section class="content-header">
@@ -17,7 +23,8 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-md-6">
+            {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
+                <div class="col-md-10">
                     <div class="box box-default color-palette-box">
                         <div class="box-header with-border">
                             <h3 class="box-title"><i class="fa fa-tag"></i> Edycja newsletter</h3>
@@ -25,20 +32,51 @@
                         <div class="box-body">
 
                          {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
-                        {{ form_start(form, {'attr': {'novalidate': 'true'}}) }}
                         <div class="form-group">
                             {{ form_row(form.tytul) }}
                         </div>
                         <div class="form-group">
-                            {{ form_rest(form) }}
-                        {{ form_row(form.save) }} 
+                            {{ form_row(form.tekst) }}
                         </div>
-                        {{ form_end(form) }}
-                        <a href="{{ path('marcin_admin_newsletter') }}" class="btn btn-primary">Wstecz</a> 
-
                         </div>
                     </div>
                 </div>
+                <div class="col-md-2">
+                    <div class="box box-default color-palette-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-tag"></i> Ustawienia newsletter</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                {{ form_row(form.bootstrap) }}
+                            </div>
+                            <div class="form-group">
+                            {{ form_row(form.grupy) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(form.test) }}
+                            </div>
+                            <div class="form-group">
+                             {{ form_row(form.send) }} 
+                             </div>
+                            <div class="form-group">
+                             {{ form_row(form.submit) }} 
+                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.save) }} 
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ path('marcin_admin_newsletter') }}" class="btn btn-primary btn-block">Wstecz</a> 
+                                </div>
+                            </div>
+                                
+                        
+                          
+                        </div>
+                    </div>
+                </div>
+                            {{ form_end(form) }}
             {#<div class="col-md-6">
                 <div class="box box-default color-palette-box">
                     <div class="box-header with-border">
@@ -62,6 +100,8 @@ dsad
   selector: 'textarea',
   language: 'pl',
   height: 500,
+  relative_urls: false,
+   remove_script_host : false,
   plugins: [
     'advlist autolink lists link image charmap print preview anchor',
     'searchreplace visualblocks code',
@@ -74,4 +114,72 @@ dsad
    external_plugins: { "filemanager" : "{{ asset('bundles/marcinadmin/plugins/filemanager/plugin.min.js') }}"}
 });
         </script>
+        <script type="text/javascript" src="{{ asset('bundles/marcinadmin/plugins/select2/select2.min.js') }}"></script>
+<script type="text/javascript">
+$(".select2").select2();
+</script>
+<script>
+
+var waitingDialog = waitingDialog || (function ($) {
+    'use strict';
+
+	// Creating modal dialog's DOM
+	var $dialog = $(
+		'<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+		'<div class="modal-dialog modal-m">' +
+		'<div class="modal-content">' +
+			'<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
+			'<div class="modal-body">' +
+				'<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
+			'</div>' +
+		'</div></div></div>');
+
+	return {
+		/**
+		 * Opens our dialog
+		 * @param message Custom message
+		 * @param options Custom options:
+		 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+		 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+		 */
+		show: function (message, options) {
+			// Assigning defaults
+			if (typeof options === 'undefined') {
+				options = {};
+			}
+			if (typeof message === 'undefined') {
+				message = 'Loading';
+			}
+			var settings = $.extend({
+				dialogSize: 'm',
+				progressType: '',
+				onHide: null // This callback runs after the dialog was hidden
+			}, options);
+
+			// Configuring dialog
+			$dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+			$dialog.find('.progress-bar').attr('class', 'progress-bar');
+			if (settings.progressType) {
+				$dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+			}
+			$dialog.find('h3').text(message);
+			// Adding callbacks
+			if (typeof settings.onHide === 'function') {
+				$dialog.off('hidden.bs.modal').on('hidden.bs.modal', function (e) {
+					settings.onHide.call($dialog);
+				});
+			}
+			// Opening dialog
+			$dialog.modal();
+		},
+		/**
+		 * Closes dialog
+		 */
+		hide: function () {
+			$dialog.modal('hide');
+		}
+	};
+
+})(jQuery);
+</script>
 {% endblock %}

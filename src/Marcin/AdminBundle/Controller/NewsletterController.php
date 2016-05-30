@@ -30,10 +30,11 @@ class NewsletterController extends Controller {
      *      requirements={"id"="\d+"},
      *      defaults={"id"=NULL}
      * )
+     * @Security("has_role('ROLE_ZAM')")
      * 
      * @Template()
      */
-    public function formAction(Request $Request, Newsletter $news = NULL) {
+    public function formAction(Request $Request, Newsletter $news = NULL, $id) {
         if(null == $news){
             $news = new Newsletter();
             //$Article->setAuthor($this->getUser());
@@ -43,15 +44,111 @@ class NewsletterController extends Controller {
         $form = $this->createForm(new NewsletterType(), $news);
         
         $form->handleRequest($Request);
-        if($form->isValid()){
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($news);
-            $em->flush();
-            $message = (isset($newNewsletterForm)) ? 'Poprawnie dodano nowy newsletter.': 'Newsletter został zaktualizowany.';
-            $this->addFlash('success', $message);
+        if ($form->get('send')->isClicked()) {
+            if($form->isValid()){
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($news);
+                $em->flush();
+            }
+                try {
+                    $userManager = $this->get('user_manager');
+                    $userManager->testNewsletter($id);
+                }
+                catch (UserException $exc) {
+                        $this->addFlash('error', $exc->getMessage());
+                }
+                    $this->addFlash('success', 'Testowy email został wysłany');
             return $this->redirect($this->generateUrl('marcin_admin_newsletter_form', array(
                 'id' => $news->getId()
             )));
+        }
+        if ($form->get('submit')->isClicked()) {
+           // $this->addFlash('success', 'Kliknięcie w submit');
+            if($form->isValid()){
+                $em = $this->getDoctrine()->getManager();
+                $news->setWyslano(new \DateTime());
+                $em->persist($news);
+                $em->flush();
+            }
+//            $qb_newsletter = $em->createQueryBuilder()
+//                ->select('a')
+//                ->from('MarcinAdminBundle:Username', 'a')
+//                 //->setMaxResults(1)
+//                 ->getQuery()
+//                 ->getResult();
+            $qb_grupy = $em->createQueryBuilder()
+                ->select('b')
+                ->from('MarcinAdminBundle:Newsletter', 'b')
+                 ->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+            
+            foreach ($qb_grupy as $grupy)
+            {
+                $grupy_array = $grupy->GetGrupy();
+            }
+            
+            if($grupy_array == null)
+            {
+                 $this->addFlash('error', 'Proszę wybrać do jakich grup użytkowników ma zostać wysłany newsletter!');
+                return $this->redirect($this->generateUrl('marcin_admin_newsletter_form', array(
+                'id' => $news->getId()
+            )));
+            } else {
+                foreach ($grupy_array as $tablica_tras)
+                {
+                    $qb_newsletter = $em->createQueryBuilder()
+                    ->select('a')
+                    ->from('MarcinAdminBundle:Username', 'a')
+                     //->setMaxResults(1)
+                    ->where('a.trasa = :trasa')
+                    ->setParameter('trasa', $tablica_tras)
+                    ->getQuery()
+                    ->getResult();
+                    
+                    foreach ($qb_newsletter as $news)
+                     {
+                        // sleep(15);
+                         $email_send = $news->GetEmail();
+                            try {
+                                $userManager = $this->get('user_manager');
+                                $userManager->sendNewsletter($id,$email_send);
+                            }
+                            catch (UserException $exc) {
+                                    $this->addFlash('error', $exc->getMessage());
+                            }
+                     }
+                
+                }
+            }
+//         foreach ($qb_newsletter as $news)
+//         {
+//            // sleep(15);
+//             $email_send = $news->GetEmail();
+//                try {
+//                    $userManager = $this->get('user_manager');
+//                    $userManager->sendNewsletter($id,$email_send);
+//                }
+//                catch (UserException $exc) {
+//                        $this->addFlash('error', $exc->getMessage());
+//                }
+//         }
+            $this->addFlash('success', 'Newsletter został wysłany');
+            return $this->redirect($this->generateUrl('marcin_admin_newsletter_form', array(
+                'id' => $id
+            )));
+        }
+        if ($form->get('save')->isClicked()) {
+            if($form->isValid()){
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($news);
+                $em->flush();
+                $message = (isset($newNewsletterForm)) ? 'Poprawnie dodano nowy newsletter.': 'Newsletter został zaktualizowany.';
+                $this->addFlash('success', $message);
+                return $this->redirect($this->generateUrl('marcin_admin_newsletter_form', array(
+                    'id' => $news->getId()
+                )));
+            }
         }
         
         return array(
@@ -70,7 +167,7 @@ class NewsletterController extends Controller {
      *      defaults={"page"=1}
      * 
      * )
-     * @Security("has_role('ROLE_MAGNUM')")
+     * @Security("has_role('ROLE_ZAM')")
      *    
      * @Template()
      */

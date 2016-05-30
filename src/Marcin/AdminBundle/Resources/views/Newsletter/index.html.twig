@@ -23,6 +23,8 @@
             </div>
             <div class="box-body">
                 <div class="row">
+                    <div class="col-md-3"><a href="{{ path('marcin_admin_newsletter_form') }}" class="btn btn-danger btn-block">NOWY <i class="fa fa-paper-plane-o" aria-hidden="true"></i></a></div>
+                    <div class="clearfix"></div><br>
                     <div class="col-sm-12">
                         <div style="overflow-x: auto;">
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
@@ -30,6 +32,7 @@
                                 <tr role="row">
                                     <th <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">Tytul</th>
+                                    <th>Wysłano</th>
                                     <th>akcje</th>
                                 </tr>
                             </thead>
@@ -37,6 +40,7 @@
     {% for article in pagination  %}
        <tr><th>{{ article.id }}</th> 
            <th>{{ article.tytul }}</th>
+           <th>{% if article.wyslano is empty %}<h5><span class="label label-warning">Nie wysłano</span></h5>{% else %}<h5><span class="label label-success">{{ article.wyslano | date('Y-m-d H:i:s') }}</span></h5>{% endif %}</th>
            <th><a href="{{ path('marcin_admin_newsletter_form', {'id': article.id}) }}" class="btn btn-primary">
                                                 <span class="glyphicon glyphicon-edit"></span>
                                             </a>

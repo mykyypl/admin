@@ -172,6 +172,46 @@ class DashboardController extends Controller {
 //                        'csrfProvider' => $this->get('form.csrf_provider'),
 //        );
     }
+    
+        /**
+     * @Route("/form/update-complete/produkcja", 
+     *       name="marcin_admin_dashboard_update_wykonano",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function updateWykoAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'wykonano' => $Request->request->get('wykonano')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+        if ($result['wykonano'] == '1')
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStatus('wyprodukowane');
+            $em->flush();
+        } else if($result['wykonano'] == '0')
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStatus('w realizacji');
+            $em->flush();
+        }
+        
+        return new JsonResponse(true);
+    }
 
     /**
      * @Route(
@@ -222,15 +262,15 @@ class DashboardController extends Controller {
 
     /**
      * @Route(
-     *       "/{status}/{page}",
+     *       "/{trasy}/{status}/{page}",
      *       name="marcin_admin_dashboard",
      *      requirements={"page"="\d+"},
-     *      defaults={"status"="all", "page"=1}
+     *      defaults={"status"="all", "page"=1, "trasy"="all"}
      * )
      *    
      * @Template()
      */
-    public function indexAction(Request $Request, $status, $page) {
+    public function indexAction(Request $Request, $status, $page, $trasy) {
 //        $queryParams = array(
 //            'userLike' => $Request->query->get('userLike')
 //        );
@@ -267,6 +307,7 @@ class DashboardController extends Controller {
         $queryParams = array(
             'userLike' => $Request->query->get('userLike'),
             'status' => $status,
+            'trasy' => $trasy,
             //'limit' => $Request->query->get('limit'),
         );
 
@@ -321,6 +362,14 @@ class DashboardController extends Controller {
             'Zrealizowane' =>'zrealizowane',
             'Wszystkie' => 'all'
         );
+        $trasyList = array(
+            'Poniedziałek' => 'poniedzialek',
+            'Wtorek' => 'wtorek',
+            'Środa' => 'sroda',
+            'Czwartek' =>'czwartek',
+            'Piątek' => 'piatek',
+            'Wszystkie' => 'all'
+        );
         if (!isset($this->status_new_zam)) {
             $this->status_new_zam = $RepoZam->getNewzam();
         }
@@ -348,10 +397,12 @@ class DashboardController extends Controller {
                     'limits' => $limits,
                     'currLimit' => $limit,
                     'statusesList' => $statusesList,
-                    'currStatus' => $status,
+                    'trasyList' => $trasyList,
+                    //'currStatus' => $status,
                     'statistics' => $statistics,
                     'pagination' => $pagination,
                     'currStatus' => $status,
+                    'currTrasy' => $trasy,
                     'produkty' => $daneprodukty,
                     'deleteTokenName' => $this->deleteTokenName,
                     'csrfProvider' => $this->get('form.csrf_provider'),

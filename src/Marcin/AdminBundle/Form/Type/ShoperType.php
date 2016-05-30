@@ -71,7 +71,7 @@ class ShoperType extends AbstractType
             ))
             ->add('adres2', 'text', array(
                 'label' => 'Adres',
-                'data' => ' ',
+                'data' => ' .',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',

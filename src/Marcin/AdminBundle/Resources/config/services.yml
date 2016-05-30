@@ -86,8 +86,12 @@ services:
     anulowanie_mailer:
         class: Marcin\AdminBundle\Mailer\AnulowanieMailer
         arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
+        
+    newsletter_mailer:
+        class: Marcin\AdminBundle\Mailer\NewsletterMailer
+        arguments: [@mailer, "zamowienia@grupamagnum.eu", "Zamówienia GrupaMAGNUM"]
 
 
     user_manager:
         class: Marcin\AdminBundle\Manager\UserManager
-        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer, @partner_mailer, @selena_mailer, @hanno_mailer, @zygmar_mailer, @awax_mailer, @vip_mailer, @awaxcheck_mailer, @vipcheck_mailer, @investcheck_mailer, @partnercheck_mailer, @selenacheck_mailer, @hannocheck_mailer, @zygmarcheck_mailer, @zamowienia_mailer, @anulowanie_mailer]
+        arguments: [@doctrine, @router, @templating, @security.encoder_factory, @user_mailer, @own_mailer, @invest_mailer, @partner_mailer, @selena_mailer, @hanno_mailer, @zygmar_mailer, @awax_mailer, @vip_mailer, @awaxcheck_mailer, @vipcheck_mailer, @investcheck_mailer, @partnercheck_mailer, @selenacheck_mailer, @hannocheck_mailer, @zygmarcheck_mailer, @zamowienia_mailer, @anulowanie_mailer, @newsletter_mailer]

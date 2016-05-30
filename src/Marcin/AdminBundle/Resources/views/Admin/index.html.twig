@@ -89,10 +89,10 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <form action="{{ path('marcin_admin_dashboard', {'status': currStatus}) }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
+                        <form action="{{ path('marcin_admin_dashboard', {'trasy': currTrasy,'status': currStatus}) }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
                                                 {% for key,val in statusesList %}
                     <div class="col-xs-12 col-md-2 col-lg-2 padding-bottom-15">
-                        <a class="btn btn-block {{ currStatus == val ? 'btn-default':'btn-primary' }}" href="{{ path('marcin_admin_dashboard', {'status': val}) }}">
+                        <a class="btn btn-block {{ currStatus == val ? 'btn-default':'btn-primary' }}" href="{{ path('marcin_admin_dashboard', {'trasy': currTrasy, 'status': val}) }}">
                             {{ key }} ({{ statistics[val] }})
                         </a>
                     </div>
@@ -108,6 +108,19 @@
                                </select>
                        </div>
                     </div>
+                    <div class="col-xs-6 col-md-2 col-lg-1 padding-bottom-15">
+                        <div class="form-group limit">
+                               <select class="form-control select-block input-md" placeholder="Pokaż" id="trasy">
+                                   {% for trasy, trasa in trasyList %}
+                                       <option {{ currTrasy == trasa ? 'selected="selected"':'' }} value="{{ path('marcin_admin_dashboard', {'trasy': trasa, 'status': currStatus}) }}">
+                                            {{ trasy }}
+                                       </option>
+                                   {% endfor %}
+                               </select>
+                       </div>
+                    </div>
+
+
                                <div class="clearfix"></div>
                             <div class="col-xs-12 col-md-2 col-lg-3 padding-bottom-15 pull-right">
                                 <div class="input-group" style="width: 100%;">
@@ -130,8 +143,9 @@
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">jakie_zam</th>
                                     <th>send data</th>
                                     <th>nr-user-zam</th>
+                                    {% if currStatus == 'realizacja' %}<th>wyprodukowane</th>{% endif %}
                                     <th>Produkcja</th>
-                                    <th>status</th>
+                                   {% if currStatus == 'realizacja' %}{% else %}<th>status</th>{% endif %}
                                     {% if is_granted('ROLE_MAGNUM') %}<th>do zaplaty</th>
                                     <th>akcje</th>
                                     <th>zł</th>{% endif %}
@@ -178,6 +192,11 @@
                                         </th>
                                     <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
+                                    {% if currStatus == 'realizacja' %}<th>
+                                        <div class="checkbox checkbox-success">
+                                            <center> <input style="flat-red" id="wykonano" type="checkbox" value="{{ article.status }}" onclick="changeWykonano('{{ article.id }}', event)" /><label for="checkbox2">
+                                                </label></center></div>
+                                        </th>{% endif %}
                                     <th id="numerprodukcji{{ article.id }}">
                                         <div id="produkcja{{ article.id }}" onclick="changeProdukcjaText('{{ article.id }}', event)">
                                              <h4><span onclick="changeProdukcjaText('{{ article.id }}', event)">
@@ -187,7 +206,7 @@
                                             <button class="btn btn-success" onclick="changeButtonProdukcja('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button>
                                             </div></div>
                                     </th>
-                                                                        <th id="zmiana-status-{{ article.id }}">
+                                        {% if currStatus == 'realizacja' %}{% else %}<th id="zmiana-status-{{ article.id }}">
                                         <select name="status_select" data-container="body" class="selectpicker"{% if article.status == 'wersja robocza' %} data-style="btn-info" {% elseif article.status == 'przesłane do realizacji' %} data-style="btn-warning" {% elseif article.status == 'oczekiwanie na zapłatę' %} data-style="btn-danger" {% elseif article.status == 'anulowane' %} data-style="btn-danger" {% elseif article.status == 'w realizacji' %} data-style="btn-primary" {% elseif article.status == 'wyprodukowane' %} data-style="btn-primary" {% elseif article.status == 'w dostawie' %} data-style="btn-danger" {% elseif article.status == 'gotowe do odbioru/montażu' %} data-style="btn-danger" {% elseif article.status == 'wysłane' %} data-style="btn-danger" {% else %} data-style="btn-success" {% endif %} id="{{ path('marcin_admin_dashboard_update', {'id': article.id }) }}" onchange="changeOrderStatus('{{ article.id }}', '{{ article.user }}', event)">
                                             <option value="wersja robocza"{% if article.status == 'wersja robocza' %} selected="selected" {% endif %}>wersja robocza</option>
                                             <option value="anulowane"{% if article.status == 'anulowane' %} selected="selected" {% endif %}>anulowane</option>
@@ -199,7 +218,7 @@
                                             <option value="gotowe do odbioru/montażu"{% if article.status == 'gotowe do odbioru/montażu' %} selected="selected" {% endif %}>gotowe do odbioru/montażu</option>
                                             <option value="wysłane"{% if article.status == 'wysłane' %} selected="selected" {% endif %}>wysłane</option>
                                             <option value="zrealizowane/odebrane"{% if article.status == 'zrealizowane/odebrane' %} selected="selected" {% endif %}>zrealizowane/odebrane</option></select>
-                                        {#<h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4>#}</th>
+                                        {#<h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4>#}</th>{% endif %}
                                     {% if is_granted('ROLE_MAGNUM') %}<th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-warning" onclick="changeOrderText('{{ article.id }}', event)"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"> <div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value=""></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% else %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-danger" onclick="changeOrderText('{{ article.id }}', event)">{{ article.dozaplaty  }} zł</span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value="{{ article.dozaplaty }}"></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</div></th>
                                     <th id="wynik_b{{ article.id }}">
                                         <div class="btn-group">
@@ -295,6 +314,35 @@
                                 });
 
                             }
+                            function changeWykonano(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var zaplacono = 1;
+        } else {
+             console.log('odznaczono!');
+             var zaplacono = 0;
+        }
+                                var url = '{{ path('marcin_admin_dashboard_update_wykonano') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        wykonano: zaplacono
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                              //  $('#wynik'+order_id).load(document.URL + ' #wynik'+order_id);
+                                                
+                                    }
+                                });
+
+                            }
+                            
                             function changeOrderText(id, event) {
                                  var order_id = id;
                                   if($('#dozaplaty'+order_id).css('display')!='none'){
@@ -488,6 +536,18 @@
 
      setTimeout(refresh, 50000);
 </script>
+<script>
+    $(function(){
+      // bind change event to select
+      $('#trasy').on('change', function () {
+          var url = $(this).val(); // get selected value
+          if (url) { // require a URL
+              window.location = url; // redirect
+          }
+          return false;
+      });
+    });
+</script>                                                                                                                                                                                                                                                                                                                                                  
         <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
                     {% endblock %}
 

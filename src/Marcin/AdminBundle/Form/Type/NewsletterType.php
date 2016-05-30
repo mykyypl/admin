@@ -22,9 +22,9 @@ class NewsletterType extends AbstractType
     {
         $builder
             ->add('tytul', 'text', array(
-                'label' => 'User',
+                'label' => 'Tytuł',
                 'attr' => array(
-                    'autocomplete' => 'off',
+                    'autocomplete' => 'on',
                     'class' => 'form-control',
                 )
             ))
@@ -34,10 +34,59 @@ class NewsletterType extends AbstractType
                     'class' => 'tinymce'
                 )
             ))
+            ->add('bootstrap', 'checkbox', array(
+             'label'     => 'Załączyć bibliotekę Bootstrap?',
+              'required'  => false,
+                'attr' => array (
+                    'class' => 'minimal'
+                )
+            ))
+            ->add('test', 'text', array(
+                'label' => 'Wpisz testowy email',
+                'attr' => array(
+                    'autocomplete' => 'on',
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('grupy', 'choice', array(
+                'label' => 'Grupy użytkoników:',
+                'multiple' => true,
+                'choices' => array(
+                    //'ROLE_USER' => 'Użytkownik',
+                    'poniedzialek' => 'Poniedziałek',
+                    'wtorek' => 'Wtorek',
+                    'sroda' => 'Środa',
+                    'czwartek' => 'Czwartek',
+                    'piatek' => 'Piątek',
+                    'tarnow' => 'Tarnów',
+                    'tadeusz' => 'Tadeusz',
+                    'odbior' => 'Odbiór',
+                    'salon' => 'Salon',
+                    'tuchowska' => 'Tuchowska',
+                    'montaz' => 'Montaż',
+                    'wysylka' => 'Wysyłka'
+                ),
+                'attr' => array(
+                    'class' => 'select2 form-control'
+                )
+            ))
             ->add('save', 'submit', array(
                 'label' => 'Zapisz',
                 'attr' => array(
-                    'class' => 'btn btn-success'
+                    'class' => 'btn btn-success btn-block'
+                )
+            ))
+            ->add('submit', 'submit', array(
+                'label' => 'Wyślij newsletter!',
+                'attr' => array(
+                    'class' => 'btn btn-danger btn-block',
+                    'onclick' => "waitingDialog.show('Trwa wysyłanie... proszę poczekać na odświeżenie strony!');setTimeout(function () {waitingDialog.hide();}, 200000);"
+                )
+            ))
+            ->add('send', 'submit', array(
+                'label' => 'Wyślij testowy email',
+                'attr' => array(
+                    'class' => 'btn btn-info btn-block'
                 )
             ));
     }

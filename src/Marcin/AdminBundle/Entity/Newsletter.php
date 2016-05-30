@@ -49,6 +49,30 @@ class Newsletter {
     private $zalacznik = null;
     
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     * 
+     */
+    private $bootstrap = null;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * 
+     * 
+     */
+    private $test = null;
+    
+    /**
+     * @ORM\Column(name="wyslano", type="datetime", nullable=true)
+     */
+    private $wyslano = null;
+    
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $grupy;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -123,5 +147,96 @@ class Newsletter {
     public function getZalacznik()
     {
         return $this->zalacznik;
+    }
+    
+    /**
+     * Set bootstrap
+     *
+     * @param string $bootstrap
+     *
+     * @return Newsletter
+     */
+    public function setBootstrap($bootstrap)
+    {
+        $this->bootstrap = $bootstrap;
+        return $this;
+    }
+    /**
+     * Get newsletter
+     *
+     * @return string
+     */
+    public function getBootstrap()
+    {
+        return $this->bootstrap;
+    }
+    
+    /**
+     * Set test
+     *
+     * @param integer $test
+     *
+     * @return Newsletter
+     */
+    public function setTest($test)
+    {
+        $this->test = $test;
+        return $this;
+    }
+    
+    /**
+     * Get test
+     *
+     * @return integer
+     */
+    public function getTest()
+    {
+        return $this->test;
+    }
+    
+    /**
+     * Set wyslano
+     *
+     * @param \DateTime $wyslano
+     * @return Newsletter
+     */
+    public function setWyslano($wyslano) {
+        $this->wyslano = $wyslano;
+
+        return $this;
+    }
+
+    /**
+     * Get wyslano
+     *
+     * @return \DateTime 
+     */
+    public function getWyslano() {
+        return $this->wyslano;
+    }
+    
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->date = new \DateTime();
+    }
+    
+    public function getGrupy() {
+        
+        return $this->grupy;
+    }
+    
+    /**
+     * Set grupy
+     *
+     * @param array $grupy
+     * @return Newsletter
+     */
+    public function setGrupy($grupy)
+    {
+        $this->grupy = $grupy;
+
+        return $this;
     }
 }
