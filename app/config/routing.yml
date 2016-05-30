@@ -12,5 +12,5 @@ marcin_admin:
     
 common_user_admin:
     resource: "@CommonUserBundle/Resources/config/admin-routing.yml"
-    prefix:   /panel/u/uzytkownicy
+    prefix:   /panel/p/u/uzytkownicy
     
