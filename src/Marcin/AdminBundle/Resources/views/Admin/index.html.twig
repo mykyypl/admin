@@ -144,7 +144,7 @@
                                     <th>send data</th>
                                     <th>nr-user-zam</th>
                                     {% if currStatus == 'realizacja' %}<th>wyprodukowane</th>{% endif %}
-                                    <th>Produkcja</th>
+                                    <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Produkcja', 's.nrprodukcji') }}</th>
                                    {% if currStatus == 'realizacja' %}{% else %}<th>status</th>{% endif %}
                                     {% if is_granted('ROLE_MAGNUM') %}<th>do zaplaty</th>
                                     <th>akcje</th>
@@ -153,7 +153,7 @@
                             </thead>
 
                             {% for article in pagination  %}
-                                <tr {% if article.zaplacono == '0' %}{% if article.dozaplaty == '0' %}class="danger"{% endif %}{% endif %}><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
+                                <tr {% if article.zaplacono == '0' %}{% if article.dozaplaty == '0' %}class="warning"{% endif %}{% endif %}><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
                                     <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <font color="red" size="4">M</font> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <font color="red" size="4">MD</font> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <font color="red" size="4">MR</font> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <font color="red" size="4">ZO</font> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <font color="red" size="4">EL</font> {% else %} <font color="red" size="4">R</font> {# {{ article.jakie_zam }}#}{% endif %}<div class="modal fade {{ article.id }}" id="{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ article.id }}">
                                               <div class="modal-dialog modal-lg" role="document">                  
                                                 <div class="modal-content">

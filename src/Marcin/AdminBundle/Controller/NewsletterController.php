@@ -109,6 +109,7 @@ class NewsletterController extends Controller {
                     foreach ($qb_newsletter as $news)
                      {
                         // sleep(15);
+                         //$email_imie = $news->GetImienazw();
                          $email_send = $news->GetEmail();
                             try {
                                 $userManager = $this->get('user_manager');

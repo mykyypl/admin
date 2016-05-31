@@ -63,6 +63,27 @@ class TestRepository extends EntityRepository
             }else if('piatek' == $params['trasy']){
                  $qb->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'piatek');
+            }else if('tarnow' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'tarnow');
+            }else if('tadeusz' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'tadeusz');
+            }else if('odbior' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'odbior');
+            }else if('salon' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'salon');
+            }else if('tuchowska' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'tuchowska');
+            }else if('montaz' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'montaz');
+            }else if('wysylka' == $params['trasy']){
+                 $qb->andwhere('s.trasa = :trasa')
+                ->setParameter('trasa', 'wysylka');
             }
         }
         

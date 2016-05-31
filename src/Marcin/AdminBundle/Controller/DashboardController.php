@@ -368,6 +368,13 @@ class DashboardController extends Controller {
             'Środa' => 'sroda',
             'Czwartek' =>'czwartek',
             'Piątek' => 'piatek',
+            'Tarnów' => 'tarnow',
+            'Tadeusz' => 'tadeusz',
+            'Odbiór' => 'odbior',
+            'Salon' => 'salon',
+            'Tuchowska' => 'tuchowska',
+            'Montaż' => 'montaz',
+            'Wysyłka' => 'wysylka',
             'Wszystkie' => 'all'
         );
         if (!isset($this->status_new_zam)) {
