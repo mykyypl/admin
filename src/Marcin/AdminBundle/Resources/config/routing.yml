@@ -71,6 +71,11 @@ marcin_admin_newsletter:
     resource: "@MarcinAdminBundle/Controller/NewsletterController.php"
     type: annotation
     prefix: /p/news/letter
+    
+marcin_admin_komunikatyzam:
+    resource: "@MarcinAdminBundle/Controller/KomunikatyzamController.php"
+    type: annotation
+    prefix: /p/zamowieniak/komunikaty
 
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"

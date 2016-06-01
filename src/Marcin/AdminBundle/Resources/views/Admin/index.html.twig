@@ -3,6 +3,21 @@
     {{parent()}}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
+   <style>
+         #ladowanie h3 {
+    width: 300px;
+    right: 36px;
+    top: 36px;
+    cursor: auto;
+    position: fixed;
+    z-index: 100040;
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    text-align: center;
+    height: 70px;
+    padding-top: 15px;
+       </style>
 {% endblock %}
 {% block body %}
     <section class="content-header">
@@ -259,6 +274,7 @@
                     </div>
 
                 </section>
+                                    <div id="ladowanie"></div>      
                 {% endblock %}
                     {% block javascripts %}
                         {{parent()}}
@@ -410,7 +426,21 @@
                             }
                             function changeButtonProdukcja(id, event) {
                                 var button_id = id;
-                                $('#numerprodukcji'+button_id).load(document.URL + ' #numerprodukcji'+button_id);
+                                //var para = document.createElement("P");
+                                // var t = document.createTextNode("ładowanie...");
+                                //para.appendChild(t);
+                                
+                               // document.getElementById("ladowanie").appendChild(para);
+                                var c = $('<h3>ładowanie...</h3>');
+                                $('#ladowanie').append(c);
+                               // $( document ).ready(function() {
+                               var docLoaded = setInterval(function () {
+                                if(document.readyState !== "complete") return;
+                                clearInterval(docLoaded);
+                                    $('#ladowanie').fadeOut("slow");
+                                    $('#numerprodukcji'+button_id).load(document.URL + ' #numerprodukcji'+button_id);
+                                }, 100);
+                                //});
                             }
                             
     var elems = document.getElementsByClassName('potwierdzenie');
