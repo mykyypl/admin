@@ -41,7 +41,7 @@ class Komunikatyzamowienia {
     private $tresc;
     
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      * 
      * 
      */

@@ -17,6 +17,15 @@
     text-align: center;
     height: 70px;
     padding-top: 15px;
+         }
+         @media print
+            {
+		
+        a[href]:after {
+            content: none !important;
+            }
+	
+        }
        </style>
 {% endblock %}
 {% block body %}
