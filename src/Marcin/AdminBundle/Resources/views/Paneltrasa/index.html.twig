@@ -84,7 +84,7 @@
 
                             {% for article in pagination  %}
                                 <tr><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
-                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <h4><font color="red">M</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <h4><font color="red">MD</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <h4><font color="red">MR</font></h4> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <h4><font color="red">ZO</font></h4> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <h4><font color="red">EL</font></h4> {% else %} <h4><font color="red">R</font></h4>{# {{ article.jakie_zam }}#}{% endif %}</th>
+                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <h4><font color="red">M</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <h4><font color="red">MD</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <h4><font color="red">MR</font></h4> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <h4><font color="red">ZO</font></h4> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <h4><font color="red">EL</font></h4> {% elseif article.jakie_zam == 'wydanie zewnętrzne' %} <h4><font color="red">WZ</font></h4>{% else %} <h4><font color="red">R</font></h4>{# {{ article.jakie_zam }}#}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
                                     <th id="numerprodukcji{{ article.id }}">
                                         <div id="produkcja{{ article.id }}">
@@ -106,12 +106,14 @@
                                             <option value="zrealizowane/odebrane"{% if article.status == 'zrealizowane/odebrane' %} selected="selected" {% endif %}>zrealizowane/odebrane</option></select>
                                         {#<h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4>#}{#</th>#}
                                            <th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}"><span class="label label-warning"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div>{% else %}<div id="dozaplaty{{ article.id }}"><span class="label label-danger"><dssd class="dozaplatyy">{{ article.dozaplaty  }}</dssd> zł</span></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">{{ article.dozaplaty  }} zł</span></h4> {% endif %}</div></th>
-                                        <th><div class="checkbox checkbox-success">
+                                        <th>{% if article.jakie_zam == 'zgłoszenie do odbioru' %}{% else %}<div class="checkbox checkbox-success">
                                                 <input style="flat-red" id="spr" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderPay('{{ article.id }}', event)"{# {% if article.zaplacono == '1' %}checked {% endif %} #}/><label for="checkbox1">
-    </label></div></th>
-    <th><div class="checkbox checkbox-danger">
+    </label></div>{% endif %}</th>
+    <th>{% if article.jakie_zam == 'zgłoszenie do odbioru' %}<div class="checkbox checkbox-danger">
+                                                <input style="flat-red" id="spr1" type="checkbox" value="" onclick="changeOrderWZ('{{ article.id }}', event)"{# {% if article.zaplacono == '1' %}checked {% endif %} #}/><label for="checkbox2">
+    </label></div>{% else %}<div class="checkbox checkbox-danger">
                                                 <input style="flat-red" id="spr1" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderNotPay('{{ article.id }}', event)"{# {% if article.zaplacono == '1' %}checked {% endif %} #}/><label for="checkbox2">
-    </label></div></th>
+    </label></div>{% endif %}</th>
                                     </tr>
                                     {% endfor %}
                                     </table>
@@ -180,6 +182,34 @@
         } else {
              console.log('odznaczono!');
              var zaplacono = 3;
+        }
+                                var url = '{{ path('marcin_admin_paneltrasa_update') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        zaplacono: zaplacono
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                        {#  $('#wynik'+order_id).load(document.URL + ' #wynik'+order_id);#}
+                                                
+                                    }
+                                });
+
+                            }
+         function changeOrderWZ(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var zaplacono = 4;
+        } else {
+             console.log('odznaczono!');
+             var zaplacono = 5;
         }
                                 var url = '{{ path('marcin_admin_paneltrasa_update') }}';
 

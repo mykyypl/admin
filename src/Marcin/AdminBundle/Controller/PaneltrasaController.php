@@ -72,6 +72,18 @@ class PaneltrasaController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $Zamowienie->setStatus('w dostawie');
             $em->flush();
+        }elseif ($result['zaplacono'] == '4')
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStatus('przesłane do realizacji');
+            $Zamowienie->setJakie_zam('wydanie zewnętrzne');
+            $em->flush();
+        }elseif ($result['zaplacono'] == '5')
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStatus('w dostawie');
+            $Zamowienie->setJakie_zam('zgłoszenie do odbioru');
+            $em->flush();
         }
         
         return new JsonResponse(true);

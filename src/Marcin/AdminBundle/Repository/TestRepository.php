@@ -25,8 +25,9 @@ class TestRepository extends EntityRepository
                 $qb->where('s.status = :realizacja')
                         ->setParameter('realizacja', 'w realizacji');
             }else if('wyprodukowane' == $params['status']){
-                $qb->where('s.status = :wyprodukowane')
-                        ->setParameter('wyprodukowane', 'wyprodukowane');
+                $qb->where('s.status = :wyprodukowane OR s.status = :przyjete')
+                        ->setParameter('wyprodukowane', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte');
             }else if('zrealizowane' == $params['status']){
                 $qb->where('s.status = :zrealizowane OR s.status = :anulowane OR s.status = :wyslane OR s.status = :wdostawie OR s.status = :gotowe')
                         ->setParameter('zrealizowane', 'zrealizowane/odebrane')
@@ -199,8 +200,9 @@ class TestRepository extends EntityRepository
                         ->setParameter('currDate', 'w realizacji')
                         ->getQuery()
                         ->getSingleScalarResult();
-        $wyprodukowane = $qb_wyp->andWhere('a.status = :currDate')
+        $wyprodukowane = $qb_wyp->andWhere('a.status = :currDate OR a.status = :przyjete')
                         ->setParameter('currDate', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->getQuery()
                         ->getSingleScalarResult();
         $zrealizowane = $qb_zrel->andWhere('a.status = :currDate OR a.status = :anulowane OR a.status = :wyslane OR a.status = :wdostawie OR a.status = :gotowe')
@@ -437,8 +439,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('u')
                         ->select('COUNT(u)')
-                        ->where('u.status = :identifier')
-                        ->setParameter('identifier', 'wyprodukowane');
+                        ->where('u.status = :identifier OR u.status = :przyjete')
+                        ->setParameter('identifier', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte');
         
         
         $all_wyprodukowane = (int)$qb->getQuery()->getSingleScalarResult();
@@ -451,8 +454,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
               ->addOrderBy('s.sendDate', 'DESC');
         
           if(!empty($params['orderBy'])){
@@ -473,8 +477,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'poniedzialek')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -497,8 +502,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'wtorek')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -521,8 +527,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'sroda')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -545,8 +552,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'czwartek')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -569,8 +577,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'piatek')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -593,8 +602,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'tarnow')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -617,8 +627,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'tadeusz')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -641,8 +652,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'odbior')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -665,8 +677,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'salon')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -689,8 +702,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'tuchowska')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -713,8 +727,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'montaz')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -737,8 +752,9 @@ class TestRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-                ->where('s.status = :status')
+                ->where('s.status = :status OR s.status = :przyjete')
                 ->setParameter('status', 'wyprodukowane')
+                ->setParameter('przyjete', 'przyjęte')
                 ->andwhere('s.trasa = :trasa')
                 ->setParameter('trasa', 'wysylka')
               ->addOrderBy('s.sendDate', 'DESC');
@@ -761,8 +777,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'poniedzialek');
         
@@ -777,8 +794,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'wtorek');
         
@@ -793,8 +811,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'sroda');
         
@@ -809,8 +828,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'czwartek');
         
@@ -825,8 +845,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'piatek');
         
@@ -841,8 +862,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'tarnow');
         
@@ -857,8 +879,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'tadeusz');
         
@@ -873,8 +896,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'odbior');
         
@@ -889,8 +913,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'salon');
         
@@ -905,8 +930,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'tuchowska');
         
@@ -921,8 +947,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'montaz');
         
@@ -937,8 +964,9 @@ class TestRepository extends EntityRepository
 
                 $qb = $this->createQueryBuilder('s')
                         ->select('COUNT(s)')
-                        ->where('s.status = :status')
+                        ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
+                        ->setParameter('przyjete', 'przyjęte')
                         ->andwhere('s.trasa = :trasa')
                         ->setParameter('trasa', 'wysylka');
         

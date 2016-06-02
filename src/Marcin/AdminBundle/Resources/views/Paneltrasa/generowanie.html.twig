@@ -49,6 +49,8 @@
                               {% set kasa_przeplata = 0 %}
                               {% set kasa_odbior = 0 %}
                               {% set kasa_przelew = 0 %}
+                               {% set arr = {} %}
+                               {% set a = 0 %}
                             <table border="1" width="100%">
                                 <tr class="kolordruk" bgcolor="#C3C3C3">
                                     <th>Lp</th>
@@ -58,11 +60,11 @@
                                     <th><center>MO</center></th>
                                     <th><center>MD</center></th>
                                     <th><center>MR</center></th>
-                                    <th><center>ZO</center></th>
+                                    <th><center>O/W</center></th>
                                     <th><center>ZL</center></th>
                                 </tr>
                                {% for trasss in dane%}
-
+                                        {% set a = a + 1 %}
                                   
                                         {#  <b><h4>KLIENT:</h4></b><br>
                                           <b>{{ trasss.nazwa }}</b><br>
@@ -73,6 +75,7 @@
                                   {% set ilosc_md = 0 %}
                                   {% set ilosc_mr = 0 %}
                                   {% set ilosc_o = 0 %}
+                                  {% set ilosc_wz = 0 %}
                                   {% set ilosc_l = 0 %}
                                   {% set nazwafirmy = 0 %}
                                   {% set ulica = 0 %}
@@ -81,7 +84,9 @@
                                   {% set nip = 0 %}
                                   {% set miasto = 0 %}
                                             {% for prod in produkty if prod.dostawa == trasss.id %}
-                                                
+                                                {% set a = a + 1 %}
+                                               {# {{ a }}#}
+                                                {% set arr = arr|merge({(a):(prod.nrprodukcji)}) %}
                                                 {# obliczanie wartosci całego zestawienia #}
                                                 {% if prod.platnosc == 'Przedpłata 100%' %} 
                                                     {% if prod.zaplacono == '1' %}{% set kasa_przeplata = kasa_przeplata + 0 %}{% else %}{% set kasa_przeplata = kasa_przeplata + prod.dozaplaty %}{% endif %}
@@ -107,6 +112,8 @@
                                                             {% set ilosc_o = ilosc_o + 1 %}
                                                         {% elseif prod.jakiezam == 'zamówienie elementów luzem'%}
                                                             {% set ilosc_l = ilosc_l + 1 %}
+                                                        {% elseif prod.jakiezam == 'wydanie zewnętrzne' %}
+                                                            {% set ilosc_wz = ilosc_wz + 1 %}
                                                         {% endif %}
                                                         {# koniec obliczania ilosci produktów #}
                                                         
@@ -134,7 +141,7 @@
                                                 <td><center>{% if ilosc_m == '0' %}-{% else %}{{ ilosc_m }}{% endif %}</center></td>
                                                 <td><center>{% if ilosc_md == '0' %}-{% else %}{{ ilosc_md }}{% endif %}</center></td>
                                                 <td><center>{% if ilosc_mr == '0' %}-{% else %}{{ ilosc_mr }}{% endif %}</center></td>
-                                                <td><center>{% if ilosc_o == '0' %}-{% else %}{{ ilosc_o }}{% endif %}</center></td>
+                                                <td><center>{% if ilosc_o == '0' %}-{% else %}{{ ilosc_o }}{% endif %}/{% if ilosc_wz == '0' %}-{% else %}{{ ilosc_wz }}{% endif %}</center></td>
                                                 <td><center>{% if ilosc_l == '0' %}-{% else %}{{ ilosc_l }}{% endif %}</center></td>
                                             </tr>
                                 {% endfor %}
@@ -142,6 +149,9 @@
                                 <h4>Suma do zapłaty(Przedpłata 100%): <b>{{ kasa_przeplata }}</b> zł</h4>
                                 <h4>Suma do zapłaty(Gotówka przy odbiorze): <b>{{ kasa_odbior }}</b> zł</h4>
                                 <h4>Suma do zapłaty(Przelew): <b>{{ kasa_przelew }}</b> zł</h4><br>
+                                {% for key,val in arr %}
+                                    {{ val }},
+                                    {% endfor %}
 </div>
                                  <FORM>
                                                 <div class="row"><div class="col-md-12"><INPUT TYPE="button" class="btn btn-warning btn-lg btn-block" onClick="printDiv('do_drukowania')" value="WYDRUKUJ LUB ZAPISZ DO PDF"></div></div></FORM> 

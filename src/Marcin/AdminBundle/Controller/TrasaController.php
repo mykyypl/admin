@@ -994,10 +994,12 @@ class TrasaController extends Controller {
                 ->from('MarcinAdminBundle:Zamowienia', 'a')
                  ->where('a.trasa = :identifier')
                  ->setParameter('identifier', $trasastat)
-                 ->andwhere('a.status = :status')
+                 ->andwhere('a.status = :status OR a.status = :przyjete')
                  ->setParameter('status', 'wyprodukowane')
+                 ->setParameter('przyjete', 'przyjęte')
                   ->andwhere('a.trasaok = :trasaok')
                  ->setParameter('trasaok', '1')
+                  ->addOrderBy('a.nrprodukcji', 'ASC')
                  ->getQuery()
                  ->getResult();
         
