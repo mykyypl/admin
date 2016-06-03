@@ -29,10 +29,12 @@ class UzytkownicyType extends AbstractType
                 )
             ))
             ->add('login', 'text', array(
+                'disabled' => true,
                 'label' => 'Login użytkownika',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',
+                     'read_only' => true
                 )
             ))
             ->add('email', 'text', array(
@@ -40,6 +42,18 @@ class UzytkownicyType extends AbstractType
                 'attr' => array(
                     'autocomplete' => 'off',
                     'class' => 'form-control',
+                )
+            ))
+            ->add('adminstatus', 'choice', array(
+                'label' => 'Administrator:',
+                'multiple' => false,
+                'choices' => array(
+                    //'ROLE_USER' => 'Użytkownik',
+                    'admin' => 'TAK',
+                    '' => 'NIE'
+                ),
+                'attr' => array(
+                    'class' => 'form-control'
                 )
             ))
             ->add('save', 'submit', array(

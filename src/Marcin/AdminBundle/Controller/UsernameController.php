@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Marcin\AdminBundle\Entity\Username;
 use Marcin\AdminBundle\Entity\Trasa;
-use Marcin\AdminBundle\Entity\Faktura;
+use Marcin\AdminBundle\Entity\Zamowieniadmin;
 use Marcin\AdminBundle\Entity\Produkty;
 use Marcin\AdminBundle\Entity\Adresdostawa;
 use Marcin\AdminBundle\Entity\Zamowienia;
@@ -28,6 +28,70 @@ class UsernameController extends Controller {
     private $aktywacjaTokenName = 'aktywacja-user-%d';
     private $deleteTokenName = 'delete-user-%d';
     
+        /**
+     * @Route("/form/admin/admins", 
+     *       name="marcin_admin_username_update_admins",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_MAGNUM')")
+     *
+     */
+    public function adminAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'admin' => $Request->request->get('admin'),
+            'zaznaczenie' => $Request->request->get('zaznaczenie'),
+            'login' => $Request->request->get('login'),
+            'aid' => $Request->request->get('aid')
+        );
+
+        if (NULL === $result['id']) {
+               return new JsonResponse(false);
+         }
+        
+        if ($result['zaznaczenie'] == '1')
+        {
+            $em = $this->getDoctrine()->getManager();
+            $nr = new Zamowieniadmin();
+            $nr->setUser($result['login']);
+            $nr->setUserpo($result['admin']);
+            $em->persist($nr);
+            $em->flush();
+        } else if($result['zaznaczenie'] == '0')
+        {
+            $em = $this->getDoctrine()->getManager();
+            //$RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowieniadmin');
+            //$Zamowienie = $RepoZamowienia->find($result['aid']);
+              $delluser = $em->createQueryBuilder()
+                    ->select('a')
+                    ->from('MarcinAdminBundle:Zamowieniadmin', 'a')
+                     ->where('a.user = :identifier')
+                     ->setParameter('identifier', $result['login'])
+                     ->andwhere('a.user_po = :identifier1')
+                      ->setParameter('identifier1', $result['admin'])
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getResult();
+              
+            if (NULL === $delluser) {
+            return new JsonResponse(false);
+        } else {
+            
+        }
+        foreach ($delluser as $usuwanie) {
+            $em->remove($usuwanie);
+            //$Zamowienie->setStatus('w realizacji');
+            $em->flush();
+        }
+        }
+        
+        return new JsonResponse(true);
+    }
+    
     /**
      * @Route("/form/update-complete", 
      *       name="marcin_admin_username_update_trasa",
@@ -36,7 +100,7 @@ class UsernameController extends Controller {
      *          "methods": "POST"
      *      }
      * )
-     * @Security("has_role('ROLE_PROD')")
+     * @Security("has_role('ROLE_MAGNUM')")
      *
      */
     public function updateZamAction(Request $Request) {
@@ -78,7 +142,36 @@ class UsernameController extends Controller {
             $Uzytkownicy = new Username();
             $newUzytkownicyForm = TRUE;
         }
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $query_user = $em->createQuery(
+            'SELECT p
+            FROM MarcinAdminBundle:Username p'
+        );
 
+        $listuser = $query_user->getResult();
+        
+        $zamowienia_user = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Username', 'a')
+                 ->where('a.id = :identifier')
+                 ->setParameter('identifier', $Uzytkownicy)
+                 ->getQuery()
+                 ->getResult();
+         foreach ($zamowienia_user as $zamas)
+            {
+                $uzytkownik = $zamas->GetLogin();
+            }
+            
+        $admin = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowieniadmin', 'a')
+                 ->where('a.user = :identifier')
+                 ->setParameter('identifier', $uzytkownik)
+                 ->getQuery()
+                 ->getResult();
+        
         $form = $this->createForm(new UzytkownicyType(), $Uzytkownicy);
 
         $form->handleRequest($Request);
@@ -88,7 +181,7 @@ class UsernameController extends Controller {
             $em->flush();
             $message = (isset($newUzytkownicyForm)) ? 'Poprawnie dodano.' : 'Użytkownik został zaaktualizowany.';
             $this->addFlash('success', $message);
-            return $this->redirect($this->generateUrl('marcin_admin_username', array(
+            return $this->redirect($this->generateUrl('marcin_admin_username_form', array(
                                 'id' => $Uzytkownicy->getId()
             )));
         }
@@ -98,6 +191,9 @@ class UsernameController extends Controller {
                     'currPage' => 'uzytkownicy',
                     'form' => $form->createView(),
                     'uzytkownicy' => $Uzytkownicy,
+                    'admin' => $admin,
+                    'user' => $zamowienia_user,
+                    'listuser' => $listuser
                         )
         );
     }

@@ -73,6 +73,13 @@ class Username {
     private $trasa;
     
     /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $admin_status;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -216,6 +223,29 @@ class Username {
     public function getTrasa()
     {
         return $this->trasa;
+    }
+    
+    /**
+     * Set admin_status
+     *
+     * @param integer $admin_status
+     *
+     * @return Username
+     */
+    public function setAdminstatus($admin_status)
+    {
+        $this->admin_status = $admin_status;
+        return $this;
+    }
+    
+    /**
+     * Get admin_status
+     *
+     * @return integer
+     */
+    public function getAdminstatus()
+    {
+        return $this->admin_status;
     }
 
     

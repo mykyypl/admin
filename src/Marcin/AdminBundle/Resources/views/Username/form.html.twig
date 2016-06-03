@@ -1,6 +1,23 @@
 {% extends 'MarcinAdminBundle::base.html.twig' %}
 {% block stylesheets %}
 {{parent()}}
+<style>
+    .multiselect {
+    width:30em;
+    height:30em;
+    border:solid 1px #c0c0c0;
+    overflow:auto;
+}
+ 
+.multiselect label {
+    display:block;
+}
+ 
+.multiselect-on {
+    color:#ffffff;
+    background-color:#23b7e5;
+}
+    </style>
 {% endblock %}
 {% block body %}
             <section class="content-header">
@@ -36,6 +53,9 @@
                             {{ form_row(form.email) }}
                         </div>
                         <div class="form-group">
+                            {{ form_row(form.adminstatus) }}
+                        </div>
+                        <div class="form-group">
                             {{ form_rest(form) }}
                         {{ form_row(form.save) }} 
                         </div>
@@ -51,9 +71,35 @@
                      <h3 class="box-title"><i class="fa fa-tag"></i> Edycja użytkownika</h3>
                     </div>
                     <div class="box-body">
-
-dsad
-
+                        <div class="multiselect">
+                            {% for users in user %}
+                                {% if users.adminstatus == 'admin' %}
+                                 {% for list in listuser %}
+                                      {% set arr = {} %}
+                                      {% set a = 0 %}
+                                       {% for admins in admin if admins.user == users.login  %}
+                                           {% set a = a + 1 %}
+                                           {% if admins.userpo == list.login %}
+                                               {% if list.login != users.login %}
+                                               {% set arr = arr|merge({(a):(list.login)}) %}
+                                               <label><input type="checkbox" name="{{ list.login }}" value="{{ list.login }}" onclick="changeAdmins('{{ list.id }}','{{ users.login }}','{{ admins.id }}', event)" checked/> {{ list.login }}</label>
+                                            {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if list.login in arr  %}
+                                       
+                                        {% else %}
+                                            {% if list.login != users.login %}
+                                                 <label><input type="checkbox" name="{{ list.login }}" value="{{ list.login }}" onclick="changeAdmins('{{ list.id }}','{{ users.login }}','', event)"/> {{ list.login }}</label>
+                                            {% endif %}     
+                                            {% endif %}
+                                                                                   
+                                 {% endfor %}
+                                 {% else %}
+                                 <label>Brak uprawnień użytkownika {{ users.login }}</label>
+                                 {% endif %}
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,4 +108,65 @@ dsad
         {% endblock %}
 {% block javascripts %}
     {{parent()}}
+    <script>
+        jQuery.fn.multiselect = function() {
+    $(this).each(function() {
+        var checkboxes = $(this).find("input:checkbox");
+        checkboxes.each(function() {
+            var checkbox = $(this);
+            // Highlight pre-selected checkboxes
+            if (checkbox.prop("checked"))
+                checkbox.parent().addClass("multiselect-on");
+ 
+            // Highlight checkboxes that the user selects
+            checkbox.click(function() {
+                if (checkbox.prop("checked"))
+                    checkbox.parent().addClass("multiselect-on");
+                else
+                    checkbox.parent().removeClass("multiselect-on");
+            });
+        });
+    });
+};
+$(function() {
+     $(".multiselect").multiselect();
+});
+
+  function changeAdmins(id, user, aid, event) {
+                                var order_id = id;
+                                var login = user;
+                                var aid = aid;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var zaznaczenie = 1;
+             var admins = $(element).val();
+        } else {
+             console.log('odznaczono!');
+             var zaznaczenie = 0;
+             var admins = $(element).val();
+        }
+                                var url = '{{ path('marcin_admin_username_update_admins') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        admin: admins,
+                                        zaznaczenie: zaznaczenie,
+                                        login: login,
+                                        aid: aid
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                              //  $('#wynik'+order_id).load(document.URL + ' #wynik'+order_id);
+                                                
+                                    }
+                                });
+
+                            }
+        </script>
 {% endblock %}
