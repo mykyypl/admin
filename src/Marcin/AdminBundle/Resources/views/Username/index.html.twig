@@ -39,7 +39,7 @@
         
     {% for article in pagination  %}
        <tr><th>{{ article.id }}</th> 
-           <th>{{ article.imienazw }}</th>
+           <th>{{ article.imienazw }} {% if article.adminstatus == "admin" %}<span style="margin-right: 5px;" class="label label-default">admin</span>{% endif %}</th>
            <th>{{ article.login }} NIP: {% for faktura in dane if faktura.user == article.login %}{{ faktura.nip }}{% endfor %}</th>
            <th>{{ article.email }}</th>
            <th id="zmiana-trasa-{{ article.id }}">

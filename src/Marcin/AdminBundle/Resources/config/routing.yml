@@ -76,6 +76,11 @@ marcin_admin_komunikatyzam:
     resource: "@MarcinAdminBundle/Controller/KomunikatyzamController.php"
     type: annotation
     prefix: /p/zamowieniak/komunikaty
+    
+marcin_admin_zamokna:
+    resource: "@MarcinAdminBundle/Controller/ZamoknaController.php"
+    type: annotation
+    prefix: /p/zam/okna
 
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"

@@ -145,12 +145,17 @@ class UsernameController extends Controller {
         
         $em = $this->getDoctrine()->getManager();
         
-        $query_user = $em->createQuery(
-            'SELECT p
-            FROM MarcinAdminBundle:Username p'
-        );
-
-        $listuser = $query_user->getResult();
+//        $query_user = $em->createQuery(
+//            'SELECT p
+//            FROM MarcinAdminBundle:Username p'
+//        );
+        
+        $listuser = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Username', 'a')
+                 ->addOrderBy('a.login', 'ASC')
+                 ->getQuery()
+                 ->getResult();
         
         $zamowienia_user = $em->createQueryBuilder()
                 ->select('a')
