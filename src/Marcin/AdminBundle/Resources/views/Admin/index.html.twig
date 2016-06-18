@@ -85,8 +85,8 @@
                 <!-- small box -->
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3>{{ new_many.count.all_many }}</h3>
-                        <p>Pozycje zrealizowane nieopłacone:</p>
+                        <h3>{{ new_many.count.all_many }} / {{ zrelmany.count.all_zrelmany }}</h3>
+                        <p>Pozycje zrealizowane / zakończone nieopłacone:</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
@@ -100,6 +100,18 @@
             <div class="info-box-content">
               <span class="info-box-text">Łącznie do zapłaty:</span>
               <span class="info-box-number">{{ suma.count.all_suma }} zł</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-money"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Suma zakończonych nieopłaconych:</span>
+              <span class="info-box-number">{{ zrelsuma.count.all_zrelsuma }} zł</span>
             </div>
             <!-- /.info-box-content -->
           </div>

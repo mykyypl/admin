@@ -257,7 +257,9 @@ class DashboardController extends Controller {
     private $status_send_zam;
     private $new_user_stat;
     private $new_many;
+    private $zrelmany;
     private $suma;
+    private $zrelsuma;
     private $suma_wyprodukowane;
 
     /**
@@ -389,8 +391,14 @@ class DashboardController extends Controller {
         if (!isset($this->new_many)) {
             $this->new_many = $RepoZam->getMany();
         }
+        if (!isset($this->zrelmany)) {
+            $this->zrelmany = $RepoZam->getZrelmany();
+        }
         if (!isset($this->suma)) {
             $this->suma = $RepoZam->getSuma();
+        }
+        if (!isset($this->zrelsuma)) {
+            $this->zrelsuma = $RepoZam->getZrelsuma();
         }
         if (!isset($this->suma_wyprodukowane)) {
             $this->suma_wyprodukowane = $RepoZam->getWyprodukowane();
@@ -422,8 +430,14 @@ class DashboardController extends Controller {
                     'new_many' => array(
                         'count' => $this->new_many
                     ),
+                    'zrelmany' => array(
+                        'count' => $this->zrelmany
+                    ),
                     'suma' => array(
                         'count' => $this->suma
+                    ),
+                    'zrelsuma' => array(
+                        'count' => $this->zrelsuma
                     ),
                     'suma_wyprodukowane' => array(
                         'count' => $this->suma_wyprodukowane

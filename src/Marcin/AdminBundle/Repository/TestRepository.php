@@ -421,6 +421,26 @@ class TestRepository extends EntityRepository
         );
     }
     
+        public function getZrelmany() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('COUNT(u)')
+                        ->where('u.do_zaplaty IS NOT NULL AND u.do_zaplaty != :dozaplaty')
+                        ->setParameter('dozaplaty', '0')
+                        ->andwhere('u.zaplacono = :zaplacono')
+                        ->setParameter('zaplacono', '0')
+                        ->andWhere('u.status = :status')
+                        ->setParameter('status', 'zrealizowane/odebrane');
+//                        ->where('u.status = :identifier')
+//                        ->setParameter('identifier', 'oczekiwanie na zapłatę');
+        
+        
+        $all_zrelmany = (int)$qb->getQuery()->getSingleScalarResult();
+ return array(
+            'all_zrelmany' => $all_zrelmany
+        );
+    }
+    
     public function getSuma() {
 
                 $qb = $this->createQueryBuilder('u')
@@ -432,6 +452,22 @@ class TestRepository extends EntityRepository
         $all_suma = (int)$qb->getQuery()->getSingleScalarResult();
  return array(
             'all_suma' => $all_suma
+        );
+    }
+    
+    public function getZrelsuma() {
+
+                $qb = $this->createQueryBuilder('u')
+                        ->select('SUM(u.do_zaplaty) AS do_zaplaty')
+                        ->where('u.zaplacono = :status_zaplaty')
+                        ->setParameter('status_zaplaty', '0')
+                        ->andWhere('u.status = :status')
+                        ->setParameter('status', 'zrealizowane/odebrane');
+        
+        
+        $all_zrelsuma = (int)$qb->getQuery()->getSingleScalarResult();
+ return array(
+            'all_zrelsuma' => $all_zrelsuma
         );
     }
     

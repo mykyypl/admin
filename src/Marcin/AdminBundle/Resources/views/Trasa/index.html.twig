@@ -23,19 +23,69 @@
             </div>
             <div class="box-body">
                 <div class="row">
-                    <div class="col-sm-12">       
-                        <a href="{{ path('marcin_admin_trasa_poniedzialek') }}" class="btn btn-primary">Poniedziałek  <span class="badge">{{ pon.count.all_pon }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_wtorek') }}" class="btn btn-primary">Wtorek <span class="badge">{{ wto.count.all_wto }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_sroda') }}" class="btn btn-primary">Środa <span class="badge">{{ sro.count.all_sro }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_czwartek') }}" class="btn btn-primary">Czwartek <span class="badge">{{ czw.count.all_czw }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_piatek') }}" class="btn btn-primary">Piątek <span class="badge">{{ pia.count.all_pia }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_tarnow') }}" class="btn btn-primary">Tarnów <span class="badge">{{ tar.count.all_tar }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_tadeusz') }}" class="btn btn-primary">Tadeusz <span class="badge">{{ tad.count.all_tad }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_odbior') }}" class="btn btn-primary">Odbiór <span class="badge">{{ odb.count.all_odb }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_salon') }}" class="btn btn-primary">Salon <span class="badge">{{ sal.count.all_sal }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_tuchowska') }}" class="btn btn-primary">Tuchowska <span class="badge">{{ tuch.count.all_tuch }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_montaz') }}" class="btn btn-primary">Montaż <span class="badge">{{ mon.count.all_mon }}</span></a>
-                        <a href="{{ path('marcin_admin_trasa_wysylka') }}" class="btn btn-primary">Wysyłka <span class="badge">{{ wys.count.all_wys }}</span></a>
+                    <div class="col-sm-12">
+                        <div class="row">
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_poniedzialek') }}">
+                                Poniedziałek <span class="badge">{{ pon.count.all_pon }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_wtorek') }}">
+                                Wtorek <span class="badge">{{ wto.count.all_wto }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_sroda') }}">
+                                Środa <span class="badge">{{ sro.count.all_sro }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_czwartek') }}">
+                                Czwartek <span class="badge">{{ czw.count.all_czw }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_piatek') }}">
+                                Piątek <span class="badge">{{ pia.count.all_pia }}</span>
+                            </a>
+                        </div>    
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_tarnow') }}">
+                                Tarnów <span class="badge">{{ tar.count.all_tar }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_tadeusz') }}">
+                                Tadeusz <span class="badge">{{ tad.count.all_tad }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_odbior') }}">
+                                Odbiór <span class="badge">{{ odb.count.all_odb }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_salon') }}">
+                                Salon <span class="badge">{{ sal.count.all_sal }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_tuchowska') }}">
+                                Tuchowska <span class="badge">{{ tuch.count.all_tuch }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_montaz') }}">
+                                Montaż <span class="badge">{{ mon.count.all_mon }}</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                            <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_wysylka') }}">
+                                Wysyłka <span class="badge">{{ wys.count.all_wys }}</span>
+                            </a>
+                        </div>
+                    </div>
                         <div style="overflow-x: auto;">
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
