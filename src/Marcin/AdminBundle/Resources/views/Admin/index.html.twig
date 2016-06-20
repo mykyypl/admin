@@ -26,6 +26,10 @@
             }
 	
         }
+        .widok-realizacja
+        {
+            visibility: hidden;
+        }
        </style>
 {% endblock %}
 {% block body %}
@@ -171,6 +175,7 @@
                    
                                <div class="clearfix"></div>
                         </form>
+                                  <div class="box">
                         <div style="overflow-x: auto;">
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
@@ -179,17 +184,17 @@
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">jakie_zam</th>
                                     <th>send data</th>
                                     <th>nr-user-zam</th>
-                                    {% if currStatus == 'realizacja' %}<th>wyprodukowane</th>{% endif %}
+                                {% if currStatus == 'realizacja' %}<th>wyprodukowane</th>{% elseif currStatus == 'przeslane' %}<th>realizacja</th>{% endif %}
                                     <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Produkcja', 's.nrprodukcji') }}</th>
-                                   {% if currStatus == 'realizacja' %}{% else %}<th>status</th>{% endif %}
+                                   {% if currStatus == 'realizacja' %}{% elseif currStatus == 'przeslane' %}{% else %}<th>status</th>{% endif %}
                                     {% if is_granted('ROLE_MAGNUM') %}<th>do zaplaty</th>
                                     <th>akcje</th>
                                     <th>zł</th>{% endif %}
                                 </tr>
                             </thead>
-
+                            <tbody>
                             {% for article in pagination  %}
-                                <tr {% if article.zaplacono == '0' %}{% if article.dozaplaty == '0' %}class="warning"{% endif %}{% endif %}><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
+                                <tr id="gm-panel{{ article.id }}" {% if article.zaplacono == '0' %}{% if article.dozaplaty == '0' %}class="warning"{% endif %}{% endif %}><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
                                     <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <font color="red" size="4">M</font> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <font color="red" size="4">MD</font> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <font color="red" size="4">MR</font> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <font color="red" size="4">ZO</font> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <font color="red" size="4">EL</font> {% elseif article.jakie_zam == 'wydanie zewnętrzne' %} <font color="red" size="4">WZ</font>{% else %} <font color="red" size="4">R</font> {# {{ article.jakie_zam }}#}{% endif %}<div class="modal fade {{ article.id }}" id="{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ article.id }}">
                                               <div class="modal-dialog modal-lg" role="document">                  
                                                 <div class="modal-content">
@@ -232,7 +237,12 @@
                                         <div class="checkbox checkbox-success">
                                             <center> <input style="flat-red" id="wykonano" type="checkbox" value="{{ article.status }}" onclick="changeWykonano('{{ article.id }}', event)" /><label for="checkbox2">
                                                 </label></center></div>
-                                        </th>{% endif %}
+                                        </th>
+                                    {% elseif currStatus == 'przeslane' %}
+                                        <th id="realizacja{{ article.id }}">
+                                            <button type="button" class="btn btn-success" onclick="changeButtonRealizacja('{{ article.id }}', event)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button> <button type="button" id="potwierdzenie-realizacja" class="potwierdzenie-realizacja btn btn-danger" onclick="changeButtonRealizacjadel('{{ article.id }}', event)"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                        </th>
+                                    {% endif %}
                                     <th id="numerprodukcji{{ article.id }}">
                                         <div id="produkcja{{ article.id }}" onclick="changeProdukcjaText('{{ article.id }}', event)">
                                              <h4><span onclick="changeProdukcjaText('{{ article.id }}', event)">
@@ -242,7 +252,7 @@
                                             <button class="btn btn-success" onclick="changeButtonProdukcja('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button>
                                             </div></div>
                                     </th>
-                                        {% if currStatus == 'realizacja' %}{% else %}<th id="zmiana-status-{{ article.id }}">
+                                        {% if currStatus == 'realizacja' %}{% elseif currStatus == 'przeslane' %}{% else %}<th id="zmiana-status-{{ article.id }}">
                                         <select name="status_select" data-container="body" class="selectpicker"{% if article.status == 'wersja robocza' %} data-style="btn-info" {% elseif article.status == 'przesłane do realizacji' %} data-style="btn-warning" {% elseif article.status == 'oczekiwanie na zapłatę' %} data-style="btn-danger" {% elseif article.status == 'anulowane' %} data-style="btn-danger" {% elseif article.status == 'w realizacji' %} data-style="btn-primary" {% elseif article.status == 'wyprodukowane' %} data-style="btn-primary" {% elseif article.status == 'przyjęte' %} data-style="btn-primary" {% elseif article.status == 'w dostawie' %} data-style="btn-danger" {% elseif article.status == 'gotowe do odbioru/montażu' %} data-style="btn-danger" {% elseif article.status == 'wysłane' %} data-style="btn-danger" {% else %} data-style="btn-success" {% endif %} id="{{ path('marcin_admin_dashboard_update', {'id': article.id }) }}" onchange="changeOrderStatus('{{ article.id }}', '{{ article.user }}', event)">
                                             <option value="wersja robocza"{% if article.status == 'wersja robocza' %} selected="selected" {% endif %}>wersja robocza</option>
                                             <option value="anulowane"{% if article.status == 'anulowane' %} selected="selected" {% endif %}>anulowane</option>
@@ -275,7 +285,13 @@
     </label></div></th>{% endif %}
                                     </tr>
                                     {% endfor %}
+                                    </tbody>
                                     </table>
+
+                                        </div>
+                                                                                                                                                         <div id="ladowanie-realizacja" class="overlay-none">
+              <i id="ladowanie-animacja-realizacja" class="none"></i>
+            </div>
                         </div>
                                 </div>
                             </div>
@@ -464,6 +480,62 @@
                                 }, 100);
                                 //});
                             }
+                            function changeButtonRealizacja(id, event) {
+                                var button_id = id;
+
+                                document.getElementById("ladowanie-realizacja").className = "overlay";
+                                document.getElementById("ladowanie-animacja-realizacja").className = "fa fa-refresh fa-spin";
+                                
+                                //var element = event.currentTarget;
+                                //var clicked = event.target;
+                                //var produkcja = $(element).val();
+                                var url = '{{ path('marcin_admin_dashboard_update_realizacja') }}';
+                                
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: button_id
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         document.getElementById("gm-panel"+button_id).className = "widok-realizacja";
+                                         $('#gm-panel'+button_id).load(document.URL +  ' #gm-panel'+button_id);
+                                         document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                         document.getElementById("ladowanie-animacja-realizacja").className = "";      
+                                    }
+                                });
+                               
+                            }
+                            function changeButtonRealizacjadel(id, event) {
+                                var button_id = id;
+                                if (window.confirm('Czy napewno chcesz anulować zamówienie?'))
+                            {
+                                document.getElementById("ladowanie-realizacja").className = "overlay";
+                                document.getElementById("ladowanie-animacja-realizacja").className = "fa fa-refresh fa-spin";
+                                
+                                //var element = event.currentTarget;
+                                //var clicked = event.target;
+                                //var produkcja = $(element).val();
+                                var url = '{{ path('marcin_admin_dashboard_update_realizacjadel') }}';
+                                
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: button_id
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         document.getElementById("gm-panel"+button_id).className = "widok-realizacja";
+                                         $('#gm-panel'+button_id).load(document.URL +  ' #gm-panel'+button_id);
+                                         document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                         document.getElementById("ladowanie-animacja-realizacja").className = "";      
+                                    }
+                                });
+                            }
+                            else {
+                                return false;
+                            }
+                            }
                             
     var elems = document.getElementsByClassName('potwierdzenie');
     var confirmIt = function (e) {
@@ -472,6 +544,14 @@
     for (var i = 0, l = elems.length; i < l; i++) {
         elems[i].addEventListener('click', confirmIt, false);
     }
+    
+ //   var elemsreal = document.getElementsByClassName('potwierdzenie-realizacja');
+ //   var confirmIt = function (e) {
+ //       if (!confirm('Czy napewno chcesz anulować zamówienie?')) e.preventDefault();
+//    };
+//    for (var i = 0, l = elemsreal.length; i < l; i++) {
+//        elemsreal[i].addEventListener('click', confirmIt, false);
+//    }
 
                             {#      $(function(){
                                        $('.ajax-task-complete').on({

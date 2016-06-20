@@ -212,6 +212,67 @@ class DashboardController extends Controller {
         
         return new JsonResponse(true);
     }
+    
+    /**
+     * @Route("/form/update-complete/realizacja", 
+     *       name="marcin_admin_dashboard_update_realizacja",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function updateRealizacjaAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStatus('w realizacji');
+            $em->flush();
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route("/form/update-complete/realizacjadel", 
+     *       name="marcin_admin_dashboard_update_realizacjadel",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function updateRealizacjadelAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStatus('anulowane');
+            $em->flush();
+        
+        return new JsonResponse(true);
+    }
 
     /**
      * @Route(
