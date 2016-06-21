@@ -184,11 +184,12 @@
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">jakie_zam</th>
                                     <th>send data</th>
                                     <th>nr-user-zam</th>
-                                {% if currStatus == 'realizacja' %}<th>wyprodukowane</th>{% elseif currStatus == 'przeslane' %}<th>realizacja</th>{% endif %}
+                                {% if currStatus == 'realizacja' %}<th>wyprodukowane</th>{% endif %}
                                     <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Produkcja', 's.nrprodukcji') }}</th>
                                    {% if currStatus == 'realizacja' %}{% elseif currStatus == 'przeslane' %}{% else %}<th>status</th>{% endif %}
-                                    {% if is_granted('ROLE_MAGNUM') %}<th>do zaplaty</th>
-                                    <th>akcje</th>
+                                    {% if is_granted('ROLE_MAGNUM') %}<th>do zaplaty</th>{% endif %}
+                                    {% if currStatus == 'przeslane' %}<th>realizacja</th>{% endif %}
+                                    {% if is_granted('ROLE_MAGNUM') %}<th>akcje</th>
                                     <th>zł</th>{% endif %}
                                 </tr>
                             </thead>
@@ -238,10 +239,7 @@
                                             <center> <input style="flat-red" id="wykonano" type="checkbox" value="{{ article.status }}" onclick="changeWykonano('{{ article.id }}', event)" /><label for="checkbox2">
                                                 </label></center></div>
                                         </th>
-                                    {% elseif currStatus == 'przeslane' %}
-                                        <th id="realizacja{{ article.id }}">
-                                            <button type="button" class="btn btn-success" onclick="changeButtonRealizacja('{{ article.id }}', event)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button> <button type="button" id="potwierdzenie-realizacja" class="potwierdzenie-realizacja btn btn-danger" onclick="changeButtonRealizacjadel('{{ article.id }}', event)"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                        </th>
+                                    {% else %}
                                     {% endif %}
                                     <th id="numerprodukcji{{ article.id }}">
                                         <div id="produkcja{{ article.id }}" onclick="changeProdukcjaText('{{ article.id }}', event)">
@@ -267,6 +265,11 @@
                                             <option value="zrealizowane/odebrane"{% if article.status == 'zrealizowane/odebrane' %} selected="selected" {% endif %}>zrealizowane/odebrane</option></select>
                                         {#<h4>{% if article.status == 'wersja robocza' %}<span class="label label-danger">{{ article.status }}</span> {% elseif article.status == 'przesłane do realizacji' %} <span class="label label-info">{{ article.status }}</span> {% elseif article.status == 'w realizacji' %} <span class="label label-success">{{ article.status }}</span> {% elseif article.status == 'przyjęte do realizacji' %} <span class="label label-success">{{ article.status }}</span> {% else %} <span class="label label-primary">{{ article.status }}</span>{% endif %}</h4>#}</th>{% endif %}
                                     {% if is_granted('ROLE_MAGNUM') %}<th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-warning" onclick="changeOrderText('{{ article.id }}', event)"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"> <div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value=""></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% else %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-danger" onclick="changeOrderText('{{ article.id }}', event)">{{ article.dozaplaty  }} zł</span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value="{{ article.dozaplaty }}"></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</div></th>
+                                     {% endif %}{% if currStatus == 'przeslane' %}
+                                        <th id="realizacja{{ article.id }}">
+                                            <button type="button" class="btn btn-success" onclick="changeButtonRealizacja('{{ article.id }}', event)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button> <button type="button" id="potwierdzenie-realizacja" class="potwierdzenie-realizacja btn btn-danger" onclick="changeButtonRealizacjadel('{{ article.id }}', event)"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                        </th>
+                                    {% endif %}{% if is_granted('ROLE_MAGNUM') %}
                                     <th id="wynik_b{{ article.id }}">
                                         <div class="btn-group">
                                             <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
