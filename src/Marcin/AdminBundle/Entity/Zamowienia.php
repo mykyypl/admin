@@ -127,6 +127,20 @@ class Zamowienia {
      * 
      */
     private $platnosc; 
+    
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * 
+     * 
+     */
+    private $zamowienie = null;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * 
+     * 
+     */
+    private $zakonczone = null; 
 
     /**
      * Get id
@@ -467,6 +481,50 @@ class Zamowienia {
     public function getPlatnosc()
     {
         return $this->platnosc;
+    }
+    
+    /**
+     * Set zamowienie
+     *
+     * @param integer $zamowienie
+     *
+     * @return Zamowienia
+     */
+    public function setZamowienie($zamowienie)
+    {
+        $this->zamowienie = $zamowienie;
+        return $this;
+    }
+    /**
+     * Get zamowienie
+     *
+     * @return integer
+     */
+    public function getZamowienie()
+    {
+        return $this->zamowienie;
+    }
+    
+    /**
+     * Set zakonczone
+     *
+     * @param integer $zakonczone
+     *
+     * @return Zamowienia
+     */
+    public function setZakonczone($zakonczone)
+    {
+        $this->zakonczone = $zakonczone;
+        return $this;
+    }
+    /**
+     * Get zakonczone
+     *
+     * @return integer
+     */
+    public function getZakonczone()
+    {
+        return $this->zakonczone;
     }
     
 }

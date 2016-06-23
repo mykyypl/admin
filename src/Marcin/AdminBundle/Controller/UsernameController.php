@@ -177,6 +177,40 @@ class UsernameController extends Controller {
                  ->getQuery()
                  ->getResult();
         
+        $dane_faktura = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Faktura', 'a')
+                 ->where('a.user = :identifier')
+                 ->setParameter('identifier', $uzytkownik)
+                 ->getQuery()
+                 ->getResult();
+        $a = 0; $b = 0; $c = 0; $d = 0; $e = 0; $f = 0;
+         foreach ($dane_faktura as $faktura)
+        {
+             $fakt[$a++]['nip'] = $faktura->GetNip();
+             $fakt[$b++]['ulica'] = $faktura->GetUlica();
+             $fakt[$c++]['kodpocztowy'] = $faktura->GetKodpocztowy();
+             $fakt[$d++]['miasto'] = $faktura->GetMiasto();
+             $fakt[$e++]['telefon'] = $faktura->GetTelefon();
+             $fakt[$f++]['nazwafirmy'] = $faktura->GetNazwafirmy();
+         }
+        $dane_dostawa = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Adresdostawa', 'a')
+                 ->where('a.user = :identifier')
+                 ->setParameter('identifier', $uzytkownik)
+                 ->getQuery()
+                 ->getResult();
+        $aa = 0; $bb = 0; $cc = 0; $dd = 0; $ee = 0; $ff = 0;
+         foreach ($dane_dostawa as $dostawa)
+        {
+             $dost[$bb++]['ulica'] = $dostawa->GetUlica();
+             $dost[$cc++]['kodpocztowy'] = $dostawa->GetKodpocztowy();
+             $dost[$dd++]['miejscowosc'] = $dostawa->GetMiejscowowsc();
+             $dost[$ee++]['telefon'] = $dostawa->GetTelefon();
+             $dost[$ff++]['nazwafirmy'] = $dostawa->GetNazwafirmy();
+         }
+        
         $form = $this->createForm(new UzytkownicyType(), $Uzytkownicy);
 
         $form->handleRequest($Request);
@@ -198,7 +232,9 @@ class UsernameController extends Controller {
                     'uzytkownicy' => $Uzytkownicy,
                     'admin' => $admin,
                     'user' => $zamowienia_user,
-                    'listuser' => $listuser
+                    'listuser' => $listuser,
+                    'faktura' => $fakt,
+                    'dostawa' => $dost
                         )
         );
     }

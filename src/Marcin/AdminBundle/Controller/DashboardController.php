@@ -245,6 +245,51 @@ class DashboardController extends Controller {
     }
     
     /**
+     * @Route("/form/update-complete/lock/lock", 
+     *       name="marcin_admin_dashboard_update_lock",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function updateLockAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'locknew' => $Request->request->get('locknew')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+        if ($result['locknew'] == "lock")
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setZamowienie(null);
+            $Zamowienie->setZakonczone(null);
+            $em->persist($Zamowienie);
+            $em->flush();
+        }
+        elseif ($result['locknew'] == "unlock")
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setZamowienie('1');
+            $Zamowienie->setZakonczone('1');
+            $em->persist($Zamowienie);
+            $em->flush();
+        }
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
      * @Route("/form/update-complete/realizacjadel", 
      *       name="marcin_admin_dashboard_update_realizacjadel",
      *       requirements={

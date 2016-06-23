@@ -278,6 +278,15 @@
                                             <a  href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf" target="_blank" class="ajax-task-complete btn btn-primary">
                                                 <span class="glyphicon glyphicon-print"></span>
                                             </a>
+                                                {% if article.zakonczone == "1" %}
+                                            <button type="button" class="btn btn-default" onclick="changeLock('{{ article.id }}', 'lock', event)">
+                                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                            </button>
+                                            {% else %}
+                                            <button type="button" class="btn btn-default" onclick="changeLock('{{ article.id }}', 'unlock', event)">
+                                                <i class="fa fa-unlock" aria-hidden="true"></i>
+                                            </button>
+                                            {% endif %}
                                         </div> {% if is_granted('ROLE_ADMIN') %}{% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
                                             {% set deleteUrl = path('marcin_admin_dashboard_delete', {'id': article.id, 'token': tokenName}) %}
                                         <a id="potwierdzenie" href="{{ deleteUrl }}" class="potwierdzenie btn btn-danger" data-confirmAction="">
@@ -538,6 +547,29 @@
                             else {
                                 return false;
                             }
+                            }
+                            
+                            function changeLock(id, warunek, event) {
+                                var zamowienie = id;
+                                var waruneknew = warunek;
+                                
+                                //var element = event.currentTarget;
+                                //var clicked = event.target;
+                                //var produkcja = $(element).val();
+                                var url = '{{ path('marcin_admin_dashboard_update_lock') }}';
+                                
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: zamowienie,
+                                        locknew: waruneknew
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                          location.reload();
+                                    }
+                                });
+                               
                             }
                             
     var elems = document.getElementsByClassName('potwierdzenie');

@@ -104,6 +104,61 @@
                 </div>
             </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                <div class="box box-default color-palette-box">
+                    <div class="box-header with-border">
+                     <h3 class="box-title"><i class="fa fa-tag"></i> Podgląd danych faktura</h3>
+                    </div>
+                    <div class="box-body">
+                        {% for fakt in faktura %}
+                            <div class="form-group">
+                                <label class="required">NIP:</label>
+                                {{ fakt.nip }}
+                            </div>
+                            <div class="form-group">
+                                <label class="required">Adres:</label>
+                                {{ fakt.ulica }} {{ fakt.miasto }} {{ fakt.kodpocztowy }}
+                            </div>
+                            <div class="form-group">
+                                <label class="required">TELEFON:</label>
+                                {{ fakt.telefon }}
+                            </div>
+                            <div class="form-group">
+                                <label class="required">FIRMA:</label>
+                                {{ fakt.nazwafirmy }}
+                            </div>
+                            
+                        {% endfor %}
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="box box-default color-palette-box">
+                    <div class="box-header with-border">
+                     <h3 class="box-title"><i class="fa fa-tag"></i> Podgląd danych dostawa</h3>
+                    </div>
+                    {% for dost in dostawa %}
+                    <div class="box-body">
+                         
+                            <div class="form-group">
+                                <label class="required">Adres:</label>
+                                {{ dost.ulica }} {{ dost.miejscowosc }} {{ dost.kodpocztowy }}
+                            </div>
+                            <div class="form-group">
+                                <label class="required">TELEFON:</label>
+                                {{ dost.telefon }}
+                            </div>
+                            <div class="form-group">
+                                <label class="required">FIRMA:</label>
+                                {{ dost.nazwafirmy }}
+                            </div>
+                            
+                       
+                    </div> {% endfor %}
+                </div>
+                </div>
+            </div>
 </section>
         {% endblock %}
 {% block javascripts %}
