@@ -164,7 +164,7 @@
                                <div class="clearfix"></div>
                             <div class="col-xs-12 col-md-2 col-lg-3 padding-bottom-15 pull-right">
                                 <div class="input-group" style="width: 100%;">
-                                  <input type="text" name="userLike" class="form-control input-md" placeholder="Wyszukaj po nr-user-zam" value="{{ queryParams['userLike'] }}">
+                                  <input type="text" name="userLike" class="form-control input-md" placeholder="Wyszukaj po nr-user, nr-prod i nr fakt" value="{{ queryParams['userLike'] }}">
                                   <div class="input-group-btn">
                                     <button class="btn btn-md btn-block btn-default"><i class="fa fa-search"></i></button>
                                   </div>
@@ -189,8 +189,8 @@
                                    {% if currStatus == 'realizacja' %}{% elseif currStatus == 'przeslane' %}{% else %}<th>status</th>{% endif %}
                                     {% if is_granted('ROLE_MAGNUM') %}<th>do zaplaty</th>{% endif %}
                                     {% if currStatus == 'przeslane' %}<th>realizacja</th>{% endif %}
-                                    {% if is_granted('ROLE_MAGNUM') %}<th>akcje</th>
-                                    <th>zł</th>{% endif %}
+                                    <th>akcje</th>
+                                    {% if is_granted('ROLE_MAGNUM') %}<th>zł</th>{% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -234,10 +234,12 @@
                                         </th>
                                     <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
-                                    {% if currStatus == 'realizacja' %}<th>
-                                        <div class="checkbox checkbox-success">
+                                    {% if currStatus == 'realizacja' %}
+                                        {#<div class="checkbox checkbox-success">
                                             <center> <input style="flat-red" id="wykonano" type="checkbox" value="{{ article.status }}" onclick="changeWykonano('{{ article.id }}', event)" /><label for="checkbox2">
-                                                </label></center></div>
+                                                </label></center></div>#}
+                                        <th id="produkcjaa{{ article.id }}">
+                                <center><button type="button" class="btn btn-success" onclick="changeButtonProdukcjaa('{{ article.id }}', event)"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button></center>
                                         </th>
                                     {% else %}
                                     {% endif %}
@@ -269,16 +271,16 @@
                                         <th id="realizacja{{ article.id }}">
                                             <button type="button" class="btn btn-success" onclick="changeButtonRealizacja('{{ article.id }}', event)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button> <button type="button" id="potwierdzenie-realizacja" class="potwierdzenie-realizacja btn btn-danger" onclick="changeButtonRealizacjadel('{{ article.id }}', event)"><i class="fa fa-ban" aria-hidden="true"></i></button>
                                         </th>
-                                    {% endif %}{% if is_granted('ROLE_MAGNUM') %}
+                                    {% endif %}
                                     <th id="wynik_b{{ article.id }}">
-                                        <div class="btn-group">
+                                        {% if is_granted('ROLE_MAGNUM') %}<div class="btn-group">
                                             <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
                                                 <span class="glyphicon glyphicon-edit"></span>
-                                            </a>
+                                            </a>{% endif %}
                                             <a  href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf" target="_blank" class="ajax-task-complete btn btn-primary">
                                                 <span class="glyphicon glyphicon-print"></span>
                                             </a>
-                                                {% if article.zakonczone == "1" %}
+                                              {% if is_granted('ROLE_MAGNUM') %}  {% if article.zakonczone == "1" %}
                                             <button type="button" class="btn btn-default" onclick="changeLock('{{ article.id }}', 'lock', event)">
                                                 <i class="fa fa-lock" aria-hidden="true"></i>
                                             </button>
@@ -291,7 +293,7 @@
                                             {% set deleteUrl = path('marcin_admin_dashboard_delete', {'id': article.id, 'token': tokenName}) %}
                                         <a id="potwierdzenie" href="{{ deleteUrl }}" class="potwierdzenie btn btn-danger" data-confirmAction="">
                                             <span class="glyphicon glyphicon-trash"></span>
-                                        </a>{% endif %}</th>
+                                        </a>{% endif %}{% endif %}</th>{% if is_granted('ROLE_MAGNUM') %}
                                         <th><div class="checkbox checkbox-success">
                                                 <input style="flat-red" id="spr" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderPay('{{ article.id }}', event)" {% if article.zaplacono == '1' %}checked {% endif %} /><label for="checkbox1">
     </label></div></th>{% endif %}
@@ -380,7 +382,7 @@
                                 });
 
                             }
-                            function changeWykonano(id, event) {
+                            {# function changeWykonano(id, event) {
                                 var order_id = id;
                                 var element = event.currentTarget;
                                 var clicked = event.target;
@@ -407,7 +409,7 @@
                                     }
                                 });
 
-                            }
+                            }#}
                             
                             function changeOrderText(id, event) {
                                  var order_id = id;
@@ -567,6 +569,45 @@
                                     method: 'POST',
                                     success: function (data) {
                                           location.reload();
+                                    }
+                                });
+                               
+                            }
+                            
+                            function changeButtonProdukcjaa(id, event) {
+                                var order_id = id;
+
+                                document.getElementById("ladowanie-realizacja").className = "overlay";
+                                document.getElementById("ladowanie-animacja-realizacja").className = "fa fa-refresh fa-spin";
+                                
+                                //var element = event.currentTarget;
+                                //var clicked = event.target;
+                                //var produkcja = $(element).val();
+                                var url = '{{ path('marcin_admin_dashboard_update_wykonano') }}';
+                                
+                                var element = event.currentTarget;
+                                //var clicked = event.target;
+                                
+                                if($(element).is('clicked')) {
+             console.log('null kliknieto!');
+             var zaplacono = 0;
+        } else {
+             console.log('kliknieto!');
+             var zaplacono = 1;
+        }
+                                
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                      id: order_id,
+                                      wykonano: zaplacono
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         document.getElementById("gm-panel"+order_id).className = "widok-realizacja";
+                                         $('#gm-panel'+order_id).load(document.URL +  ' #gm-panel'+order_id);
+                                         document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                         document.getElementById("ladowanie-animacja-realizacja").className = "";      
                                     }
                                 });
                                

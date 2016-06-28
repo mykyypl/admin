@@ -97,7 +97,11 @@ class TestRepository extends EntityRepository
         if(!empty($params['userLike'])){
             $jakie_zamLike = '%'.$params['userLike'].'%';
             $qb->andWhere('s.nr_user_zam LIKE :jakie_zamLike')
-                    ->setParameter('jakie_zamLike', $jakie_zamLike);
+                    ->setParameter('jakie_zamLike', $jakie_zamLike)
+                    ->orWhere('s.nrprodukcji LIKE :nr')
+                    ->setParameter('nr', $jakie_zamLike)
+                    ->orWhere('s.nr_fakt LIKE :fakt')
+                    ->setParameter('fakt', $jakie_zamLike);
         }
         
         

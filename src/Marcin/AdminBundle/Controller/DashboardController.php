@@ -509,6 +509,9 @@ class DashboardController extends Controller {
         if (!isset($this->suma_wyprodukowane)) {
             $this->suma_wyprodukowane = $RepoZam->getWyprodukowane();
         }
+        
+        //$data1 = new \DateTime('- 30 days');
+        //echo $data1->format('Y-m-d');
 
         return $this->render('MarcinAdminBundle:Admin:index.html.twig', array(
                     'pageTitle' => 'GM Panel',
