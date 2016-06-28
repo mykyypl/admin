@@ -1016,4 +1016,256 @@ class TestRepository extends EntityRepository
             'all_wys' => $all_wys
         );
     }
+    
+    public function getDzien1() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data1 = new \DateTime();
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data1->format('Y-m-d').'%');
+        
+        
+         $czas1 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas1' => $czas1
+        );
+    }
+    
+    public function getDzien2() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data2 = new \DateTime('- 1 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data2->format('Y-m-d').'%');
+        
+        
+         $czas2 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas2' => $czas2
+        );
+    }
+    
+    public function getDzien3() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data3 = new \DateTime('- 2 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data3->format('Y-m-d').'%');
+        
+        
+         $czas3 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas3' => $czas3
+        );
+    }
+    
+    public function getDzien4() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data4 = new \DateTime('- 3 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data4->format('Y-m-d').'%');
+        
+        
+         $czas4 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas4' => $czas4
+        );
+    }
+    
+    public function getDzien5() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data5 = new \DateTime('- 4 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data5->format('Y-m-d').'%');
+        
+        
+         $czas5 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas5' => $czas5
+        );
+    }
+    
+    public function getDzien6() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data6 = new \DateTime('- 5 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data6->format('Y-m-d').'%');
+        
+        
+         $czas6 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas6' => $czas6
+        );
+    }
+    
+    public function getDzien7() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data7 = new \DateTime('- 6 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data7->format('Y-m-d').'%');
+        
+        
+         $czas7 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas7' => $czas7
+        );
+    }
+    
+    public function getDzien8() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data8 = new \DateTime('- 7 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data8->format('Y-m-d').'%');
+        
+        
+         $czas8 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas8' => $czas8
+        );
+    }
+    
+    public function getDzien9() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data9 = new \DateTime('- 8 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data9->format('Y-m-d').'%');
+        
+        
+         $czas9 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas9' => $czas9
+        );
+    }
+    
+    public function getDzien10() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data10 = new \DateTime('- 9 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data10->format('Y-m-d').'%');
+        
+        
+         $czas10 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas10' => $czas10
+        );
+    }
+    
+    public function getDzien11() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data11 = new \DateTime('- 10 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data11->format('Y-m-d').'%');
+        
+        
+         $czas11 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas11' => $czas11
+        );
+    }
+    
+    public function getDzien12() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data12 = new \DateTime('- 11 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data12->format('Y-m-d').'%');
+        
+        
+         $czas12 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas12' => $czas12
+        );
+    }
+    
+    public function getDzien13() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data13 = new \DateTime('- 12 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data13->format('Y-m-d').'%');
+        
+        
+         $czas13 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas13' => $czas13
+        );
+    }
+    
+    public function getDzien14() {
+        
+        //$data1 = new \DateTime('- 30 days');
+        $data14 = new \DateTime('- 13 days');
+        
+
+                $qb = $this->createQueryBuilder('s')
+                        ->select('COUNT(s)')
+                        ->where('s.sendDate LIKE :status')
+                        ->setParameter('status', '%'.$data14->format('Y-m-d').'%');
+        
+        
+         $czas14 = (int)$qb->getQuery()->getSingleScalarResult();
+     return array(
+            'czas14' => $czas14
+        );
+    }
 }

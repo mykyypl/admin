@@ -3,6 +3,7 @@
     {{parent()}}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/select/css/bootstrap-select.min.css') }}" />
+   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
    <style>
          #ladowanie h3 {
     width: 300px;
@@ -127,6 +128,13 @@
                 <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia</h3>
             </div>
             <div class="box-body">
+                {% if is_granted('ROLE_MAGNUM') %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="myfirstchart" style="height: 350px;"></div>
+                                </div>
+                            </div><br>
+                {% endif %}
                 <div class="row">
                     <div class="col-sm-12">
                         <form action="{{ path('marcin_admin_dashboard', {'trasy': currTrasy,'status': currStatus}) }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
@@ -312,7 +320,7 @@
                             <div class="row">
                                 <div class="col-sm-5">
                                     <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
-                                        Wszystkich zamówień jest: {{ pagination.getTotalItemCount }}
+                                        Wszystkich zamówień jest: {{ pagination.getTotalItemCount }} 
                                     </div>
                                 </div>
                                 <div class="col-sm-7">
@@ -755,7 +763,27 @@
           return false;
       });
     });
-</script>                                                                                                                                                                                                                                                                                                                                                  
+</script>     
         <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+        <script>
+    Morris.Line({
+  element: 'myfirstchart',
+  data: [
+    { y: '{{ "now"|date("Y-m-d") }}', a: {{ czas1.count.czas1 }}, b: {{ czas8.count.czas8 }} },
+    { y: '{{ "- 1 days"|date("Y-m-d") }}', a: {{ czas2.count.czas2 }},  b: {{ czas9.count.czas9 }} },
+    { y: '{{ "- 2 days"|date("Y-m-d") }}', a: {{ czas3.count.czas3 }},  b: {{ czas10.count.czas10 }} },
+    { y: '{{ "- 3 days"|date("Y-m-d") }}', a: {{ czas4.count.czas4 }},  b: {{ czas11.count.czas11 }} },
+    { y: '{{ "- 4 days"|date("Y-m-d") }}', a: {{ czas5.count.czas5 }},  b: {{ czas12.count.czas12 }} },
+    { y: '{{ "- 5 days"|date("Y-m-d") }}', a: {{ czas6.count.czas6 }},  b: {{ czas13.count.czas13 }} },
+    { y: '{{ "- 6 days"|date("Y-m-d") }}', a: {{ czas7.count.czas7 }}, b: {{ czas14.count.czas14 }} }
+  ],
+  xkey: 'y',
+  ykeys: ['a', 'b'],
+  labels: ['Ten tydzień', 'Poprzedni tydzień'],
+  xLabels: 'day'
+});
+    </script>
                     {% endblock %}
 

@@ -367,6 +367,22 @@ class DashboardController extends Controller {
     private $suma;
     private $zrelsuma;
     private $suma_wyprodukowane;
+    private $dzien1;
+    private $dzien2;
+    private $dzien3;
+    private $dzien4;
+    private $dzien5;
+    private $dzien6;
+    private $dzien7;
+    private $dzien8;
+    private $dzien9;
+    private $dzien10;
+    private $dzien11;
+    private $dzien12;
+    private $dzien13;
+    private $dzien14;
+
+
 
     /**
      * @Route(
@@ -510,6 +526,36 @@ class DashboardController extends Controller {
             $this->suma_wyprodukowane = $RepoZam->getWyprodukowane();
         }
         
+         if (!isset($this->dzien1)) {
+            $this->dzien1 = $RepoZam->getDzien1();
+        }if (!isset($this->dzien2)) {
+            $this->dzien2 = $RepoZam->getDzien2();
+        }if (!isset($this->dzien3)) {
+            $this->dzien3 = $RepoZam->getDzien3();
+        }if (!isset($this->dzien4)) {
+            $this->dzien4 = $RepoZam->getDzien4();
+        }if (!isset($this->dzien5)) {
+            $this->dzien5 = $RepoZam->getDzien5();
+        }if (!isset($this->dzien6)) {
+            $this->dzien6 = $RepoZam->getDzien6();
+        }if (!isset($this->dzien7)) {
+            $this->dzien7 = $RepoZam->getDzien7();
+        }if (!isset($this->dzien8)) {
+            $this->dzien8 = $RepoZam->getDzien8();
+        }if (!isset($this->dzien9)) {
+            $this->dzien9 = $RepoZam->getDzien9();
+        }if (!isset($this->dzien11)) {
+            $this->dzien11 = $RepoZam->getDzien11();
+        }if (!isset($this->dzien10)) {
+            $this->dzien10 = $RepoZam->getDzien10();
+        }if (!isset($this->dzien12)) {
+            $this->dzien12 = $RepoZam->getDzien12();
+        }if (!isset($this->dzien13)) {
+            $this->dzien13 = $RepoZam->getDzien13();
+        }if (!isset($this->dzien14)) {
+            $this->dzien14 = $RepoZam->getDzien14();
+        }
+        
         //$data1 = new \DateTime('- 30 days');
         //echo $data1->format('Y-m-d');
 
@@ -553,6 +599,48 @@ class DashboardController extends Controller {
                     ),
                     'send_zam' => array(
                         'count' => $this->status_send_zam
+                    ),
+                    'czas1' => array(
+                        'count' => $this->dzien1
+                    ),
+                    'czas2' => array(
+                        'count' => $this->dzien2
+                    ),
+                    'czas3' => array(
+                        'count' => $this->dzien3
+                    ),
+                    'czas4' => array(
+                        'count' => $this->dzien4
+                    ),
+                    'czas5' => array(
+                        'count' => $this->dzien5
+                    ),
+                    'czas6' => array(
+                        'count' => $this->dzien6
+                    ),
+                    'czas7' => array(
+                        'count' => $this->dzien7
+                    ),
+                    'czas8' => array(
+                        'count' => $this->dzien8
+                    ),
+                    'czas9' => array(
+                        'count' => $this->dzien9
+                    ),
+                    'czas10' => array(
+                        'count' => $this->dzien10
+                    ),
+                    'czas11' => array(
+                        'count' => $this->dzien11
+                    ),
+                    'czas12' => array(
+                        'count' => $this->dzien12
+                    ),
+                    'czas13' => array(
+                        'count' => $this->dzien13
+                    ),
+                    'czas14' => array(
+                        'count' => $this->dzien14
                     )
                         )
         );
