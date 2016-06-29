@@ -245,6 +245,76 @@ class DashboardController extends Controller {
     }
     
     /**
+     * @Route("/form/update-complete/faktura/add", 
+     *       name="marcin_admin_dashboard_faktura_add",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_MAGNUM')")
+     *
+     */
+    public function addFakturaAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'nrfakt' => $Request->request->get('nrfakt')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        if($result['id'] != NULL)
+        {
+        
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setNr_fakt($result['nrfakt']);
+            $em->flush();
+        }
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route("/form/update-complete/faktura/edit", 
+     *       name="marcin_admin_dashboard_faktura_edit",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_MAGNUM')")
+     *
+     */
+    public function editFakturaAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'nrfakt' => $Request->request->get('nrfakt')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        if($result['id'] != NULL)
+        {
+        
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setNr_fakt($result['nrfakt']);
+            $em->flush();
+        }
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
      * @Route("/form/update-complete/lock/lock", 
      *       name="marcin_admin_dashboard_update_lock",
      *       requirements={

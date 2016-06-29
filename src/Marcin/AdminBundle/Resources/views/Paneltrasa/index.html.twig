@@ -72,18 +72,31 @@
                         <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
                             <thead>
                                 <tr role="row">
-                                    <th <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Id', 's.id') }}</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">jakie_zam</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">zam</th>
                                     <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'nr_user_zam', 's.nr_user_zam') }}</th>
                                     <th>Produkcja</th>
                                     <th>do zaplaty</th>
-                                    <th>dost/zapl</th>
-                                    <th>dost</th>
+                                    <th>d/z</th>
+                                    <th>d</th>
                                 </tr>
                             </thead>
-
-                            {% for article in pagination  %}
-                                <tr><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
+                            {% set a = 0 %}
+                            {% for danee in dane %}
+                                {% set a = a+1 %}
+                                <tr class="clickable" data-toggle="collapse" id="row{{ a }}" data-target=".row{{ a }}">
+                                    <td><i class="glyphicon glyphicon-plus fa-2x"> </i> <strong>{{ danee.user }}</strong></td>
+          	<td></td>  
+            <td></td>
+            <td></td>
+            <td><div class="checkbox checkbox-success">
+                                                <input style="flat-red" id="spr1" type="checkbox" onclick="changeAllPay('{{ danee.user }}', event)"{# {% if article.zaplacono == '1' %}checked {% endif %} #}/><label for="checkbox2">
+    </label></div></td>
+            <td><div class="checkbox checkbox-danger">
+                                                <input style="flat-red" id="spr1" type="checkbox" onclick="changeAllNotPay('{{ danee.user }}', event)"{# {% if article.zaplacono == '1' %}checked {% endif %} #}/><label for="checkbox2">
+    </label></div></td>
+                                </tr>
+                                {% for article in pagination if article.user == danee.user %}
+                                    <tr class="collapse row{{ a }}">
                                     <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <h4><font color="red">M</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <h4><font color="red">MD</font></h4> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <h4><font color="red">MR</font></h4> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <h4><font color="red">ZO</font></h4> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <h4><font color="red">EL</font></h4> {% elseif article.jakie_zam == 'wydanie zewnętrzne' %} <h4><font color="red">WZ</font></h4>{% else %} <h4><font color="red">R</font></h4>{# {{ article.jakie_zam }}#}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
                                     <th id="numerprodukcji{{ article.id }}">
@@ -115,7 +128,10 @@
                                                 <input style="flat-red" id="spr1" type="checkbox" value="{{ article.zaplacono }}" onclick="changeOrderNotPay('{{ article.id }}', event)"{# {% if article.zaplacono == '1' %}checked {% endif %} #}/><label for="checkbox2">
     </label></div>{% endif %}</th>
                                     </tr>
-                                    {% endfor %}
+                                {% endfor %}
+                            {% endfor %}
+                            
+                            
                                     </table>
                         </div>
                                 </div>
@@ -227,6 +243,62 @@
                                 });
 
                             }
+                            
+           function changeAllPay(name, event) {
+                                var klasa = name;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var klasaa = 1;
+        } else {
+             console.log('odznaczono!');
+             var klasaa = 2;
+        }
+                                var url = '{{ path('marcin_admin_paneltrasa_zaplacono_all') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        nazwa: klasa,
+                                        warunek: klasaa
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                        {#  $('#wynik'+order_id).load(document.URL + ' #wynik'+order_id);#}
+                                                
+                                    }
+                                });
+           }
+           
+                      function changeAllNotPay(name, event) {
+                                var klasa = name;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                                
+                                if($(element).is(":checked")) {
+             console.log('zaznaczono!');
+             var klasaa = 3;
+        } else {
+             console.log('odznaczono!');
+             var klasaa = 4;
+        }
+                                var url = '{{ path('marcin_admin_paneltrasa_zaplacono_all') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        nazwa: klasa,
+                                        warunek: klasaa
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                        {#  $('#wynik'+order_id).load(document.URL + ' #wynik'+order_id);#}
+                                                
+                                    }
+                                });
+           }
                             
 {# function changeOrderPrice(id, user, event) {
                                 var order_id = id;

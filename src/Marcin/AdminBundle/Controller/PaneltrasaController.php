@@ -89,6 +89,101 @@ class PaneltrasaController extends Controller {
         return new JsonResponse(true);
     }
     
+     /**
+     * @Route("/form/update-complete/all/zam", 
+     *       name="marcin_admin_paneltrasa_zaplacono_all",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function allZamAction(Request $Request) {
+
+        $result = array(
+            'nazwa' => $Request->request->get('nazwa'),
+            'warunek' => $Request->request->get('warunek')
+        );
+
+        //$RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        //$Zamowienie = $RepoZamowienia->find($result['id']);
+        
+        if($result['warunek'] == '1')
+        {
+             $em = $this->getDoctrine()->getManager();
+             $zamowienia_pierwszy = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.status = :status OR a.status = :przyjete OR a.status =:dostawa')
+                 ->setParameter('status', 'w dostawie')
+                 ->setParameter('przyjete', 'wysłane')
+                 ->setParameter('dostawa', 'gotowe do odbioru/montażu')
+                  ->andwhere('a.trasaok = :trasaok')
+                 ->setParameter('trasaok', '1')
+                 ->andwhere('a.user = :uzytkownik')
+                 ->setParameter('uzytkownik', $result['nazwa'])
+                 ->getQuery()
+                 ->getResult();
+             
+             
+              foreach ($zamowienia_pierwszy as $pierwszy)
+                {
+                    $dane = $pierwszy->GetJakie_zam();
+                    if ($dane == "zgłoszenie do odbioru")
+                    {
+                        
+                    }
+                     else {
+                             $pierwszy->setStatus('zrealizowane/odebrane');
+                             $pierwszy->setZaplacono('1');
+                             $em->flush();
+                     }
+                }
+        }
+        elseif ($result['warunek'] == '3')
+        {
+             $em = $this->getDoctrine()->getManager();
+             $zamowienia_pierwszy = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.status = :status OR a.status = :przyjete OR a.status =:dostawa')
+                 ->setParameter('status', 'w dostawie')
+                 ->setParameter('przyjete', 'wysłane')
+                 ->setParameter('dostawa', 'gotowe do odbioru/montażu')
+                  ->andwhere('a.trasaok = :trasaok')
+                 ->setParameter('trasaok', '1')
+                 ->andwhere('a.user = :uzytkownik')
+                 ->setParameter('uzytkownik', $result['nazwa'])
+                 ->getQuery()
+                 ->getResult();
+             
+              foreach ($zamowienia_pierwszy as $pierwszy)
+                {
+                    $dane = $pierwszy->GetJakie_zam();
+                    if ($dane == "zgłoszenie do odbioru")
+                    {
+                        $pierwszy->setStatus('przesłane do realizacji');
+                        $pierwszy->setJakie_zam('wydanie zewnętrzne');
+                        $em->flush();
+                    }
+                     else {
+                             $pierwszy->setStatus('zrealizowane/odebrane');
+                             $em->flush();
+                     }
+                }
+        }
+//        
+//        if (NULL === $Zamowienie) {
+//            return new JsonResponse(false);
+//        }
+//        
+        
+        
+        return new JsonResponse(true);
+    }
+    
     /**
      * @Route(
      *       "/{status}/{page}",
@@ -135,11 +230,62 @@ class PaneltrasaController extends Controller {
             'Wysyłka' =>'wysylka',
             'Wszystkie' => 'all'
         );
+        
+        if ($status == 'all')
+        {
+        
+        $em = $this->getDoctrine()->getManager();
+        $zamowienia_query = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.status = :status OR a.status = :przyjete OR a.status =:dostawa')
+                 ->setParameter('status', 'w dostawie')
+                 ->setParameter('przyjete', 'wysłane')
+                 ->setParameter('dostawa', 'gotowe do odbioru/montażu')
+                  ->andwhere('a.trasaok = :trasaok')
+                 ->setParameter('trasaok', '1')
+                  ->addOrderBy('a.nrprodukcji', 'ASC')
+                 ->getQuery()
+                 ->getResult();
+        }
+        else {
+            $em = $this->getDoctrine()->getManager();
+        $zamowienia_query = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.status = :status OR a.status = :przyjete OR a.status =:dostawa')
+                 ->setParameter('status', 'w dostawie')
+                 ->setParameter('przyjete', 'wysłane')
+                 ->setParameter('dostawa', 'gotowe do odbioru/montażu')
+                 ->andwhere('a.trasa = :identifier')
+                 ->setParameter('identifier', $status)
+                  ->andwhere('a.trasaok = :trasaok')
+                 ->setParameter('trasaok', '1')
+                  ->addOrderBy('a.nrprodukcji', 'ASC')
+                 ->getQuery()
+                 ->getResult();
+            
+        }
+        
+        $a = 0;
+        if ($zamowienia_query == null)
+        {
+            $dane[1]['user'] = null;
+        }
+            else
+        {
+            foreach ($zamowienia_query as $zamowienia)
+                {
+                    $dane[$a++]['user'] = $zamowienia->GetUser();
+                }
+            $dane = array_map("unserialize", array_unique(array_map("serialize", $dane)));
+        }
         return $this->render('MarcinAdminBundle:Paneltrasa:index.html.twig', array(
                     'pageTitle' => 'GM Panel trasy',
                     //'articles' => $articles,
                     //'pagination' => $pagination,
                     'queryParams' => $queryParams,
+                    'dane' => $dane,
                     'limits' => $limits,
                     'currLimit' => $limit,
                     'statusesList' => $statusesList,

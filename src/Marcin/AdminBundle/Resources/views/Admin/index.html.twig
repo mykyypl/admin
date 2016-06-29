@@ -128,13 +128,6 @@
                 <h3 class="box-title"><i class="fa fa-tag"></i> Zamówienia</h3>
             </div>
             <div class="box-body">
-                {% if is_granted('ROLE_MAGNUM') %}
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id="myfirstchart" style="height: 350px;"></div>
-                                </div>
-                            </div><br>
-                {% endif %}
                 <div class="row">
                     <div class="col-sm-12">
                         <form action="{{ path('marcin_admin_dashboard', {'trasy': currTrasy,'status': currStatus}) }}" method="get" class="form-inline filter-search padding-top-15 padding-bottom-15" role="form">
@@ -192,6 +185,11 @@
                                     <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jakie zamówienie">jakie_zam</th>
                                     <th>send data</th>
                                     <th>nr-user-zam</th>
+                                     {% if is_granted('ROLE_MAGNUM') %}
+                                        {% if currStatus == 'zrealizowane' or currStatus == 'all' %}
+                                            <th>fakt</th>
+                                        {% endif %}
+                                     {% endif %}
                                 {% if currStatus == 'realizacja' %}<th>wyprodukowane</th>{% endif %}
                                     <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="id">{{ knp_pagination_sortable(pagination, 'Produkcja', 's.nrprodukcji') }}</th>
                                    {% if currStatus == 'realizacja' %}{% elseif currStatus == 'przeslane' %}{% else %}<th>status</th>{% endif %}
@@ -242,6 +240,56 @@
                                         </th>
                                     <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
+                                    {% if is_granted('ROLE_MAGNUM') %}
+                                        {% if currStatus == 'zrealizowane' or currStatus == 'all' %}
+                                            <th id="ffakt{{ article.id }}"><center>{% if article.nr_fakt == "" %}
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fakt{{ article.id }}"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                <div class="modal fade" id="fakt{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">                                                                                                  
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                <h4 class="modal-title">ID zamówienia: {{ article.id }}</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon" id="basic-addon1">Nr fakt:</span>
+                                                                    <input type="text" id="nrfaktury{{ article.id }}" class="form-control" placeholder="proszę wpisać nr fakt..." aria-describedby="basic-addon1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                                                                <button id="add{{ article.id }}" type="button" class="btn btn-primary" onclick="addFakt('{{ article.id }}', event)">Zapisz</button>
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div><!-- /.modal -->
+                                            {% else %}
+                                                <a href="" data-toggle="modal" data-target="#fakte{{ article.id }}"><h4>{{ article.nr_fakt }}</h4></a>
+                                                <div class="modal fade" id="fakte{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                <h4 class="modal-title">ID zamówienia: {{ article.id }}</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon" id="basic-addon1">Nr fakt:</span>
+                                                                    <input type="text" id="nrfakturye{{ article.id }}" class="form-control" value="{{ article.nr_fakt }}" placeholder="proszę wpisać nr fakt..." aria-describedby="basic-addon1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                                                                <button type="button" onclick="editFakt('{{ article.id }}', event)" class="btn btn-primary">Zapisz</button>
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div><!-- /.modal -->
+                                                {% endif %}
+                                </center></th>
+                                        {% endif %}
+                                     {% endif %}
                                     {% if currStatus == 'realizacja' %}
                                         {#<div class="checkbox checkbox-success">
                                             <center> <input style="flat-red" id="wykonano" type="checkbox" value="{{ article.status }}" onclick="changeWykonano('{{ article.id }}', event)" /><label for="checkbox2">
@@ -329,6 +377,13 @@
                                     </div>
                                 </div>
                             </div>
+                                                    {% if is_granted('ROLE_MAGNUM') %}
+                                                        <br> <div class="row">
+                                <div class="col-md-12">
+                                    <div id="myfirstchart" style="height: 350px;"></div>
+                                </div>
+                            </div>
+                {% endif %}
                         </div><!-- /.box-body -->
 
                     </div>
@@ -628,6 +683,66 @@
     for (var i = 0, l = elems.length; i < l; i++) {
         elems[i].addEventListener('click', confirmIt, false);
     }
+    
+    function addFakt(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                               // var nazwa = 'nrfaktury';
+                                //var fakt = document.getElementById(nazwa.order_id);
+                                //var nrfakturki = fakt.value;
+                                var fakturka = $('#nrfaktury'+order_id).val();
+                                $('#fakt'+order_id).modal('hide');
+                                var url = '{{ path('marcin_admin_dashboard_faktura_add') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        nrfakt: fakturka
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         //document.getElementById("gm-panel"+order_id).className = "widok-realizacja";
+                                         
+                                         document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                         document.getElementById("ladowanie-animacja-realizacja").className = ""; 
+                                         $('#ffakt'+order_id).load(document.URL +  ' #ffakt'+order_id);
+                                               console.log(fakturka);
+                                    }
+                                });
+
+                            }
+                            
+                function editFakt(id, event) {
+                                var order_id = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                               // var nazwa = 'nrfaktury';
+                                //var fakt = document.getElementById(nazwa.order_id);
+                                //var nrfakturki = fakt.value;
+                                var fakturka = $('#nrfakturye'+order_id).val();
+                                $('#fakte'+order_id).modal('hide');
+                                var url = '{{ path('marcin_admin_dashboard_faktura_edit') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: order_id,
+                                        nrfakt: fakturka
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         //document.getElementById("gm-panel"+order_id).className = "widok-realizacja";
+                                         
+                                         document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                         document.getElementById("ladowanie-animacja-realizacja").className = ""; 
+                                         $('#ffakt'+order_id).load(document.URL +  ' #ffakt'+order_id);
+                                               console.log(fakturka);
+                                    }
+                                });
+
+                            }
     
  //   var elemsreal = document.getElementsByClassName('potwierdzenie-realizacja');
  //   var confirmIt = function (e) {
