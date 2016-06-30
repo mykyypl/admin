@@ -48,7 +48,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <div class="col-lg-3 col-xs-6">
+            <a href="{{ path('marcin_admin_dashboard', {'status': 'przeslane'}) }}"><div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-yellow">
                     <div class="inner">
@@ -59,8 +59,8 @@
                         <i class="ion ion-bag"></i>
                     </div>
                 </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
+                </div><!-- ./col --></a>
+            <a href="{{ path('marcin_admin_dashboard', {'status': 'realizacja'}) }}"><div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-primary">
                     <div class="inner">
@@ -71,9 +71,9 @@
                         <i class="ion ion-stats-bars"></i>
                     </div>
                 </div>
-            </div><!-- ./col -->
+                </div><!-- ./col --></a>
             {% if is_granted('ROLE_MAGNUM') %}
-            <div class="col-lg-3 col-xs-6">
+            <a href="{{ path('marcin_admin_username') }}"><div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-aqua">
                     <div class="inner">
@@ -84,7 +84,7 @@
                         <i class="ion ion-person-add"></i>
                     </div>
                 </div>
-            </div><!-- ./col -->
+            </div><!-- ./col --></a>
             <a href="{{ path('marcin_admin_dashboard', {'status': 'dozaplaty'}) }}">
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->

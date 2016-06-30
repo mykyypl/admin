@@ -17,6 +17,51 @@
     color:#ffffff;
     background-color:#23b7e5;
 }
+.notice-info {
+    border-color: #337ab7 !important;
+}
+.notice-mo {
+    border-color: #5cb85c !important;
+}
+.notice-mod {
+    border-color: #f0ad4e !important;
+}
+.notice-mor {
+    border-color: #607D8B !important;
+}
+.notice-od {
+    border-color: #795548 !important;
+}
+.notice-el {
+    border-color: #444 !important;
+}
+.notice {
+    padding: 15px;
+    background-color: #fafafa;
+    border-left: 6px solid #7f7f84;
+    margin-bottom: 10px;
+    -webkit-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+    box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+}
+.notice-info>strong {
+    color: #337ab7;
+}
+.notice-mo>strong {
+    color: #5cb85c;
+}
+.notice-mod>strong {
+    color: #f0ad4e;
+}
+.notice-mor>strong {
+    color: #607D8B;
+}
+.notice-od>strong {
+    color: #795548;
+}
+.notice-el>strong {
+    color: #444;
+}
     </style>
 {% endblock %}
 {% block body %}
@@ -104,6 +149,445 @@
                 </div>
             </div>
             </div>
+            {# rabaty #}
+                        <div class="row">
+                <div class="col-md-12">
+                <div class="box box-default color-palette-box">
+                    <div class="box-header with-border">
+                     <h3 class="box-title"><i class="fa fa-tag"></i> Rabaty</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            {#  
+                                Płatności:
+                            1. Przedpłata 100%
+                            2. Gotówka przy odbiorze
+                            3. Przelew (mniejszy rabat)
+                            
+                            Typ:
+                            1. Roletki
+                            2. Moskitiery
+                            3. Moskitiery drzwiowe
+                            4. Moskitiery rolowane
+                            5. Zgłoszenie odioru
+                            6. Elementy luzem
+                            
+                            #}
+                            <div class="col-md-4">
+                                <div class="page-header">
+                                    <h3>Roletki</h3>
+                                </div>
+                                
+                                    <div class="form-group">
+                                        <div class="notice notice-info">
+                                            <strong>Przedpłata 100%</strong> rabat:
+                                            {% for rabaty_ro in rabat if rabaty_ro.typ == "1" and rabaty_ro.platnosc == "Przedpłata 100%" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat11" value="{{ rabaty_ro.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap11" class="btn btn-danger" onclick="dataSave('{{ rabaty_ro.user }}', '1', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd11" class="btn btn-default" onclick="dataDell('{{ rabaty_ro.user }}', '1', '1', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat11" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij11" class="btn btn-danger" onclick="dataAdd('{{ rabaty_ro.user }}', '1', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-info">
+                                            <strong>Gotówka przy odbiorze</strong> rabat: 
+                                            {% for rabaty_ro in rabat if rabaty_ro.typ == "1" and rabaty_ro.platnosc == "Gotówka przy odbiorze" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat12" value="{{ rabaty_ro.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap12" class="btn btn-danger" onclick="dataSave('{{ rabaty_ro.user }}', '1', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd12" class="btn btn-default" onclick="dataDell('{{ rabaty_ro.user }}', '1', '2', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat12" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij12" class="btn btn-danger" onclick="dataAdd('{{ rabaty_ro.user }}', '1', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-info">
+                                            <strong>Przelew (mniejszy rabat)</strong> rabat: 
+                                            {% for rabaty_ro in rabat if rabaty_ro.typ == "1" and rabaty_ro.platnosc == "Przelew (mniejszy rabat)" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat13" value="{{ rabaty_ro.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap13" class="btn btn-danger" onclick="dataSave('{{ rabaty_ro.user }}', '1', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd13" class="btn btn-default" onclick="dataDell('{{ rabaty_ro.user }}', '1', '3', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat13" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij13" class="btn btn-danger" onclick="dataAdd('{{ rabaty_ro.user }}', '1', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="page-header">
+                                    <h3>Moskitiery</h3>
+                                </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mo">
+                                            <strong>Przedpłata 100%</strong> rabat:
+                                            {% for rabaty_mo in rabat if rabaty_mo.typ == "2" and rabaty_mo.platnosc == "Przedpłata 100%" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat21" value="{{ rabaty_mo.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap21" class="btn btn-danger" onclick="dataSave('{{ rabaty_mo.user }}', '2', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd21" class="btn btn-default" onclick="dataDell('{{ rabaty_mo.user }}', '2', '1', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat21" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij21" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mo.user }}', '2', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mo">
+                                            <strong>Gotówka przy odbiorze</strong> rabat: 
+                                            {% for rabaty_mo in rabat if rabaty_mo.typ == "2" and rabaty_mo.platnosc == "Gotówka przy odbiorze" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat22" value="{{ rabaty_mo.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap22" class="btn btn-danger" onclick="dataSave('{{ rabaty_mo.user }}', '2', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd22" class="btn btn-default" onclick="dataDell('{{ rabaty_mo.user }}', '2', '2', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat22" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij22" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mo.user }}', '2', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mo">
+                                            <strong>Przelew (mniejszy rabat)</strong> rabat: 
+                                            {% for rabaty_mo in rabat if rabaty_mo.typ == "2" and rabaty_mo.platnosc == "Przelew (mniejszy rabat)" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat23" value="{{ rabaty_mo.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap23" class="btn btn-danger" onclick="dataSave('{{ rabaty_mo.user }}', '2', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd23" class="btn btn-default" onclick="dataDell('{{ rabaty_mo.user }}', '2', '3', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat23" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij23" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mo.user }}', '2', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="page-header">
+                                    <h3>Moskitiery drzwiowe</h3>
+                                </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mod">
+                                            <strong>Przedpłata 100%</strong> rabat:
+                                            {% for rabaty_mod in rabat if rabaty_mod.typ == "3" and rabaty_mod.platnosc == "Przedpłata 100%" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat31" value="{{ rabaty_mod.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap31" class="btn btn-danger" onclick="dataSave('{{ rabaty_mod.user }}', '3', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd31" class="btn btn-default" onclick="dataDell('{{ rabaty_mod.user }}', '3', '1', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat31" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij31" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mod.user }}', '3', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mod">
+                                            <strong>Gotówka przy odbiorze</strong> rabat:
+                                            {% for rabaty_mod in rabat if rabaty_mod.typ == "3" and rabaty_mod.platnosc == "Gotówka przy odbiorze" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat32" value="{{ rabaty_mod.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap32" class="btn btn-danger" onclick="dataSave('{{ rabaty_mod.user }}', '3', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd32" class="btn btn-default" onclick="dataDell('{{ rabaty_mod.user }}', '3', '2', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat32" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij32" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mod.user }}', '3', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mod">
+                                            <strong>Przelew (mniejszy rabat)</strong> rabat: 
+                                            {% for rabaty_mod in rabat if rabaty_mod.typ == "3" and rabaty_mod.platnosc == "Przelew (mniejszy rabat)" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat33" value="{{ rabaty_mod.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap33" class="btn btn-danger" onclick="dataSave('{{ rabaty_mod.user }}', '3', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd33" class="btn btn-default" onclick="dataDell('{{ rabaty_mod.user }}', '3', '3', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat33" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij33" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mod.user }}', '3', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="page-header">
+                                    <h3>Moskitiery rolowane</h3>
+                                </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mor">
+                                            <strong>Przedpłata 100%</strong> rabat:
+                                            {% for rabaty_mor in rabat if rabaty_mor.typ == "4" and rabaty_mor.platnosc == "Przedpłata 100%" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat41" value="{{ rabaty_mor.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap41" class="btn btn-danger" onclick="dataSave('{{ rabaty_mor.user }}', '4', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd41" class="btn btn-default" onclick="dataDell('{{ rabaty_mor.user }}', '4', '1', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat41" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij41" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mor.user }}', '4', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mor">
+                                            <strong>Gotówka przy odbiorze</strong> rabat: 
+                                            {% for rabaty_mor in rabat if rabaty_mor.typ == "4" and rabaty_mor.platnosc == "Gotówka przy odbiorze" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat42" value="{{ rabaty_mor.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap42" class="btn btn-danger" onclick="dataSave('{{ rabaty_mor.user }}', '4', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd42" class="btn btn-default" onclick="dataDell('{{ rabaty_mor.user }}', '4', '2', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat42" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij42" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mor.user }}', '4', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-mor">
+                                            <strong>Przelew (mniejszy rabat)</strong> rabat: 
+                                            {% for rabaty_mor in rabat if rabaty_mor.typ == "4" and rabaty_mor.platnosc == "Przelew (mniejszy rabat)" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat43" value="{{ rabaty_mor.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap43" class="btn btn-danger" onclick="dataSave('{{ rabaty_mor.user }}', '4', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd43" class="btn btn-default" onclick="dataDell('{{ rabaty_mor.user }}', '4', '3', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat43" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij43" class="btn btn-danger" onclick="dataAdd('{{ rabaty_mor.user }}', '4', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="page-header">
+                                    <h3>Zgłoszenie odbioru</h3>
+                                </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-od">
+                                            <strong>Przedpłata 100%</strong> rabat:
+                                            {% for rabaty_od in rabat if rabaty_od.typ == "5" and rabaty_od.platnosc == "Przedpłata 100%" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat51" value="{{ rabaty_od.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap51" class="btn btn-danger" onclick="dataSave('{{ rabaty_od.user }}', '5', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd51" class="btn btn-default" onclick="dataDell('{{ rabaty_od.user }}', '5', '1', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat51" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij51" class="btn btn-danger" onclick="dataAdd('{{ rabaty_od.user }}', '5', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-od">
+                                            <strong>Gotówka przy odbiorze</strong> rabat: 
+                                            {% for rabaty_od in rabat if rabaty_od.typ == "5" and rabaty_od.platnosc == "Gotówka przy odbiorze" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat52" value="{{ rabaty_od.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap52" class="btn btn-danger" onclick="dataSave('{{ rabaty_od.user }}', '5', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd52" class="btn btn-default" onclick="dataDell('{{ rabaty_od.user }}', '5', '2', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat52" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij52" class="btn btn-danger" onclick="dataAdd('{{ rabaty_od.user }}', '5', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-od">
+                                            <strong>Przelew (mniejszy rabat)</strong> rabat: 
+                                            {% for rabaty_od in rabat if rabaty_od.typ == "5" and rabaty_od.platnosc == "Przelew (mniejszy rabat)" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat53" value="{{ rabaty_od.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap53" class="btn btn-danger" onclick="dataSave('{{ rabaty_od.user }}', '5', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd53" class="btn btn-default" onclick="dataDell('{{ rabaty_od.user }}', '5', '3', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat53" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij53" class="btn btn-danger" onclick="dataAdd('{{ rabaty_od.user }}', '5', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="page-header">
+                                    <h3>Elementy luzem</h3>
+                                </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-el">
+                                            <strong>Przedpłata 100%</strong> rabat:
+                                            {% for rabaty_el in rabat if rabaty_el.typ == "6" and rabaty_el.platnosc == "Przedpłata 100%" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat61" value="{{ rabaty_el.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap61" class="btn btn-danger" onclick="dataSave('{{ rabaty_el.user }}', '6', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd61" class="btn btn-default" onclick="dataDell('{{ rabaty_el.user }}', '6', '1', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat61" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij61" class="btn btn-danger" onclick="dataAdd('{{ rabaty_el.user }}', '6', '1', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-el">
+                                            <strong>Gotówka przy odbiorze</strong> rabat: 
+                                            {% for rabaty_el in rabat if rabaty_el.typ == "6" and rabaty_el.platnosc == "Gotówka przy odbiorze" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat62" value="{{ rabaty_el.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap62" class="btn btn-danger" onclick="dataSave('{{ rabaty_el.user }}', '6', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd62" class="btn btn-default" onclick="dataDell('{{ rabaty_el.user }}', '6', '2', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat62" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij62" class="btn btn-danger" onclick="dataAdd('{{ rabaty_el.user }}', '6', '2', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="notice notice-el">
+                                            <strong>Przelew (mniejszy rabat)</strong> rabat: 
+                                            {% for rabaty_el in rabat if rabaty_el.typ == "6" and rabaty_el.platnosc == "Przelew (mniejszy rabat)" %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat63" value="{{ rabaty_el.rabat }}" placeholder="wpisz rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="zap63" class="btn btn-danger" onclick="dataSave('{{ rabaty_el.user }}', '6', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                        <button id="zapd63" class="btn btn-default" onclick="dataDell('{{ rabaty_el.user }}', '6', '3', event)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% else %}
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rabat63" value="" placeholder="dodaj rabat...">
+                                                    <span class="input-group-btn">
+                                                        <button id="wyslij63" class="btn btn-danger" onclick="dataAdd('{{ rabaty_el.user }}', '6', '3', event)" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            {# koniec rabaty #}
             <div class="row">
                 <div class="col-md-6">
                 <div class="box box-default color-palette-box">
@@ -219,6 +703,88 @@ $(function() {
                                     success: function (data) {
                                               //  $('#wynik'+order_id).load(document.URL + ' #wynik'+order_id);
                                                 
+                                    }
+                                });
+
+                            }
+                            
+                            function dataSave(user, typ, platnosc, event) {
+                                var uzytkownik = user;
+                                var typzam = typ;
+                                var plat = platnosc;
+                                //var element = event.currentTarget;
+                                //var clicked = event.target;
+                               var rabat = document.getElementById('rabat'+typzam+plat).value;
+                                var url = '{{ path('marcin_admin_username_update_edit') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        uzytkownik: uzytkownik,
+                                        typzam: typzam,
+                                        platnosc: plat,
+                                        rabat: rabat
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log(uzytkownik);
+                                    }
+                                });
+
+                            }
+                            
+                            function dataAdd(user, typ, platnosc, event) {
+                                var uzytkownik = user;
+                                var typzam = typ;
+                                var plat = platnosc;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                               // var rabat = $(element).val();
+                               var rabat = document.getElementById('rabat'+typzam+plat).value;
+                                var url = '{{ path('marcin_admin_username_update_add') }}';
+                                
+                                $('#wyslij'+typzam+plat).prop('disabled', true);
+                                
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        uzytkownik: uzytkownik,
+                                        typzam: typzam,
+                                        platnosc: plat,
+                                        rabat: rabat
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log(uzytkownik);
+                                    }
+                                });
+
+                            }
+                            
+                            function dataDell(user, typ, platnosc, event) {
+                                var uzytkownik = user;
+                                var typzam = typ;
+                                var plat = platnosc;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                               // var rabat = $(element).val();
+                               var rabat = document.getElementById('rabat'+typzam+plat).value;
+                                var url = '{{ path('marcin_admin_username_update_dell') }}';
+                                
+                                $('#zap'+typzam+plat).prop('disabled', true);
+                                $('#zapd'+typzam+plat).prop('disabled', true);
+                                
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        uzytkownik: uzytkownik,
+                                        typzam: typzam,
+                                        platnosc: plat,
+                                        rabat: rabat
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log(uzytkownik);
                                     }
                                 });
 

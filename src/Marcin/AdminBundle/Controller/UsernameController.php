@@ -19,6 +19,7 @@ use Marcin\AdminBundle\Entity\Zamowieniadmin;
 use Marcin\AdminBundle\Entity\Produkty;
 use Marcin\AdminBundle\Entity\Adresdostawa;
 use Marcin\AdminBundle\Entity\Zamowienia;
+use Marcin\AdminBundle\Entity\Rabaty;
 
 use Marcin\AdminBundle\Form\Type\UzytkownicyType;
 
@@ -127,6 +128,171 @@ class UsernameController extends Controller {
     }
     
     /**
+     * @Route("/form/update-complete/add", 
+     *       name="marcin_admin_username_update_add",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_MAGNUM')")
+     *
+     */
+    public function addRabatAction(Request $Request) {
+
+        $result = array(
+            'uzytkownik' => $Request->request->get('uzytkownik'),
+            'typzam' => $Request->request->get('typzam'),
+            'platnosc' => $Request->request->get('platnosc'),
+            'rabat' => $Request->request->get('rabat')
+        );
+
+        //$RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Username');
+        //$Zamowienie = $RepoZamowienia->find($result['id']);
+
+        //if (NULL === $Zamowienie) {
+         //   return new JsonResponse(false);
+       // }
+        $Rabaty = new Rabaty();
+        $em = $this->getDoctrine()->getManager();
+        $Rabaty->setUser($result['uzytkownik']);
+        if($result['platnosc'] == '1')
+        {
+            $Rabaty->setPlatnosc('Przedpłata 100%');
+        }
+        elseif ($result['platnosc'] == '2') 
+        {
+            $Rabaty->setPlatnosc('Gotówka przy odbiorze');
+        }
+        elseif ($result['platnosc'] == '3')
+        {
+            $Rabaty->setPlatnosc('Przelew (mniejszy rabat)');
+        }
+        $Rabaty->setTypzamowienia($result['typzam']);
+        $Rabaty->setRabat($result['rabat']);
+        $em->persist($Rabaty);
+        $em->flush();
+        
+        return new JsonResponse(true);
+
+    }
+    
+    /**
+     * @Route("/form/update-complete/edit", 
+     *       name="marcin_admin_username_update_edit",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_MAGNUM')")
+     *
+     */
+    public function editRabatAction(Request $Request) {
+
+        $result = array(
+            'uzytkownik' => $Request->request->get('uzytkownik'),
+            'typzam' => $Request->request->get('typzam'),
+            'platnosc' => $Request->request->get('platnosc'),
+            'rabat' => $Request->request->get('rabat')
+        );
+
+        if($result['platnosc'] == '1')
+        {
+            $wartosc = 'Przedpłata 100%';
+        }
+        elseif ($result['platnosc'] == '2') 
+        {
+            $wartosc = 'Gotówka przy odbiorze';
+        }
+        elseif ($result['platnosc'] == '3')
+        {
+           $wartosc = 'Przelew (mniejszy rabat)';
+        }
+        
+        $em = $this->getDoctrine()->getManager();
+        $rabaty = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Rabaty', 'a')
+                 ->where('a.user = :identifier')
+                 ->setParameter('identifier', $result['uzytkownik'])
+                 ->andwhere('a.platnosc = :platnosc')
+                 ->setParameter('platnosc', $wartosc)
+                 ->andwhere('a.typ_zamowienia = :typ')
+                 ->setParameter('typ', $result['typzam'])
+                 ->getQuery()
+                 ->getResult();
+        
+        if (NULL === $rabaty) {
+            return new JsonResponse(false);
+        }
+        
+        $rabaty[0]->setRabat($result['rabat']);
+        $em->flush();
+        
+        return new JsonResponse(true);
+
+    }
+    
+    /**
+     * @Route("/form/update-complete/dell", 
+     *       name="marcin_admin_username_update_dell",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_MAGNUM')")
+     *
+     */
+    public function dellRabatAction(Request $Request) {
+
+        $result = array(
+            'uzytkownik' => $Request->request->get('uzytkownik'),
+            'typzam' => $Request->request->get('typzam'),
+            'platnosc' => $Request->request->get('platnosc'),
+            'rabat' => $Request->request->get('rabat')
+        );
+
+        if($result['platnosc'] == '1')
+        {
+            $wartosc = 'Przedpłata 100%';
+        }
+        elseif ($result['platnosc'] == '2') 
+        {
+            $wartosc = 'Gotówka przy odbiorze';
+        }
+        elseif ($result['platnosc'] == '3')
+        {
+           $wartosc = 'Przelew (mniejszy rabat)';
+        }
+        
+        $em = $this->getDoctrine()->getManager();
+        $rabaty = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Rabaty', 'a')
+                 ->where('a.user = :identifier')
+                 ->setParameter('identifier', $result['uzytkownik'])
+                 ->andwhere('a.platnosc = :platnosc')
+                 ->setParameter('platnosc', $wartosc)
+                 ->andwhere('a.typ_zamowienia = :typ')
+                 ->setParameter('typ', $result['typzam'])
+                 ->getQuery()
+                 ->getResult();
+        
+        if (NULL === $rabaty) {
+            return new JsonResponse(false);
+        }
+        foreach ($rabaty as $usuwanie) {
+           $em->remove($usuwanie);
+           $em->flush();
+        }
+        
+        return new JsonResponse(true);
+
+    }
+    
+    /**
      * @Route(
      *      "/form/{id}", 
      *      name="marcin_admin_username_form",
@@ -210,6 +376,32 @@ class UsernameController extends Controller {
              $dost[$ee++]['telefon'] = $dostawa->GetTelefon();
              $dost[$ff++]['nazwafirmy'] = $dostawa->GetNazwafirmy();
          }
+         
+         $rabaty = $em->createQueryBuilder()
+                ->select('a')
+                ->from('MarcinAdminBundle:Rabaty', 'a')
+                 ->where('a.user = :identifier')
+                 ->setParameter('identifier', $uzytkownik)
+                 ->getQuery()
+                 ->getResult();
+         
+         if ($rabaty == null)
+         {
+            $rabat[0]['user'] = $uzytkownik;
+            $rabat[0]['platnosc'] = null;
+            $rabat[0]['typ'] = null;
+            $rabat[0]['rabat'] = null;
+         }
+         else {
+             $z = 0; $x = 0; $v = 0; $n = 0;
+            foreach ($rabaty as $rabatybaza)
+            {
+                $rabat[$z++]['user'] = $rabatybaza->GetUser();
+                $rabat[$x++]['platnosc'] = $rabatybaza->GetPlatnosc();
+                $rabat[$v++]['typ'] = $rabatybaza->GetTypzamowienia();
+                $rabat[$n++]['rabat'] = $rabatybaza->GetRabat();
+            }
+         }
         
         $form = $this->createForm(new UzytkownicyType(), $Uzytkownicy);
 
@@ -234,7 +426,8 @@ class UsernameController extends Controller {
                     'user' => $zamowienia_user,
                     'listuser' => $listuser,
                     'faktura' => $fakt,
-                    'dostawa' => $dost
+                    'dostawa' => $dost,
+                    'rabat' => $rabat
                         )
         );
     }
