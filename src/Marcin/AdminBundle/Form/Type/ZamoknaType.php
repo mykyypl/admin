@@ -35,20 +35,34 @@ class ZamoknaType extends AbstractType
                     'class' => 'form-control'
                 )
             ))
-            ->add('oscieznica', 'text', array(
-                'label' => 'Ościeżnica',
+            ->add('oscieznica', 'choice', array(
+                'label' => 'Ościeżnica:',
+                'multiple' => false,
+                'choices' => array(
+                    '' => 'Wybież',
+                    'Kańciasta' => 'Kańciasta',
+                    'Zaokrąglona' => 'Zaokrąglona',
+                    'Bez uszczelki' => 'Bez uszczelki',
+                    'Z okapnikiem' => 'Z okapnikiem'
+                ),
                 'attr' => array(
-                    'autocomplete' => 'on',
-                    'class' => 'form-control',
+                    'class' => 'form-control'
                 )
             ))
-            ->add('skrzydlo', 'text', array(
-                'label' => 'Skrzydlo',
+            ->add('skrzydlo', 'choice', array(
+                'label' => 'Skrzydlo:',
+                'multiple' => false,
+                'choices' => array(
+                    '' => 'Wybież',
+                    'Cofnięte' => 'Cofnięte',
+                    'Pół-lico' => 'Pół-lico',
+                    'Lico' => 'Lico',
+                    'Z okapnikiem' => 'Z okapnikiem'
+                ),
                 'attr' => array(
-                    'autocomplete' => 'on',
-                    'class' => 'form-control',
+                    'class' => 'form-control'
                 )
-            ))
+            ))    
             ->add('blaszka', 'text', array(
                 'label' => 'Blaszka',
                 'attr' => array(

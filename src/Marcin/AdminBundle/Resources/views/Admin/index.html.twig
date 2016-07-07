@@ -186,7 +186,7 @@
                                     <th>send data</th>
                                     <th>nr-user-zam</th>
                                      {% if is_granted('ROLE_MAGNUM') %}
-                                        {% if currStatus == 'zrealizowane' or currStatus == 'all' %}
+                                        {% if currStatus == 'zrealizowane' or currStatus == 'all' or currStatus == 'dozaplaty' %}
                                             <th>fakt</th>
                                         {% endif %}
                                      {% endif %}
@@ -241,7 +241,7 @@
                                     <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
                                     {% if is_granted('ROLE_MAGNUM') %}
-                                        {% if currStatus == 'zrealizowane' or currStatus == 'all' %}
+                                        {% if currStatus == 'zrealizowane' or currStatus == 'all' or currStatus == 'dozaplaty' %}
                                             <th id="ffakt{{ article.id }}"><center>{% if article.nr_fakt == "" %}
                                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fakt{{ article.id }}"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                                 <div class="modal fade" id="fakt{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">                                                                                                  
@@ -294,9 +294,15 @@
                                         {#<div class="checkbox checkbox-success">
                                             <center> <input style="flat-red" id="wykonano" type="checkbox" value="{{ article.status }}" onclick="changeWykonano('{{ article.id }}', event)" /><label for="checkbox2">
                                                 </label></center></div>#}
+                                        {% if article.trasa == 'salon' or article.trasa == 'tuchowska' or article.trasa == 'odbiór' %}
+                                             <th id="produkcjaa{{ article.id }}">
+                                <center><button type="button" class="btn btn-info" onclick="changeButtonProdukcjaemail('{{ article.id }}', '{{ article.trasa }}', '{{ article.user }}', '{{ article.iddost }}', event)"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button></center>
+                                        </th>
+                                            {% else %}
                                         <th id="produkcjaa{{ article.id }}">
                                 <center><button type="button" class="btn btn-success" onclick="changeButtonProdukcjaa('{{ article.id }}', event)"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button></center>
                                         </th>
+                                        {% endif %}
                                     {% else %}
                                     {% endif %}
                                     <th id="numerprodukcji{{ article.id }}">
@@ -664,6 +670,51 @@
                                     data: {
                                       id: order_id,
                                       wykonano: zaplacono
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         document.getElementById("gm-panel"+order_id).className = "widok-realizacja";
+                                         $('#gm-panel'+order_id).load(document.URL +  ' #gm-panel'+order_id);
+                                         document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                         document.getElementById("ladowanie-animacja-realizacja").className = "";      
+                                    }
+                                });
+                               
+                            }
+                            
+                        function changeButtonProdukcjaemail(id, trasa, user, dostawa, event) {
+                                var order_id = id;
+                                var jakatrasa = trasa;
+                                var uzytkownik = user;
+                                var iddostawy = dostawa;
+
+                                document.getElementById("ladowanie-realizacja").className = "overlay";
+                                document.getElementById("ladowanie-animacja-realizacja").className = "fa fa-refresh fa-spin";
+                                
+                                //var element = event.currentTarget;
+                                //var clicked = event.target;
+                                //var produkcja = $(element).val();
+                                var url = '{{ path('marcin_admin_dashboard_update_wykonano_email') }}';
+                                
+                                var element = event.currentTarget;
+                                //var clicked = event.target;
+                                
+                                if($(element).is('clicked')) {
+             console.log('null kliknieto!');
+             var zaplacono = 0;
+        } else {
+             console.log('kliknieto!');
+             var zaplacono = 1;
+        }
+                                
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                      id: order_id,
+                                      wykonano: zaplacono,
+                                      trasa: jakatrasa,
+                                      user: uzytkownik,
+                                      dostawa: iddostawy
                                     },
                                     method: 'POST',
                                     success: function (data) {

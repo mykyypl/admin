@@ -214,6 +214,62 @@ class DashboardController extends Controller {
     }
     
     /**
+     * @Route("/form/update-complete/produkcja/email", 
+     *       name="marcin_admin_dashboard_update_wykonano_email",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function updateWykoEmailAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'wykonano' => $Request->request->get('wykonano'),
+            'trasa' => $Request->request->get('trasa'),
+            'user' => $Request->request->get('user'),
+            'dostawa' => $Request->request->get('dostawa')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+        if ($result['wykonano'] == '1')
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStatus('wyprodukowane');
+            $Zamowienie->setTrasaok('1');
+            $em->flush();
+            $trasastat = $result['trasa'];
+            $user = $result['user'];
+            $idzam = $result['dostawa'];
+                    
+             try {
+                $userManager = $this->get('user_manager');
+                $userManager->sendEmailo($trasastat, $user, $idzam);
+                $this->addFlash('success', 'Poprawnie wysłano email!!');
+            }
+            catch (UserException $exc) {
+                    $this->addFlash('error', $exc->getMessage());
+                }
+        } else if($result['wykonano'] == '0')
+        {
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStatus('w realizacji');
+            $em->flush();
+        }
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
      * @Route("/form/update-complete/realizacja", 
      *       name="marcin_admin_dashboard_update_realizacja",
      *       requirements={
