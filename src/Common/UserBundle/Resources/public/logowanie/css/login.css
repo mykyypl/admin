@@ -1,48 +1,105 @@
 /**
- * parallax.css
- * @Author Original @msurguy -> http://bootsnipp.com/snippets/featured/parallax-login-form
- * @Reworked By @kaptenn_com 
- * @package PARALLAX LOGIN.
+ * Marcin Kukliński
  */
     
-    body {
-        background-color: #444;
-        background: url(http://www.rainerkarcher.com/_/sandbox/textures/px_by_Gre3g/px_by_Gre3g_@2X.png);        
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+
+html,body{min-height:100%}
+body{
+    background-color: #27c5a6;
+    margin: 0;
+}
+
+input[type="text"],
+input[type="password"]{
+    border-radius: 0;
+}
+
+#test {
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 420px;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(255,255,255,1);
+    -moz-box-shadow: 1px 1px 5px 0px rgba(255,255,255,1);
+    box-shadow: 1px 1px 5px 0px rgba(255,255,255,1);
+}
+
+#logowanie {
+    margin-top: 50px;
+}
+@media screen and (max-width: 480px) {
+    #logowanie {
+        margin-top: 10px;
     }
-    .form-signin input[type="text"] {
-        margin-bottom: 5px;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
+    
+}
+@media screen and (min-width: 1700px) {
+    #test {
+        max-width: 420px;
     }
-    .form-signin input[type="password"] {
-        margin-bottom: 10px;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-    }
-    .form-signin .form-control {
-        position: relative;
-        font-size: 16px;
-        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-        height: auto;
-        padding: 10px;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-    .vertical-offset-100 {
-        padding-top: 100px;
-    }
-    .img-responsive {
+    
+}
+.tekst {
+    height: 70px;
+    padding-left: 20px;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.tekst p {
+    color: #719fdb;
+}
+
+.logowanie {
+    padding: 20px;
+}
+
+.logowanie:hover {
+    background-color: #f0f0f0;
+    border-left: 5px solid #3498db;
+}
+
+.haslo {
+    padding: 20px;
+    position: relative;
+}
+
+.haslo:hover {
+    background-color: #f0f0f0;
+    border-left: 5px solid #3498db;
+}
+
+.osadzanieikony {
+    position: relative;
+}
+
+.ustawienie {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
     display: block;
-    max-width: 100%;
-    height: auto;
-    margin: auto;
-    }
-    .panel {
-    margin-bottom: 20px;
-    background-color: rgba(255, 255, 255, 0.75);
-    border: 1px solid transparent;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    }
+    width: 34px;
+    height: 34px;
+    line-height: 34px !important;
+    text-align: center;
+    pointer-events: none;
+    color: #5598db;
+}
+
+.zapamietanie {
+    margin-left: 10px;
+    color: #95a5a6;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.wyslanie {
+    margin-right: 10px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+/* https://d85wutc1n854v.cloudfront.net/live/products/600x375/WB0G8810G.png?v=1.0 */
