@@ -81,6 +81,11 @@ marcin_admin_zamokna:
     resource: "@MarcinAdminBundle/Controller/ZamoknaController.php"
     type: annotation
     prefix: /p/zam/okna
+    
+marcin_admin_roletkinazwa:
+    resource: "@MarcinAdminBundle/Controller/RoletkinazwaController.php"
+    type: annotation
+    prefix: /r/roletki/nazwa
 
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"

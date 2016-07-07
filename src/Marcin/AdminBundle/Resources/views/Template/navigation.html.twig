@@ -82,5 +82,7 @@
                 </ul>
             </li>{% endif %}
              {% if is_granted('ROLE_ADMIN') %}<li class="{% if app.request.get('_route') == 'common_user_admin_users' %}active{% endif %}"><a href="{{ path('common_user_admin_users') }}"><i class="fa fa-users" aria-hidden="true"></i> <span>Urzytkownicy panelu</span>{#<span class="label label-primary pull-right">{{ navigation.username.count.user }}</span>#}</a></li>{% endif %}
-        {% if is_granted('ROLE_MAGNUM') %}<li class="{% if app.request.get('_route') == 'marcin_admin_zamokna' %}active{% endif %}"><a href="{{ path('marcin_admin_zamokna') }}"><i class="fa fa-windows"></i> <span>Dane okna</span></a></li>{% endif %}
+        {% if is_granted('ROLE_MAGNUM') %}<li class="{% if app.request.get('_route') == 'marcin_admin_zamokna' %}active{% endif %}"><a href="{{ path('marcin_admin_zamokna') }}"><i class="fa fa-windows"></i> <span>Dane okna</span></a></li>
+        <li class="{% if app.request.get('_route') == 'marcin_admin_roletkinazwa' %}active{% endif %}"><a href="{{ path('marcin_admin_roletkinazwa') }}"><i class="fa fa-map"></i> <span>Roletki nazwy</span></a></li>
+        {% endif %}
         </ul>

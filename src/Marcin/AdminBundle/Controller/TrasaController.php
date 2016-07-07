@@ -1767,7 +1767,7 @@ class TrasaController extends Controller {
         } else {
         //$sprwadzam = array();
          $a = 0;$b = 0;$c = 0;$d = 0;$e = 0;$f = 0;$g = 0;$h = 0;
-         $a1 = 0;$b1 = 0;$c1 = 0;$d1 = 0;$e1 = 0;$f1 = 0;$g1 = 0;$h1 = 0;
+         $a1 = 0;$b1 = 0;$c1 = 0;$d1 = 0;$e1 = 0;$f1 = 0;$g1 = 0;$h1 = 0;$i1 = 0;
          $aa = 0;$bb = 0; $cc = 0;$dd = 0;$ee = 0;$ff = 0;
          $aaa = 0; $bbb = 0; $ccc = 0; $ddd = 0; $eee = 0; $fff = 0; $ggg = 0;
         foreach ($zamowienia_query as $zamowienia)
@@ -1780,6 +1780,7 @@ class TrasaController extends Controller {
         )->setParameter('poniedzialek', $dostawa);
         $trasa_zliczanie1 = $query_zliczanie1->getResult();
         $uzytkonik = $trasa_zliczanie1[0]->GetUser();
+        $zmiana_nick = strlen($uzytkonik);
         $dane[$a++]['user'] = $trasa_zliczanie1[0]->GetUser();
         $dane[$b++]['ulica'] = $trasa_zliczanie1[0]->GetUlica();
         $dane[$c++]['kod'] = $trasa_zliczanie1[0]->GetKodpocztowy();
@@ -1797,6 +1798,7 @@ class TrasaController extends Controller {
         $produkty[$f1++]['jakiezam'] = $zamowienia->GetJakie_zam();
         $produkty[$h1++]['zaplacono'] = $zamowienia->GetZaplacono();
         $produkty[$g1++]['id'] = $zamowienia->GetId();
+        $produkty[$i1++]['konieczam'] = substr($zamowienia->GetNr_user_zam(), $zmiana_nick + 1);
         $id_zam = $zamowienia->GetId();
         
         $query_zliczanie2 = $em->createQuery(

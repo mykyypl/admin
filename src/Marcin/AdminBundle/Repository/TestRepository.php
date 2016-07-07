@@ -973,8 +973,9 @@ class TestRepository extends EntityRepository
                         ->where('s.status = :status OR s.status = :przyjete')
                         ->setParameter('status', 'wyprodukowane')
                         ->setParameter('przyjete', 'przyjęte')
-                        ->andwhere('s.trasa = :trasa')
-                        ->setParameter('trasa', 'tuchowska');
+                        ->andwhere('s.trasa = :trasa OR s.trasa = :inne')
+                        ->setParameter('trasa', 'Oczekiwanie na wybór trasy')
+                        ->setParameter('inne', NULL);
         
         
          $all_tuch = (int)$qb->getQuery()->getSingleScalarResult();

@@ -294,7 +294,7 @@
                                         {#<div class="checkbox checkbox-success">
                                             <center> <input style="flat-red" id="wykonano" type="checkbox" value="{{ article.status }}" onclick="changeWykonano('{{ article.id }}', event)" /><label for="checkbox2">
                                                 </label></center></div>#}
-                                        {% if article.trasa == 'salon' or article.trasa == 'tuchowska' or article.trasa == 'odbiór' %}
+                                        {% if article.trasa == 'salon' or article.trasa == 'tuchowska' or article.trasa == 'odbior' %}
                                              <th id="produkcjaa{{ article.id }}">
                                 <center><button type="button" class="btn btn-info" onclick="changeButtonProdukcjaemail('{{ article.id }}', '{{ article.trasa }}', '{{ article.user }}', '{{ article.iddost }}', event)"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button></center>
                                         </th>

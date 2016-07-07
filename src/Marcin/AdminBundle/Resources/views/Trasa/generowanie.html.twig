@@ -94,7 +94,7 @@ div.page
                                                     <tr class="kolordruk" bgcolor="#C3C3C3"><th colspan="4"><center><b><font color="red"><dum>{{ prod.jakiezam }}</dum></font></b></center></th></tr>
                                                     <tr class="kolordruk" bgcolor="#C3C3C3"><th>Lp.</th><th>Zamówienie</th><th>Nr. zam. Klienta</th><th>Informacje</th></tr>
                                                     <tr class="kolordruk" height="30px" bgcolor="#C3C3C3"><td><b>{{ loop.index }}</b></td>
-                                                        <td><b><dum>{{ prod.nrprodukcji }}</dum></b></td> <td>{{ prod.nruser }}
+                                                        <td><b><dum>{{ prod.nrprodukcji }}</dum></b></td> <td><b>{{ user }}</b>_{{ prod.konieczam }}{#{{ prod.nruser }}#}
                                                             </td><td>  Kwota: <b><dum>{% if prod.zaplacono == '1' %}0{% else %}{{ prod.dozaplaty }}{% endif %}</dum></b>, 
                                                             {{ prod.platnosc }}</td></tr>{% if prod.zaplacono == '1' %}{% set kasa = kasa + 0 %}{% else %}{% set kasa = kasa + prod.dozaplaty %}{% endif %}
                                                 </table>

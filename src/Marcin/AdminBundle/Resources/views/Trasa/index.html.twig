@@ -70,11 +70,11 @@
                                 Salon <span class="badge">{{ sal.count.all_sal }}</span>
                             </a>
                         </div>
-                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                       {# <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
                             <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_tuchowska') }}">
                                 Tuchowska <span class="badge">{{ tuch.count.all_tuch }}</span>
                             </a>
-                        </div>
+                        </div>#}
                         <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
                             <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_montaz') }}">
                                 Montaż <span class="badge">{{ mon.count.all_mon }}</span>
@@ -84,6 +84,11 @@
                             <a class="btn btn-block btn-primary" href="{{ path('marcin_admin_trasa_wysylka') }}">
                                 Wysyłka <span class="badge">{{ wys.count.all_wys }}</span>
                             </a>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-2 padding-bottom-15">
+                           {# <a class="btn btn-block btn-{% if trasastat == 'tuchowska' %}default{% else %}primary{% endif %}" href="{{ path('marcin_admin_trasa_tuchowska') }}">#}
+                           <button class="btn btn-block btn-danger"> Nieprzypisane: <span class="badge">{{ tuch.count.all_tuch }}</span></button>
+                          {#  </a>#}
                         </div>
                     </div>
                         <div style="overflow-x: auto;">
