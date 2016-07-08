@@ -64,7 +64,14 @@ class ZamoknaType extends AbstractType
                 )
             ))    
             ->add('blaszka', 'text', array(
-                'label' => 'Blaszka',
+                'label' => 'Blaszka standard',
+                'attr' => array(
+                    'autocomplete' => 'on',
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('blaszkaex', 'text', array(
+                'label' => 'Blaszka Exclusive',
                 'attr' => array(
                     'autocomplete' => 'on',
                     'class' => 'form-control',
@@ -83,11 +90,23 @@ class ZamoknaType extends AbstractType
                     'class' => 'form-control'
                 )
             ))
-            ->add('stronawiercenia', 'text', array(
-                'label' => 'Strona wiercenia',
+            //->add('stronawiercenia', 'text', array(
+            //    'label' => 'Strona wiercenia',
+             //   'attr' => array(
+             //       'autocomplete' => 'on',
+             //       'class' => 'form-control',
+             //   )
+           // ))
+            ->add('stronawiercenia', 'choice', array(
+                'label' => 'Strona wiercenia:',
+                'multiple' => false,
+                'choices' => array(
+                    '' => 'Wybież',
+                    'S' => 'S',
+                    'O' => 'O'
+                ),
                 'attr' => array(
-                    'autocomplete' => 'on',
-                    'class' => 'form-control',
+                    'class' => 'form-control'
                 )
             ))
             ->add('stalaszer', 'text', array(

@@ -91,7 +91,7 @@ class ZamoknaController extends Controller {
 
         $qb = $StatUser->getQueryBuilder($queryParams);
         
-        $paginationLimit = $this->container->getParameter('admin.pagination_limit');
+        $paginationLimit = $this->container->getParameter('admin.pagination_limit_okna');
         $limits = array(2, 5, 10, 15);
         
         $limit = $Request->query->get('limit', $paginationLimit);

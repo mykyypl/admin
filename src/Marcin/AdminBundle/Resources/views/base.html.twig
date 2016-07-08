@@ -54,6 +54,43 @@
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
               <!-- Messages: style can be found in dropdown.less-->
+              <!-- Notifications: style can be found in dropdown.less -->
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-wrench"></i>
+              <span class="label label-info">1</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">Zmiany aktualizacji:</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu">
+                  <li>
+                      <a>+ "systemy okienne" dodanie blaszka exclusive</a>
+                  </li>
+                  <li>
+                      <a># fix dodawania plików .dwg w panelu</a>
+                  </li>
+                  <li>
+                      <a>+ "systemy okienne" listwa rozwijana strony wiercenia (S/O)</a>
+                  </li>
+                  <li>
+                     <a># aktualizacja panelu logowania</a>
+                  </li>
+                  <li>
+                     <a># wyświetlanie wszystkich opcji okien</a>
+                  </li>
+                  <li>
+                     <a>+ wyświetlanie do 200 sys okiennych</a>
+                  </li>
+                  <li>
+                     <a>+ lista zmian po ostatniej aktualizacji</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="footer">{#<a href="#">View all</a>#}</li>
+            </ul>
+          </li>
               <!-- /.messages-menu -->
                     <li class="dropdown messages-menu">
                         {{ print_live() }}

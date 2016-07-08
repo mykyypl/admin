@@ -73,6 +73,13 @@ class Zamokna {
      * 
      * 
      */
+    private $blaszkaex;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
     private $rodzaj;
     
     /**
@@ -242,6 +249,29 @@ class Zamokna {
     public function getBlaszka()
     {
         return $this->blaszka;
+    }
+    
+    /**
+     * Set blaszkaex
+     *
+     * @param integer $blaszkaex
+     *
+     * @return Zamokna
+     */
+    public function setBlaszkaex($blaszkaex)
+    {
+        $this->blaszkaex = $blaszkaex;
+        return $this;
+    }
+    
+    /**
+     * Get blaszkaex
+     *
+     * @return integer
+     */
+    public function getBlaszkaex()
+    {
+        return $this->blaszkaex;
     }
     
     /**

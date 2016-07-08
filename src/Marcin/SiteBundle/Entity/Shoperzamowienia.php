@@ -185,7 +185,7 @@ class Shoperzamowienia {
     /**
      * @Assert\File(
      *      maxSize = "5M",
-     *      mimeTypes = {"application/pdf", "application/x-pdf", "application/msword", "application/acad", "image/vnd.dwg", "image/x-dwg", "image/jpeg", "image/pjpeg", "image/jpeg", "image/pjpeg", "image/png", "application/x-compressed", "application/x-zip-compressed", "application/zip", "multipart/x-zip"},
+     *      mimeTypes = {"application/pdf", "application/x-pdf", "application/msword", "application/acad", "image/vnd.dwg", "image/x-dwg", "image/jpeg", "image/pjpeg", "image/jpeg", "image/pjpeg", "image/png", "application/x-compressed", "application/x-zip-compressed", "application/zip", "multipart/x-zip", "application/x-acad", "application/autocad_dwg", "application/dwg", "application/x-dwg", "application/x-autocad", "drawing/dwg"},
      *      mimeTypesMessage = "Obsługiwany format plików: pdf,doc,dwg,jpg,jpeg,png,zip (MAX 5M)"
      * )
      */
