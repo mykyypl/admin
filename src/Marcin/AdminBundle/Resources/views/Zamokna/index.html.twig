@@ -58,8 +58,91 @@
                             </thead>
         
     {% for article in pagination  %}
-       <tr><th>{{ article.id }}</th> 
-           <th><a href="{{ path('marcin_admin_zamokna_form', {'id': article.id}) }}">{{ article.name }}</a></th>
+       <tr id="danee{{ article.id }}"><th>{{ article.id }}</th> 
+           <th><a href="{{ path('marcin_admin_zamokna_form', {'id': article.id}) }}">{{ article.name }}</a>
+               <button type="button" class="btn btn-warning" data-toggle="modal" data-target=".bs-example-modal-lg{{ article.id }}"><i class="fa fa-retweet" aria-hidden="true"></i></button>
+               <!-- MODAL -->
+               <div class="modal fade bs-example-modal-lg{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ article.id }}">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ article.name }}</h4>
+                      </div>
+                      <div class="modal-body">
+                       <div class="form-group">
+                           <label>Felc:</label>
+                           <input type="text" id="felc{{ article.id }}" value="{{ article.felc }}" class="form-control">
+                       </div>
+                       <div class="form-group">
+                           <label>Ościeżnica:</label>
+                           {#<input type="text" value="{{ article.oscieznica }}" class="form-control">#}
+                           <select class="form-control" id="oscieznica{{ article.id }}">
+                               <option>proszę wybrać</option>
+                               <option value="Kańciasta" {% if article.oscieznica == 'Kańciasta' %}selected{% endif %}>Kańciasta</option>
+                               <option value="Zaokrąglona" {% if article.oscieznica == 'Zaokrąglona' %}selected{% endif %}>Zaokrąglona</option>
+                               <option value="Bez uszczelki" {% if article.oscieznica == 'Bez uszczelki' %}selected{% endif %}>Bez uszczelki</option>
+                               <option value="Z okapnikiem" {% if article.oscieznica == 'Z okapnikiem' %}selected{% endif %}>Z okapnikiem</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label>Skrzydło:</label>
+                           {#<input type="text" value="{{ article.skrzydlo }}" class="form-control">#}
+                           <select class="form-control" id="skrzydlo{{ article.id }}">
+                               <option>proszę wybrać</option>
+                               <option value="Cofnięte" {% if article.skrzydlo == 'Cofnięte' %}selected{% endif %}>Cofnięte</option>
+                               <option value="Pół-lico" {% if article.skrzydlo == 'Pół-lico' %}selected{% endif %}>Pół-lico</option>
+                               <option value="Lico" {% if article.skrzydlo == 'Lico' %}selected{% endif %}>Lico</option>
+                               <option value="Z okapnikiem" {% if article.skrzydlo == 'Z okapnikiem' %}selected{% endif %}>Z okapnikiem</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label>Blaszka standard:</label>
+                           <input type="text" id="blaszka{{ article.id }}" value="{{ article.blaszka }}" class="form-control">
+                       </div>
+                       <div class="form-group">
+                           <label>Blaszka Exclusive:</label>
+                           <input type="text" id="blaszkaex{{ article.id }}" value="{{ article.blaszkaex }}" class="form-control">
+                       </div>
+                       <div class="form-group">
+                           <label>Rodzaj:</label>
+                           {#<input type="text" value="{{ article.rodzaj }}" class="form-control">#}
+                           <select class="form-control" id="rodzaj{{ article.id }}">
+                               <option>proszę wybrać</option>
+                               <option value="PCV" {% if article.rodzaj == 'PCV' %}selected{% endif %}>PCV</option>
+                               <option value="ALU" {% if article.rodzaj == 'ALU' %}selected{% endif %}>ALU</option>
+                               <option value="DRE" {% if article.rodzaj == 'DRE' %}selected{% endif %}>DRE</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label>Strona wiercenia :</label>
+                           {#<input type="text" value="{{ article.stronawiercenia }}" class="form-control">#}
+                           <select class="form-control" id="stronawiercenia{{ article.id }}">
+                               <option>proszę wybrać</option>
+                               <option value="S" {% if article.stronawiercenia == 'S' %}selected{% endif %}>S</option>
+                               <option value="O" {% if article.stronawiercenia == 'O' %}selected{% endif %}>O</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label>Stała szerokość:</label>
+                           <input type="text" id="szerokosc{{ article.id }}" value="{{ article.stalaszer }}" class="form-control">
+                       </div>
+                       <div class="form-group">
+                           <label>Stała wysokość:</label>
+                           <input type="text" id="wysokosc{{ article.id }}" value="{{ article.stalawys }}" class="form-control">
+                       </div>
+                       <div id="uwaga{{ article.id }}" class="uwaga">
+                       </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                        <button id="dane{{ article.id }}" type="button" class="btn btn-primary" onclick="dataOkna('{{ article.id }}', event)">Zapisz</button>
+                      </div>
+                    </div>
+                  </div>
+               </div>
+               <!-- koniec modal -->
+           </th>
            <th>{{ article.felc }}</th>
            <th>{{ article.oscieznica }}</th>
            <th>{{ article.skrzydlo }}
@@ -116,5 +199,63 @@
     }
         </script>
     <script type="text/javascript" src="{{ asset('bundles/marcinadmin/own/select/js/bootstrap-select.min.js') }}"></script>
+    <script>
+        
+         function dataOkna(id, event) {
+                                var okna = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                               // var nazwa = 'nrfaktury';
+                                //var fakt = document.getElementById(nazwa.order_id);
+                                //var nrfakturki = fakt.value;
+                                var felc = $('#felc'+okna).val();
+                                var oscieznica = $('#oscieznica'+okna).val();
+                                var skrzydlo = $('#skrzydlo'+okna).val();
+                                var blaszka = $('#blaszka'+okna).val();
+                                var blaszkaex = $('#blaszkaex'+okna).val();
+                                var rodzaj = $('#rodzaj'+okna).val();
+                                var stronawiercenia = $('#stronawiercenia'+okna).val();
+                                var szerokosc = $('#szerokosc'+okna).val();
+                                var wysokosc = $('#wysokosc'+okna).val();
+                                
+                                if (felc == '' || oscieznica == '' || oscieznica == 'proszę wybrać' || skrzydlo == 'proszę wybrać' || skrzydlo == '' || rodzaj == 'proszę wybrać' || rodzaj == '' || stronawiercenia == 'proszę wybrać' || stronawiercenia == '' || szerokosc == '' || wysokosc == '')
+                                {
+                                    $("#uwaga"+okna).append('<div class="alert alert-danger" role="alert">Wszystkie pola oprócz blaszek są wymagane!</div>');
+                                }
+                                else {
+                                
+                                $('#bs-example-modal-lg'+okna).modal('hide');
+                                var url = '{{ path('marcin_admin_zamokna_wykonano') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: okna,
+                                        felc: felc,
+                                        oscieznica: oscieznica,
+                                        skrzydlo: skrzydlo,
+                                        blaszka: blaszka,
+                                        blaszkaex: blaszkaex,
+                                        rodzaj: rodzaj,
+                                        stronawiercenia: stronawiercenia,
+                                        szerokosc: szerokosc,
+                                        wysokosc: wysokosc
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         //document.getElementById("gm-panel"+order_id).className = "widok-realizacja";
+                                         
+                                        // document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                        /// document.getElementById("ladowanie-animacja-realizacja").className = ""; 
+                                         //$('#danee'+okna).load(location.href + ' #danee'+okna);
+                                        location.reload();
+                                               console.log(stronawiercenia);
+                                    }
+                                });
+                            }
+
+                            }
+        
+    </script>
 {% endblock %}
 

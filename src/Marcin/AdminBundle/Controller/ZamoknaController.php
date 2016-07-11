@@ -26,6 +26,55 @@ class ZamoknaController extends Controller {
     private $deleteTokenName = 'delete-okno-%d';
     
     /**
+     * @Route("/form/update-complete/zamokna", 
+     *       name="marcin_admin_zamokna_wykonano",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function updateOknaAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'felc' => $Request->request->get('felc'),
+            'oscieznica' => $Request->request->get('oscieznica'),
+            'skrzydlo' => $Request->request->get('skrzydlo'),
+            'blaszka' => $Request->request->get('blaszka'),
+            'blaszkaex' => $Request->request->get('blaszkaex'),
+            'rodzaj' => $Request->request->get('rodzaj'),
+            'stronawiercenia' => $Request->request->get('stronawiercenia'),
+            'szerokosc' => $Request->request->get('szerokosc'),
+            'wysokosc' => $Request->request->get('wysokosc')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamokna');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setFelc($result['felc']);
+            $Zamowienie->setOscieznica($result['oscieznica']);
+            $Zamowienie->setSkrzydlo($result['skrzydlo']);
+            $Zamowienie->setBlaszka($result['blaszka']);
+            $Zamowienie->setBlaszkaex($result['blaszkaex']);
+            $Zamowienie->setRodzaj($result['rodzaj']);
+            $Zamowienie->setStronawiercenia($result['stronawiercenia']);
+            $Zamowienie->setStalaszer($result['szerokosc']);
+            $Zamowienie->setStalawys($result['wysokosc']);
+            $em->flush();
+       
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
      * @Route(
      *      "/form/{id}", 
      *      name="marcin_admin_zamokna_form",

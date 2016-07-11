@@ -62,18 +62,18 @@ class Zamokna {
     private $skrzydlo;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * 
      * 
      */
-    private $blaszka;
+    private $blaszka = null;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * 
      * 
      */
-    private $blaszkaex;
+    private $blaszkaex = null;
     
     /**
      * @ORM\Column(type="string")
