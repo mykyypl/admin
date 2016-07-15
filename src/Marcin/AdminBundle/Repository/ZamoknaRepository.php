@@ -15,7 +15,7 @@ class ZamoknaRepository extends EntityRepository
         
         $qb = $this->createQueryBuilder('s')
                 ->select('s')
-              ->addOrderBy('s.id', 'DESC');
+              ->addOrderBy('s.name', 'ASC');
 
         if(!empty($params['orderBy'])){
             $orderDir = !empty($params['orderDir']) ? $params['orderDir'] : NULL;

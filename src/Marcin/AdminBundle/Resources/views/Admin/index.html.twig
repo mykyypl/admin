@@ -31,6 +31,47 @@
         {
             visibility: hidden;
         }
+        .notice {
+    padding: 15px;
+    background-color: #fafafa;
+    border-left: 6px solid #7f7f84;
+    margin-bottom: 10px;
+    -webkit-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+       -moz-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+            box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+}
+.notice-sm {
+    padding: 10px;
+    font-size: 80%;
+}
+.notice-lg {
+    padding: 35px;
+    font-size: large;
+}
+.notice-success {
+    border-color: #80D651;
+}
+.notice-success>strong {
+    color: #80D651;
+}
+.notice-info {
+    border-color: #45ABCD;
+}
+.notice-info>strong {
+    color: #45ABCD;
+}
+.notice-warning {
+    border-color: #FEAF20;
+}
+.notice-warning>strong {
+    color: #FEAF20;
+}
+.notice-danger {
+    border-color: #d73814;
+}
+.notice-danger>strong {
+    color: #d73814;
+}
        </style>
 {% endblock %}
 {% block body %}
@@ -121,6 +162,18 @@
             <!-- /.info-box-content -->
           </div>
           <!-- /.info-box -->
+        </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" style="cursor: pointer;" onclick="WeryfikacjaZamowien()">
+          <div class="info-box bg-green">
+            <span class="info-box-icon bg-green"><i class="fa fa-eye-slash"></i></span>
+
+            <div class="info-box-content bg-green">
+              <span class="info-box-text"></span>
+              <span class="info-box-number">Weryfikacja zamówień!</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
         </div>{% endif %}
         </div>
         <div class="box box-default color-palette-box">
@@ -161,7 +214,6 @@
                        </div>
                     </div>
 
-
                                <div class="clearfix"></div>
                             <div class="col-xs-12 col-md-2 col-lg-3 padding-bottom-15 pull-right">
                                 <div class="input-group" style="width: 100%;">
@@ -172,8 +224,6 @@
                                 </div>
                             </div>
 
-
-                   
                                <div class="clearfix"></div>
                         </form>
                                   <div class="box">
@@ -202,8 +252,107 @@
                             <tbody>
                             {% for article in pagination  %}
                                 <tr id="gm-panel{{ article.id }}" {% if article.zaplacono == '0' %}{% if article.dozaplaty == '0' %}class="warning"{% endif %}{% endif %}><th id="task-complete-{{ article.id }}">{{ article.id }}</th> 
-                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <font color="red" size="4">M</font> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <font color="red" size="4">MD</font> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <font color="red" size="4">MR</font> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <font color="red" size="4">ZO</font> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <font color="red" size="4">EL</font> {% elseif article.jakie_zam == 'wydanie zewnętrzne' %} <font color="red" size="4">WZ</font>{% else %} <font color="red" size="4">R</font> {# {{ article.jakie_zam }}#}{% endif %}<div class="modal fade {{ article.id }}" id="{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ article.id }}">
-                                              <div class="modal-dialog modal-lg" role="document">                  
+                                    <th>{% if article.jakie_zam == 'zamówienie moskitier' %} <font color="red" size="4">M</font> {% elseif article.jakie_zam == 'zamówienie moskitier drzwiowych' %} <font color="red" size="4">MD</font> {% elseif article.jakie_zam == 'zamówienie moskitier rolowanych' %} <font color="red" size="4">MR</font> {% elseif article.jakie_zam == 'zgłoszenie do odbioru' %} <font color="red" size="4">ZO</font> {% elseif article.jakie_zam == 'zamówienie elementów luzem' %} <font color="red" size="4">EL</font> {% elseif article.jakie_zam == 'wydanie zewnętrzne' %} <font color="red" size="4">WZ</font>{% else %} <font color="red" size="4">R</font> {# {{ article.jakie_zam }}#}{% endif %}
+                                              {% if article.jakie_zam == 'zamówienie moskitier' %}
+                                                  <!-- moskitiery panel -->
+                                                  
+                                                    <div class="modal fade" id="mo{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="molabel{{ article.id }}">
+                                                      <div class="modal-dialog modal-lg" role="document">
+                                                        <div class="modal-content">
+                                                          <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel">{{ article.nr_user_zam }} - {{ article.id }}</h4>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                            {% set ilosc = 0 %}
+                                                       {% for prod in produkty if prod.idzam == article.id %}
+                                                           {% set ilosc = ilosc + 1 %}
+                                                           {% endfor %}
+                                                           <div class="row">
+                                                               {% for etapy in etapyprodukcji if etapy.idzam == article.id %}
+                                                               <div class="col-md-12">
+                                                                   <div style="overflow-x: auto;">
+                                                                   <div class="notice notice-{% if etapy.blad is null %}success{% else %}danger{% endif %}">
+                                                                   {% if etapy.blad is null %}Dane poprawne<br>{% else %}Prawdopodobny błąd: <strong>{{ etapy.blad }}</strong><br>{% endif %}
+                                                                   <h4><b>{{ etapy.okno }}</b>, felc:<b>{{ etapy.felc }}</b>, ościeżnica: <b>{{ etapy.oscieznica }}</b>, skrzydło: <b>{{ etapy.skrzydlo }}</b>, kolorsiatki: <b>{{ etapy.kolorsiatki }}</b><br> m2: <b>{{ etapy.m2 }}</b>, cenna: <b><font color="red">{{ etapy.cenna }} zł</font></b></h4>
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>lp</th>
+                                                                                <th>Typ</th>
+                                                                                <th>Kolor</th>
+                                                                                <th>Szer</th>
+                                                                                <th>Wys</th>
+                                                                                <th>Blaszka</th>
+                                                                                <th>Rodzaj</th>
+                                                                                <th>Strona</th>
+                                                                                <th>Stała szer</th>
+                                                                                <th>Stała wys</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>{{ etapy.ilosc }}</td>
+                                                                                <td>{{ etapy.typ }}</td>
+                                                                                <td>{{ etapy.kolor }}</td>
+                                                                                <td>{{ etapy.szerokosc }}</td>
+                                                                                <td>{{ etapy.wysokosc }}</td>
+                                                                                <td><input type="{% if etapy.typ == 'Exclusive' %}hidden{% else %}text{% endif %}" class="form-control" id="blaszkast{{ etapy.id }}" value="{{ etapy.blaszkast }}">
+                                                                                <input type="{% if etapy.typ == 'Standard' %}hidden{% else %}text{% endif %}" class="form-control" id="blaszkaex{{ etapy.id }}" value="{{ etapy.blaszkaex }}"></td>
+                                                                                <td><select style=" width: 80px;" class="form-control" id="rodzaj{{ etapy.id }}">
+                                                                                        <option></option>
+                                                                                        <option value="PCV" {% if etapy.rodzaj == 'PCV' %}selected{% endif %}>PCV</option>
+                                                                                        <option value="ALU" {% if etapy.rodzaj == 'ALU' %}selected{% endif %}>ALU</option>
+                                                                                        <option value="DRE" {% if etapy.rodzaj == 'DRE' %}selected{% endif %}>DRE</option>
+                                                                                    </select>
+                                                                                    {#<input type="text" class="form-control" id="rodzaj{{ etapy.id }}" value="{{ etapy.rodzaj }}">#}</td>
+                                                                                <td><select class="form-control" id="stronawiercenia{{ etapy.id }}">
+                                                                                        <option></option>
+                                                                                        <option value="S" {% if etapy.stronawiercenia == 'S' %}selected{% endif %}>S</option>
+                                                                                        <option value="O" {% if etapy.stronawiercenia == 'O' %}selected{% endif %}>O</option>
+                                                                                    </select>
+                                                                                    {#<input type="text" class="form-control" id="stronawiercenia{{ etapy.id }}" value="{{ etapy.stronawiercenia }}">#}</td>
+                                                                                {#<td><input type="text" class="form-control" id="felcstala{{ etapy.id }}" value="{{ etapy.felcstala }}"></td>#}
+                                                                                <td><input type="text" class="form-control" id="stalawys{{ etapy.id }}" value="{{ etapy.stalawys }}"></td>
+                                                                                <td><input type="text" class="form-control" id="stalaszer{{ etapy.id }}" value="{{ etapy.stalaszer }}"></td>
+                                                                               {# <td><select class="form-control" id="oscieznicastala{{ etapy.id }}">
+                                                                                        <option></option>
+                                                                                        <option value="Kańciasta" {% if etapy.oscieznicastala == 'Kańciasta' %}selected{% endif %}>Kańciasta</option>
+                                                                                        <option value="Zaokrąglona" {% if etapy.oscieznicastala == 'Zaokrąglona' %}selected{% endif %}>Zaokrąglona</option>
+                                                                                        <option value="Bez uszczelki" {% if etapy.oscieznicastala == 'Bez uszczelki' %}selected{% endif %}>Bez uszczelki</option>
+                                                                                        <option value="Z okapnikiem" {% if etapy.oscieznicastala == 'Z okapnikiem' %}selected{% endif %}>Z okapnikiem</option>
+                                                                                    </select>
+                                                                                    <input type="text" class="form-control" id="oscieznicastala{{ etapy.id }}" value="{{ etapy.oscieznicastala }}"></td>
+                                                                                <td><select class="form-control" id="skrzydlostala{{ etapy.id }}">
+                                                                                        <option></option>
+                                                                                        <option value="Cofnięte" {% if etapy.skrzydlostala == 'Cofnięte' %}selected{% endif %}>Cofnięte</option>
+                                                                                        <option value="Pół-lico" {% if etapy.skrzydlostala == 'Pół-lico' %}selected{% endif %}>Pół-lico</option>
+                                                                                        <option value="Lico" {% if etapy.skrzydlostala == 'Lico' %}selected{% endif %}>Lico</option>
+                                                                                        <option value="Z okapnikiem" {% if etapy.skrzydlostala == 'Z okapnikiem' %}selected{% endif %}>Z okapnikiem</option>
+                                                                                    </select>
+                                                                                    <input type="text" class="form-control" id="skrzydlostala{{ etapy.id }}" value="{{ etapy.skrzydlostala }}"></td>#}
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                            <textarea class="form-control" disabled>{{ etapy.uwagi }}</textarea>
+                                                                   </div></div>
+                                                                   <button id="zapismoskitier{{ etapy.id }}" onclick="Zapismoskitier('{{ etapy.id }}', event)" class="btn btn-{% if etapy.blad is null %}success{% else %}danger{% endif %} btn-block">ZAPISZ ZMIANY</button><br>
+                                                               </div>
+                                                               {% endfor %}
+                                                           </div>
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                                                            {#<button type="button" class="btn btn-primary">Save changes</button>#}
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  
+                                                  <!-- koniec moskitiery panel -->
+                                                  {% else %}
+                                                      <div class="modal fade {{ article.id }}" id="{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ article.id }}">
+                                                <div class="modal-dialog modal-lg" role="document">                  
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -236,7 +385,8 @@
                                                 </div>
                                               </div>
                                               </div>
-                                        </div><font size="4">/ <a href="#" type="button" data-toggle="modal" data-target="#{{ article.id }}">{{ ilosc }}</a></font>
+                                                    
+                                        </div>{% endif %}<font size="4">/ <a href="#" type="button" data-toggle="modal" data-target="#{% if article.jakie_zam == 'zamówienie moskitier' %}mo{{ article.id }}{% else %}{{ article.id }}{% endif %}">{{ ilosc }}</a></font> {% if article.jakie_zam == 'zamówienie moskitier' %}{% if article.weryfikacjaprodukcji == '1' %}<i class="fa fa-check" aria-hidden="true"></i>{% elseif article.weryfikacjaprodukcji == NULL %}<i class="fa fa-filter" aria-hidden="true"></i>{% else %}<i class="fa fa-times" aria-hidden="true"></i>{% endif %}{% endif %}
                                         </th>
                                     <th>{% if article.status == 'wersja robocza' %} - {% else %}{{ article.sendDate | date('Y-m-d') }}{% endif %}</th>
                                     <th>{{ article.nr_user_zam  }}</th>
@@ -793,6 +943,67 @@
                                     }
                                 });
 
+                            }
+                            
+                    function Zapismoskitier(id, event) {
+                                var moid = id;
+                                var element = event.currentTarget;
+                                var clicked = event.target;
+                               // var nazwa = 'nrfaktury';
+                                //var fakt = document.getElementById(nazwa.order_id);
+                                //var nrfakturki = fakt.value;
+                                var stronawiercenia = $('#stronawiercenia'+moid).val();
+                                var rodzaj = $('#rodzaj'+moid).val();
+                                //var felcstala = $('#felcstala'+moid).val();
+                                var blaszkast = $('#blaszkast'+moid).val();
+                                var blaszkaex = $('#blaszkaex'+moid).val();
+                                var stalawys = $('#stalawys'+moid).val();
+                                var stalaszer = $('#stalaszer'+moid).val();
+                                //var oscieznicastala = $('#oscieznicastala'+moid).val();
+                                //var skrzydlostala = $('#skrzydlostala'+moid).val();
+                                //$('#fakte'+order_id).modal('hide');
+                                var url = '{{ path('marcin_admin_dashboard_moskitiery_edit_ajax') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: moid,
+                                        stronawiercenia: stronawiercenia,
+                                        rodzaj: rodzaj,
+                                        //felcstala: felcstala,
+                                        blaszkast: blaszkast,
+                                        blaszkaex: blaszkaex,
+                                        stalawys: stalawys,
+                                        stalaszer: stalaszer,
+                                        //oscieznicastala: oscieznicastala,
+                                        //skrzydlostala: skrzydlostala
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         //document.getElementById("gm-panel"+order_id).className = "widok-realizacja";
+                                         
+                                         //document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                         //document.getElementById("ladowanie-animacja-realizacja").className = ""; 
+                                         //$('#ffakt'+order_id).load(document.URL +  ' #ffakt'+order_id);
+                                               console.log('ok');
+                                    }
+                                });
+                    }
+                            
+                function WeryfikacjaZamowien() {
+                                var url = '{{ path('marcin_admin_dashboard_weryfikacjazamowienia') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: url
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                        location.reload();
+                                    }
+                                });
+                                
                             }
     
  //   var elemsreal = document.getElementsByClassName('potwierdzenie-realizacja');

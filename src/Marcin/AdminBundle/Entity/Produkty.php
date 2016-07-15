@@ -54,6 +54,13 @@ class Produkty {
      * 
      * 
      */
+    private $nazwa;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
     private $szerokosc_b;
     
     /**
@@ -78,6 +85,41 @@ class Produkty {
      * 
      */
     private $kolor;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $grubosc;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $oscieznica;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $skrzydlo;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $uwagi;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $kolor_siatki;
     
     /**
      * Get id
@@ -211,6 +253,29 @@ class Produkty {
     }
     
     /**
+     * Set nazwa
+     *
+     * @param string $nazwa
+     *
+     * @return Produkty
+     */
+    public function setNazwa($nazwa)
+    {
+        $this->nazwa = $nazwa;
+        return $this;
+    }
+    
+    /**
+     * Get nazwa
+     *
+     * @return string
+     */
+    public function getNazwa()
+    {
+        return $this->nazwa;
+    }
+    
+    /**
      * Set szerokosc_b
      *
      * @param string $szerokosc_b
@@ -254,6 +319,121 @@ class Produkty {
     public function getWysokosch()
     {
         return $this->wysokosc_h;
+    }
+    
+    /**
+     * Set grubosc
+     *
+     * @param string $grubosc
+     *
+     * @return Produkty
+     */
+    public function setGrubosc($grubosc)
+    {
+        $this->grubosc = $grubosc;
+        return $this;
+    }
+    
+    /**
+     * Get grubosc
+     *
+     * @return string
+     */
+    public function getGrubosc()
+    {
+        return $this->grubosc;
+    }
+    
+    /**
+     * Set oscieznica
+     *
+     * @param string $oscieznica
+     *
+     * @return Produkty
+     */
+    public function setOscieznica($oscieznica)
+    {
+        $this->oscieznica = $oscieznica;
+        return $this;
+    }
+    
+    /**
+     * Get oscieznica
+     *
+     * @return string
+     */
+    public function getOscieznica()
+    {
+        return $this->oscieznica;
+    }
+    
+    /**
+     * Set skrzydlo
+     *
+     * @param string $skrzydlo
+     *
+     * @return Produkty
+     */
+    public function setSkrzydlo($skrzydlo)
+    {
+        $this->skrzydlo = $skrzydlo;
+        return $this;
+    }
+    
+    /**
+     * Get skrzydlo
+     *
+     * @return string
+     */
+    public function getSkrzydlo()
+    {
+        return $this->skrzydlo;
+    }
+    
+    /**
+     * Set uwagi
+     *
+     * @param string $uwagi
+     *
+     * @return Produkty
+     */
+    public function setUwagi($uwagi)
+    {
+        $this->uwagi = $uwagi;
+        return $this;
+    }
+    
+    /**
+     * Get uwagi
+     *
+     * @return string
+     */
+    public function getUwagi()
+    {
+        return $this->uwagi;
+    }
+    
+    /**
+     * Set kolor_siatki
+     *
+     * @param string $kolor_siatki
+     *
+     * @return Produkty
+     */
+    public function setKolorsiatki($kolor_siatki)
+    {
+        $this->kolor_siatki = $kolor_siatki;
+        return $this;
+    }
+    
+    /**
+     * Get kolor_siatki
+     *
+     * @return string
+     */
+    public function getKolorsiatki()
+    {
+        return $this->kolor_siatki;
     }
     
 }

@@ -23,6 +23,7 @@ class ZamoknaType extends AbstractType
         $builder
             ->add('name', 'text', array(
                 'label' => 'Nazwa',
+                'required' => true,
                 'attr' => array(
                     'autocomplete' => 'on',
                     'class' => 'form-control',
@@ -30,6 +31,7 @@ class ZamoknaType extends AbstractType
             ))
             ->add('felc', 'text', array(
                 'label' => 'Felc',
+                'required' => true,
                 'attr' => array(
                     'autocomplete' => 'on',
                     'class' => 'form-control'
@@ -37,6 +39,7 @@ class ZamoknaType extends AbstractType
             ))
             ->add('oscieznica', 'choice', array(
                 'label' => 'Ościeżnica:',
+                'required' => true,
                 'multiple' => false,
                 'choices' => array(
                     '' => 'Wybież',
@@ -51,6 +54,7 @@ class ZamoknaType extends AbstractType
             ))
             ->add('skrzydlo', 'choice', array(
                 'label' => 'Skrzydlo:',
+                'required' => true,
                 'multiple' => false,
                 'choices' => array(
                     '' => 'Wybież',
@@ -65,6 +69,7 @@ class ZamoknaType extends AbstractType
             ))    
             ->add('blaszka', 'text', array(
                 'label' => 'Blaszka standard',
+                'required' => false,
                 'attr' => array(
                     'autocomplete' => 'on',
                     'class' => 'form-control',
@@ -72,6 +77,7 @@ class ZamoknaType extends AbstractType
             ))
             ->add('blaszkaex', 'text', array(
                 'label' => 'Blaszka Exclusive',
+                'required' => false,
                 'attr' => array(
                     'autocomplete' => 'on',
                     'class' => 'form-control',
@@ -79,6 +85,7 @@ class ZamoknaType extends AbstractType
             ))
             ->add('rodzaj', 'choice', array(
                 'label' => 'Rodzaj:',
+                'required' => true,
                 'multiple' => false,
                 'choices' => array(
                     '' => 'Wybież',
@@ -99,6 +106,7 @@ class ZamoknaType extends AbstractType
            // ))
             ->add('stronawiercenia', 'choice', array(
                 'label' => 'Strona wiercenia:',
+                'required' => true,
                 'multiple' => false,
                 'choices' => array(
                     '' => 'Wybież',
@@ -111,6 +119,7 @@ class ZamoknaType extends AbstractType
             ))
             ->add('stalaszer', 'text', array(
                 'label' => 'Stała szerokośc',
+                'required' => true,
                 'attr' => array(
                     'autocomplete' => 'on',
                     'class' => 'form-control',
@@ -118,6 +127,7 @@ class ZamoknaType extends AbstractType
             ))
             ->add('stalawys', 'text', array(
                 'label' => 'Stała wysokość',
+                'required' => true,
                 'attr' => array(
                     'autocomplete' => 'on',
                     'class' => 'form-control',

@@ -61,9 +61,9 @@
                                       <a href="{{ aktywacjaUrl }}" class="btn btn-success" data-confirmAction="">
                                           Aktywacja
                                       </a>{% endif %}
-                <a href="{{ path('marcin_admin_username_form', {'id': article.id}) }}" class="btn btn-primary">
+                {% if article.aktywacja == 'tak' %}<a href="{{ path('marcin_admin_username_form', {'id': article.id}) }}" class="btn btn-primary">
                                                 <span class="glyphicon glyphicon-edit"></span>
-                                            </a>
+                                            </a>{% endif %}
                                                 {% if is_granted('ROLE_ADMIN') %}{% set tokenName = csrfProvider.generateCsrfToken(deleteTokenName|format(article.id)) %}
                                             {% set deleteUrl = path('marcin_admin_username_delete', {'id': article.id, 'username': article.login, 'token': tokenName}) %}
                                         <a id="potwierdzenie" href="{{ deleteUrl }}" class="potwierdzenie btn btn-danger" data-confirmAction="">

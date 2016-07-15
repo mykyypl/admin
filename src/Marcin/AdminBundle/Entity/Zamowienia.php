@@ -141,6 +141,20 @@ class Zamowienia {
      * 
      */
     private $zakonczone = null; 
+    
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * 
+     * 
+     */
+    private $weryfikacjaprodukcji = null;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * 
+     * 
+     */
+    private $etapyprodukcji = null;
 
     /**
      * Get id
@@ -525,6 +539,50 @@ class Zamowienia {
     public function getZakonczone()
     {
         return $this->zakonczone;
+    }
+    
+    /**
+     * Set weryfikacjaprodukcji
+     *
+     * @param integer $weryfikacjaprodukcji
+     *
+     * @return Zamowienia
+     */
+    public function setWeryfikacjaprodukcji($weryfikacjaprodukcji)
+    {
+        $this->weryfikacjaprodukcji = $weryfikacjaprodukcji;
+        return $this;
+    }
+    /**
+     * Get weryfikacjaprodukcji
+     *
+     * @return integer
+     */
+    public function getWeryfikacjaprodukcji()
+    {
+        return $this->weryfikacjaprodukcji;
+    }
+    
+    /**
+     * Set etapyprodukcji
+     *
+     * @param integer $etapyprodukcji
+     *
+     * @return Zamowienia
+     */
+    public function setEtapyprodukcji($etapyprodukcji)
+    {
+        $this->etapyprodukcji = $etapyprodukcji;
+        return $this;
+    }
+    /**
+     * Get etapyprodukcji
+     *
+     * @return integer
+     */
+    public function getEtapyprodukcji()
+    {
+        return $this->etapyprodukcji;
     }
     
 }

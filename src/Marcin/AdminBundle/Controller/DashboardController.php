@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Marcin\AdminBundle\Entity\Zamowienia;
 use Marcin\AdminBundle\Entity\Username;
+use Marcin\AdminBundle\Entity\Etapyprodukcji;
+use Marcin\AdminBundle\Entity\Cennikmoskitiery;
 use Marcin\AdminBundle\Form\Type\TestType;
 use Marcin\AdminBundle\Form\Type\UpdatezamType;
 use Marcin\AdminBundle\Exception\UserException;
@@ -209,6 +211,542 @@ class DashboardController extends Controller {
             $Zamowienie->setStatus('w realizacji');
             $em->flush();
         }
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route("/form/update-complete/moskitiery/etapy", 
+     *       name="marcin_admin_dashboard_moskitiery_edit_ajax",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_MAGNUM')")
+     *
+     */
+    public function updateMoskiprodAction(Request $Request) {
+
+        $result = array(
+            'id' => $Request->request->get('id'),
+            'stronawiercenia' => $Request->request->get('stronawiercenia'),
+            'rodzaj' => $Request->request->get('rodzaj'),
+            //'felcstala' => $Request->request->get('felcstala'),
+            'blaszkast' => $Request->request->get('blaszkast'),
+            'blaszkaex' => $Request->request->get('blaszkaex'),
+            'stalawys' => $Request->request->get('stalawys'),
+            'stalaszer' => $Request->request->get('stalaszer')
+            //'oscieznicastala' => $Request->request->get('oscieznicastala'),
+            //'skrzydlostala' => $Request->request->get('skrzydlostala')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Etapyprodukcji');
+        $Zamowienie = $RepoZamowienia->find($result['id']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+        
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setStronawiercenia($result['stronawiercenia']);
+            $Zamowienie->setRodzaj($result['rodzaj']);
+            //$Zamowienie->setFelcstala($result['felcstala']);
+            $Zamowienie->setBlaszkast($result['blaszkast']);
+            $Zamowienie->setBlaszkaex($result['blaszkaex']);
+            $Zamowienie->setStalawys($result['stalawys']);
+            $Zamowienie->setStalaszer($result['stalaszer']);
+            //$Zamowienie->setOscieznicastala($result['oscieznicastala']);
+            //$Zamowienie->setSkrzydlostala($result['skrzydlostala']);
+            $em->flush();
+        
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route("/form/update-complete/weryfikacjazamowienia", 
+     *       name="marcin_admin_dashboard_weryfikacjazamowienia",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function weryfikacjazamAction(Request $Request) {
+        $em = $this->getDoctrine()->getManager();
+        $zamowienia_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                 ->where('a.status = :status')
+                 ->setParameter('status', 'przesłane do realizacji')
+                ->andwhere('a.jakie_zam = :jakie')
+                ->setParameter('jakie', 'zamówienie moskitier')
+                ->andwhere('a.weryfikacjaprodukcji is NULL')
+               // ->setParameter('wer', '')
+                 ->getQuery()
+                 ->getResult();
+        
+        if (NULL == $zamowienia_query)
+        {
+            $this->addFlash('warning', 'Brak nowych moskitier do weryfikacji.');
+            return new JsonResponse(false);
+        }
+        
+        $cennik_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Cennikmoskitiery', 'a')
+                ->getQuery()
+                ->getResult();
+        
+        if (NULL == $cennik_query)
+        {
+              $this->addFlash('danger', 'Błąd cennika! proszę skontaktować się z administratorem!');
+              return new JsonResponse(false);
+        } else {
+        /// TWORZENIE TABLICY CENNIKA
+        $ce=0;$ce1=0;
+        foreach ($cennik_query as $cennikmo)
+        {
+            $cennik[$ce++]['standard'] = $cennikmo->getStandard();
+            $cennik[$ce1++]['exclusive'] = $cennikmo->getExclusive();
+
+//            1. (0.00-0.50) st: 43.00 ex: 55.00 
+//            2. (0.51-0.75) st: 54.00 ex: 67.00
+//            3. (0.76-1.00) st: 65.00 ex: 79.00
+//            4. (1.01-1.25) st: 74.00 ex: 89.00
+//            5. (1.26-1.50) st: 83.00 ex: 99.00
+//            6. (1.51-1.75) st: 90.00 ex: 107.00
+//            7. (1.76-2.00) st: 98.00 ex: 115.50
+            
+        }
+        }
+
+        $a = 0;$b = 0;$c = 0; $d = 0; $e = 0;
+         foreach ($zamowienia_query as $zam)
+         {
+             //$daneprodukty[$a++]['idzam'] = $prod->GetIdzam();
+             $idzamowienia = $zam->getId();
+             $nrprodukcji = $zam->getNrprodukcji();
+             $uzytkownik = $zam->getUser();
+             $nruzytkownika = $zam->getNr_user_zam();
+             $trasa = $zam->getTrasa();
+             $weryfikacjaproduktu[0] = $zam->getWeryfikacjaprodukcji();
+             
+             $produkty_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Produkty', 'a')
+                 ->where('a.id_zam = :idzam')
+                 ->setParameter('idzam', $idzamowienia)
+                 //->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+             $aa = 0; $bb = 0; $cc = 0; $dd = 0;
+             $iloscProduktow = 0;
+             foreach ($produkty_query as $prod)
+             {
+                 $tablica = $weryfikacjaproduktu[0];
+                 $kolorokna = $prod->getKolor();
+                 $uszerokosc = $prod->getSzerokosca();
+                 $uwysokosc = $prod->getWysokosch();
+                 $typ = $prod->getTyp();
+                 $uwagi = $prod->getUwagi();
+                 
+                 $kolorsiatki = $prod->getKolorsiatki();
+                 
+                 $iloscProduktow = $iloscProduktow +1;
+                 $oknookno = $prod->getNazwa();
+                 $oknofelc = $prod->getGrubosc();
+                 $oknooscieznica = $prod->getOscieznica();
+                 $oknoskrzydlo = $prod->getSkrzydlo();
+                 
+                 
+            // }
+             //$okno = array_map("unserialize", array_unique(array_map("serialize", $okno)));   // usuwanie duplikatow w tablicy
+            // foreach ($okno as $system)
+            // {
+                 $okna_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Zamokna', 'a')
+                 ->where('a.name = :nazwa')
+                 ->setParameter('nazwa', $oknookno)
+                 //->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+                 //$RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Etapyprodukcji');
+                 
+                 //$RepoZamowienia = new Etapyprodukcji;
+                 // $RepoZamowienia->setUser($system);
+                 //  $em->persist($RepoZamowienia);
+                 //$em->flush();
+                 
+                 // wyliczanie ceny moskitier
+                 
+                 $metrykwadratowe = ($uszerokosc/1000)*($uwysokosc/1000);
+                 $metrykwadratowe = number_format($metrykwadratowe,2);
+                 
+                 if ($metrykwadratowe <= 0.50)
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[0]['standard']; //"43.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[0]['exclusive']; //"55.0";
+                     }
+                 } 
+                    elseif ($metrykwadratowe >= 0.51 && $metrykwadratowe <= 0.75)
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[1]['standard']; //"54.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[1]['exclusive']; //"67.00";
+                     }
+                 } 
+                    elseif ($metrykwadratowe >= 0.76 && $metrykwadratowe <= 1.00)
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[2]['standard']; //"65.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[2]['exclusive']; //"79.00";
+                     }
+                 } 
+                    elseif ($metrykwadratowe >= 1.01 && $metrykwadratowe <= 1.25)
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[3]['standard']; //"74.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[3]['exclusive']; //"89.00";
+                     }
+                 } 
+                    elseif ($metrykwadratowe >= 1.26 && $metrykwadratowe <= 1.50)
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[4]['standard']; //"83.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[4]['exclusive']; //"99.00";
+                     }
+                 } 
+                    elseif ($metrykwadratowe >= 1.51 && $metrykwadratowe <= 1.75) 
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[5]['standard']; //"90.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[5]['exclusive']; //"107.00";
+                     }
+                 } 
+                    elseif ($metrykwadratowe >= 1.76 && $metrykwadratowe <= 2.00) 
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[6]['standard']; //"98.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[6]['exclusive']; //"115.50";
+                     }
+                 } 
+                    else 
+                 {
+                     $cenamoskitierki = "00.00";
+                 }
+                 
+             
+                 
+                 // koniec wyliczania
+                 
+                 if (NULL == $okna_query)
+                 {
+                     //$RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+                     $zam->setWeryfikacjaprodukcji('0');
+                     
+                     $RepoZamowienia = new Etapyprodukcji;
+                         $RepoZamowienia->setBlad('okno');
+                         $RepoZamowienia->setNrzamowienia($idzamowienia);
+                                    $RepoZamowienia->setNrprodukcji($nrprodukcji);
+                                    $RepoZamowienia->setNruserzam($nruzytkownika);
+                                    $RepoZamowienia->setUser($uzytkownik);
+                                    $RepoZamowienia->setTrasa($trasa);
+                                    $RepoZamowienia->setIlosc($iloscProduktow);
+                                    $RepoZamowienia->setOnline('0');
+                                    $RepoZamowienia->setOkno($oknookno);
+                                    $RepoZamowienia->setKolor($kolorokna);
+                                    $RepoZamowienia->setSzerokosc($uszerokosc);
+                                    $RepoZamowienia->setWysokosc($uwysokosc);
+                                    $RepoZamowienia->setTyp($typ);
+                                    $RepoZamowienia->setUwagi($uwagi);
+                                    $RepoZamowienia->setOscieznica($oknooscieznica);
+                                    $RepoZamowienia->setSkrzydlo($oknoskrzydlo);
+                                    $RepoZamowienia->setFelc($oknofelc);
+                                    $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    if ($kolorsiatki == 'Czarna')
+                                    {
+                                       $wyliczaniesitka = $cenamoskitierki * 0.05;
+                                       $cenazczarnasitka = $cenamoskitierki + $wyliczaniesitka;
+                                       $RepoZamowienia->setCenna($cenazczarnasitka);
+                                    } else 
+                                    {
+                                        $RepoZamowienia->setCenna($cenamoskitierki);
+                                    }
+                                    $RepoZamowienia->setM2($metrykwadratowe);
+                         $em->persist($RepoZamowienia);
+                     
+                     $em->flush();
+                     //return;  //if
+                     //break;
+                     //return new JsonResponse(false);
+                 }
+                 else {
+                     $qq= 0; $ww=0; $ee=0;
+                     foreach ($okna_query as $okienka)
+                     {
+                         $blaszkast = $okienka->getBlaszka();
+                         $blaszkaex = $okienka->getBlaszkaex();
+                         $stronawiercenia = $okienka->getStronawiercenia();
+                         $stalaszer = $okienka->getStalaszer();
+                         $stalawyst = $okienka->getStalawys();
+                         $rodzaj = $okienka->getRodzaj();
+                         
+                         $porownanieFelc = $okienka->getFelc();
+                         $porownanieOscieznica = $okienka->getOscieznica();
+                         $porownanieSkrzydlo = $okienka->getSkrzydlo();
+                     }
+                     
+                     if ($oknofelc == $porownanieFelc)
+                     {
+                         if ($oknooscieznica == $porownanieOscieznica)
+                         {
+                             if ($oknoskrzydlo == $porownanieSkrzydlo)
+                             {
+//                                 $spr = $zam->getWeryfikacjaprodukcji();
+//                                 if($spr == NULL)
+//                                 {
+                                 $weryfikacja_query = $em->createQueryBuilder('a')
+                                ->select('a')
+                                ->from('MarcinAdminBundle:Zamowienia', 'a')
+                                 ->where('a.id = :nrzam')
+                                 ->setParameter('nrzam', $idzamowienia)
+                                 ->andwhere('a.weryfikacjaprodukcji = :okno')
+                                 ->setParameter('okno', '0')
+                                 ->getQuery()
+                                 ->getResult();
+                                    if ($weryfikacja_query == NULL)
+                                    {
+                                         $zam->setWeryfikacjaprodukcji('1');
+                                    }
+                                    else {
+                                         $zam->setWeryfikacjaprodukcji('0');
+                                    }
+                                    
+                                    $RepoZamowienia = new Etapyprodukcji;
+                                    $RepoZamowienia->setBlad(null);
+                                    $RepoZamowienia->setNrzamowienia($idzamowienia);
+                                    $RepoZamowienia->setNrprodukcji($nrprodukcji);
+                                    $RepoZamowienia->setNruserzam($nruzytkownika);
+                                    $RepoZamowienia->setUser($uzytkownik);
+                                    $RepoZamowienia->setTrasa($trasa);
+                                    $RepoZamowienia->setIlosc($iloscProduktow);
+                                    $RepoZamowienia->setOnline('0');
+                                    $RepoZamowienia->setOkno($oknookno);
+                                    $RepoZamowienia->setKolor($kolorokna);
+                                    $RepoZamowienia->setSzerokosc($uszerokosc);
+                                    $RepoZamowienia->setWysokosc($uwysokosc);
+                                    $RepoZamowienia->setTyp($typ);
+                                    $RepoZamowienia->setUwagi($uwagi);
+                                    $RepoZamowienia->setOscieznica($oknooscieznica);
+                                    $RepoZamowienia->setSkrzydlo($oknoskrzydlo);
+                                    $RepoZamowienia->setFelc($oknofelc);
+                                    $RepoZamowienia->setBlaszkast($blaszkast);
+                                    $RepoZamowienia->setBlaszkaex($blaszkaex);
+                                    $RepoZamowienia->setStronawiercenia($stronawiercenia);
+                                    $RepoZamowienia->setStalaszer($stalaszer);
+                                    $RepoZamowienia->setStalawys($stalawyst);
+                                    $RepoZamowienia->setRodzaj($rodzaj);
+                                    $RepoZamowienia->setFelcstala($porownanieFelc);
+                                    $RepoZamowienia->setOscieznicastala($porownanieOscieznica);
+                                    $RepoZamowienia->setSkrzydlostala($porownanieSkrzydlo);
+                                    $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    if ($kolorsiatki == 'Czarna')
+                                    {
+                                       $wyliczaniesitka = $cenamoskitierki * 0.05;
+                                       $cenazczarnasitka = $cenamoskitierki + $wyliczaniesitka;
+                                       $RepoZamowienia->setCenna($cenazczarnasitka);
+                                    } else 
+                                    {
+                                        $RepoZamowienia->setCenna($cenamoskitierki);
+                                    }
+                                    $RepoZamowienia->setM2($metrykwadratowe);
+                                    $em->persist($RepoZamowienia);
+
+                                     $em->flush();
+                                     //break;
+                               //  }
+                             }
+                             else {
+                         $zam->setWeryfikacjaprodukcji('0');
+                         
+                         $RepoZamowienia = new Etapyprodukcji;
+                         $RepoZamowienia->setBlad('skrzydlo');
+                         $RepoZamowienia->setNrzamowienia($idzamowienia);
+                                    $RepoZamowienia->setNrprodukcji($nrprodukcji);
+                                    $RepoZamowienia->setNruserzam($nruzytkownika);
+                                    $RepoZamowienia->setUser($uzytkownik);
+                                    $RepoZamowienia->setTrasa($trasa);
+                                    $RepoZamowienia->setIlosc($iloscProduktow);
+                                    $RepoZamowienia->setOnline('0');
+                                    $RepoZamowienia->setOkno($oknookno);
+                                    $RepoZamowienia->setKolor($kolorokna);
+                                    $RepoZamowienia->setSzerokosc($uszerokosc);
+                                    $RepoZamowienia->setWysokosc($uwysokosc);
+                                    $RepoZamowienia->setTyp($typ);
+                                    $RepoZamowienia->setUwagi($uwagi);
+                                    $RepoZamowienia->setOscieznica($oknooscieznica);
+                                    $RepoZamowienia->setSkrzydlo($oknoskrzydlo);
+                                    $RepoZamowienia->setFelc($oknofelc);
+                                    $RepoZamowienia->setBlaszkast($blaszkast);
+                                    $RepoZamowienia->setBlaszkaex($blaszkaex);
+                                    $RepoZamowienia->setStronawiercenia($stronawiercenia);
+                                    $RepoZamowienia->setStalaszer($stalaszer);
+                                    $RepoZamowienia->setStalawys($stalawyst);
+                                    $RepoZamowienia->setRodzaj($rodzaj);
+                                    $RepoZamowienia->setFelcstala($porownanieFelc);
+                                    $RepoZamowienia->setOscieznicastala($porownanieOscieznica);
+                                    $RepoZamowienia->setSkrzydlostala($porownanieSkrzydlo);
+                                    $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    if ($kolorsiatki == 'Czarna')
+                                    {
+                                       $wyliczaniesitka = $cenamoskitierki * 0.05;
+                                       $cenazczarnasitka = $cenamoskitierki + $wyliczaniesitka;
+                                       $RepoZamowienia->setCenna($cenazczarnasitka);
+                                    } else 
+                                    {
+                                        $RepoZamowienia->setCenna($cenamoskitierki);
+                                    }
+                                    $RepoZamowienia->setM2($metrykwadratowe);
+                         $em->persist($RepoZamowienia);
+
+                         $em->flush();
+                         //break;
+                         //return new JsonResponse(false);
+                        }
+                         }
+                         else {
+                         $zam->setWeryfikacjaprodukcji('0');
+                         
+                         $RepoZamowienia = new Etapyprodukcji;
+                         $RepoZamowienia->setBlad('ościeżnica');
+                         $RepoZamowienia->setNrzamowienia($idzamowienia);
+                                    $RepoZamowienia->setNrprodukcji($nrprodukcji);
+                                    $RepoZamowienia->setNruserzam($nruzytkownika);
+                                    $RepoZamowienia->setUser($uzytkownik);
+                                    $RepoZamowienia->setTrasa($trasa);
+                                    $RepoZamowienia->setIlosc($iloscProduktow);
+                                    $RepoZamowienia->setOnline('0');
+                                    $RepoZamowienia->setOkno($oknookno);
+                                    $RepoZamowienia->setKolor($kolorokna);
+                                    $RepoZamowienia->setSzerokosc($uszerokosc);
+                                    $RepoZamowienia->setWysokosc($uwysokosc);
+                                    $RepoZamowienia->setTyp($typ);
+                                    $RepoZamowienia->setUwagi($uwagi);
+                                    $RepoZamowienia->setOscieznica($oknooscieznica);
+                                    $RepoZamowienia->setSkrzydlo($oknoskrzydlo);
+                                    $RepoZamowienia->setFelc($oknofelc);
+                                    $RepoZamowienia->setBlaszkast($blaszkast);
+                                    $RepoZamowienia->setBlaszkaex($blaszkaex);
+                                    $RepoZamowienia->setStronawiercenia($stronawiercenia);
+                                    $RepoZamowienia->setStalaszer($stalaszer);
+                                    $RepoZamowienia->setStalawys($stalawyst);
+                                    $RepoZamowienia->setRodzaj($rodzaj);
+                                    $RepoZamowienia->setFelcstala($porownanieFelc);
+                                    $RepoZamowienia->setOscieznicastala($porownanieOscieznica);
+                                    $RepoZamowienia->setSkrzydlostala($porownanieSkrzydlo);
+                                    $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    if ($kolorsiatki == 'Czarna')
+                                    {
+                                       $wyliczaniesitka = $cenamoskitierki * 0.05;
+                                       $cenazczarnasitka = $cenamoskitierki + $wyliczaniesitka;
+                                       $RepoZamowienia->setCenna($cenazczarnasitka);
+                                    } else 
+                                    {
+                                        $RepoZamowienia->setCenna($cenamoskitierki);
+                                    }
+                                    $RepoZamowienia->setM2($metrykwadratowe);
+                         $em->persist($RepoZamowienia);
+                         
+                         $em->flush();
+                         //break;
+                         //return new JsonResponse(false);
+                        }
+                     }
+                     else {
+                         $zam->setWeryfikacjaprodukcji('0');
+                         
+                         $RepoZamowienia = new Etapyprodukcji;
+                         $RepoZamowienia->setBlad('felc');
+                         $RepoZamowienia->setNrzamowienia($idzamowienia);
+                                    $RepoZamowienia->setNrprodukcji($nrprodukcji);
+                                    $RepoZamowienia->setNruserzam($nruzytkownika);
+                                    $RepoZamowienia->setUser($uzytkownik);
+                                    $RepoZamowienia->setTrasa($trasa);
+                                    $RepoZamowienia->setIlosc($iloscProduktow);
+                                    $RepoZamowienia->setOnline('0');
+                                    $RepoZamowienia->setOkno($oknookno);
+                                    $RepoZamowienia->setKolor($kolorokna);
+                                    $RepoZamowienia->setSzerokosc($uszerokosc);
+                                    $RepoZamowienia->setWysokosc($uwysokosc);
+                                    $RepoZamowienia->setTyp($typ);
+                                    $RepoZamowienia->setUwagi($uwagi);
+                                    $RepoZamowienia->setOscieznica($oknooscieznica);
+                                    $RepoZamowienia->setSkrzydlo($oknoskrzydlo);
+                                    $RepoZamowienia->setFelc($oknofelc);
+                                    $RepoZamowienia->setBlaszkast($blaszkast);
+                                    $RepoZamowienia->setBlaszkaex($blaszkaex);
+                                    $RepoZamowienia->setStronawiercenia($stronawiercenia);
+                                    $RepoZamowienia->setStalaszer($stalaszer);
+                                    $RepoZamowienia->setStalawys($stalawyst);
+                                    $RepoZamowienia->setRodzaj($rodzaj);
+                                    $RepoZamowienia->setFelcstala($porownanieFelc);
+                                    $RepoZamowienia->setOscieznicastala($porownanieOscieznica);
+                                    $RepoZamowienia->setSkrzydlostala($porownanieSkrzydlo);
+                                    $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    if ($kolorsiatki == 'Czarna')
+                                    {
+                                       $wyliczaniesitka = $cenamoskitierki * 0.05;
+                                       $cenazczarnasitka = $cenamoskitierki + $wyliczaniesitka;
+                                       $RepoZamowienia->setCenna($cenazczarnasitka);
+                                    } else 
+                                    {
+                                        $RepoZamowienia->setCenna($cenamoskitierki);
+                                    }
+                                    $RepoZamowienia->setM2($metrykwadratowe);
+                         $em->persist($RepoZamowienia);
+                         
+                         $em->flush();
+                         //break;
+                         //return new JsonResponse(false);
+                     }
+                 }
+             }
+         }
         
         return new JsonResponse(true);
     }
@@ -604,7 +1142,81 @@ class DashboardController extends Controller {
              $daneprodukty[$d++]['szer'] = $prod->GetSzerokosca();
              $daneprodukty[$e++]['wysokosc'] = $prod->GetWysokosch();
          }
-
+         
+         $etapyprodukcji_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Etapyprodukcji', 'a')
+                ->addOrderBy('a.id', 'DESC')
+                ->setMaxResults(800) //USTAWIENIE OPTYMALIZSUJE WYŚWIETLANIE ZAMOWIENIEŃ NA STRONIE GŁÓWNEJ PANELU!
+                 ->getQuery()
+                 ->getResult();  
+         
+         if ($etapyprodukcji_query == NULL)
+         {
+             $produkcjaetap[0]['id'] = null;
+             $produkcjaetap[0]['idzam'] = null;
+             $produkcjaetap[0]['okno'] = null;
+             $produkcjaetap[0]['kolor'] = null;
+             $produkcjaetap[0]['typ'] = null;
+             $produkcjaetap[0]['blad'] = null;
+             
+             $produkcjaetap[0]['felc'] = null;
+             $produkcjaetap[0]['oscieznica'] = null;
+             $produkcjaetap[0]['skrzydlo'] = null;
+             $produkcjaetap[0]['uwagi'] = null;
+             $produkcjaetap[0]['nrprodukcji'] = null;
+             $produkcjaetap[0]['profil'] = null;
+             $produkcjaetap[0]['stronawiercenia'] = null;
+             $produkcjaetap[0]['rodzaj'] = null;
+             $produkcjaetap[0]['szerokosc'] = null;
+             $produkcjaetap[0]['wysokosc'] = null;
+         }
+         else
+         {
+             $aa=0; $bb=0;$cc=0;$dd=0;$ee=0;$ff=0;
+         $gg=0;$hh=0;$ii=0;$jj=0;$kk=0;$ll=0;$mm=0;$nn=0;$oo=0;$pp=0;
+         $g1=0;$h1=0;$i1=0;$j1=0;$k1=0;$l1=0;$m1=0;$n1=0;$o1=0;
+         $z1=0;$y1=0;
+         foreach ($etapyprodukcji_query as $etapy)
+         {
+             $produkcjaetap[$aa++]['id'] = $etapy->GetId();
+             $produkcjaetap[$bb++]['idzam'] = $etapy->GetNrzamowienia();
+             $produkcjaetap[$cc++]['okno'] = $etapy->GetOkno();
+             $produkcjaetap[$dd++]['kolor'] = $etapy->GetKolor();
+             $produkcjaetap[$ee++]['typ'] = $etapy->GetTyp();
+             $produkcjaetap[$ff++]['blad'] = $etapy->GetBlad();
+             
+             $produkcjaetap[$gg++]['felc'] = $etapy->GetFelc();
+             $produkcjaetap[$hh++]['oscieznica'] = $etapy->GetOscieznica();
+             $produkcjaetap[$ii++]['skrzydlo'] = $etapy->GetSkrzydlo();
+             $produkcjaetap[$jj++]['uwagi'] = $etapy->GetUwagi();
+             $produkcjaetap[$kk++]['nrprodukcji'] = $etapy->GetNrprodukcji();
+             $produkcjaetap[$ll++]['profil'] = $etapy->GetProfil();
+             $produkcjaetap[$mm++]['stronawiercenia'] = $etapy->GetStronawiercenia();
+             $produkcjaetap[$nn++]['rodzaj'] = $etapy->GetRodzaj();
+             $produkcjaetap[$oo++]['szerokosc'] = $etapy->GetSzerokosc();
+             $produkcjaetap[$pp++]['wysokosc'] = $etapy->GetWysokosc();
+             
+             $produkcjaetap[$g1++]['ilosc'] = $etapy->GetIlosc();
+             $produkcjaetap[$h1++]['felcstala'] = $etapy->GetFelcstala();
+             
+             $produkcjaetap[$i1++]['blaszkast'] = $etapy->GetBlaszkast();
+             $produkcjaetap[$j1++]['blaszkaex'] = $etapy->GetBlaszkaex();
+             
+             $produkcjaetap[$k1++]['stalawys'] = $etapy->GetStalawys();
+             $produkcjaetap[$l1++]['stalaszer'] = $etapy->GetStalaszer();
+             
+             $produkcjaetap[$m1++]['oscieznicastala'] = $etapy->GetOscieznicastala();
+             $produkcjaetap[$n1++]['skrzydlostala'] = $etapy->GetSkrzydlostala();
+             
+             $produkcjaetap[$o1++]['kolorsiatki'] = $etapy->GetKolorsiatki();
+             
+             $produkcjaetap[$z1++]['cenna'] = $etapy->GetCenna();
+             $produkcjaetap[$y1++]['m2'] = $etapy->GetM2();
+             
+         }
+         }
+         
         $statusesList = array(
             'Przesłane' => 'przeslane',
             'W realizacji' => 'realizacja',
@@ -700,6 +1312,7 @@ class DashboardController extends Controller {
                     'currStatus' => $status,
                     'currTrasy' => $trasy,
                     'produkty' => $daneprodukty,
+                    'etapyprodukcji' => $produkcjaetap,
                     'deleteTokenName' => $this->deleteTokenName,
                     'csrfProvider' => $this->get('form.csrf_provider'),
                     'new_zam' => array(

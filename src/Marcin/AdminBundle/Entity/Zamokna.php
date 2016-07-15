@@ -27,6 +27,7 @@ class Zamokna {
     private $id;
     
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      * 
      * 
@@ -34,6 +35,7 @@ class Zamokna {
     private $name;
     
     /**
+     * 
      * @ORM\Column(type="string")
      * 
      * 
@@ -41,6 +43,7 @@ class Zamokna {
     private $value;
     
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      * 
      * 
@@ -48,6 +51,7 @@ class Zamokna {
     private $felc;
     
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      * 
      * 
@@ -55,6 +59,7 @@ class Zamokna {
     private $oscieznica;
     
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      * 
      * 
@@ -62,6 +67,7 @@ class Zamokna {
     private $skrzydlo;
     
     /**
+     * 
      * @ORM\Column(type="string", nullable=true)
      * 
      * 
@@ -76,6 +82,7 @@ class Zamokna {
     private $blaszkaex = null;
     
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      * 
      * 
@@ -83,6 +90,7 @@ class Zamokna {
     private $rodzaj;
     
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      * 
      * 
@@ -90,6 +98,7 @@ class Zamokna {
     private $stronawiercenia;
     
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      * 
      * 
@@ -97,6 +106,7 @@ class Zamokna {
     private $stalaszer;
     
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      * 
      * 

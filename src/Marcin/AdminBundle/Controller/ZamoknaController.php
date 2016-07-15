@@ -106,6 +106,12 @@ class ZamoknaController extends Controller {
                                 'id' => $Uzytkownicy->getId()
             )));
         }
+        
+        $validator = $this->get('validator');
+        $errors = $validator->validate($Uzytkownicy);
+        if (count($errors) > 0) {
+            $errorsString = (string) $errors;
+        }
 
         return $this->render('MarcinAdminBundle:Zamokna:form.html.twig', array(
                     'pageTitle' => (isset($newUzytkownicyForm) ? 'Okna <small>utwórz nowy</small>' : 'Okna <small>edycja użytkownika</small>'),
