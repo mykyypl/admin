@@ -155,6 +155,12 @@ class Zamowienia {
      * 
      */
     private $etapyprodukcji = null;
+    
+    /**
+     * @ORM\Column(type="integer")
+     *
+     */
+    private $zamowienie_nr;
 
     /**
      * Get id
@@ -583,6 +589,28 @@ class Zamowienia {
     public function getEtapyprodukcji()
     {
         return $this->etapyprodukcji;
+    }
+    
+    /**
+     * Set zamowienie_nr
+     *
+     * @param integer $zamowienie_nr
+     *
+     * @return Zamowienia
+     */
+    public function setZamowienienr($zamowienie_nr)
+    {
+        $this->zamowienie_nr = $zamowienie_nr;
+        return $this;
+    }
+    /**
+     * Get zamowienie_nr
+     *
+     * @return integer
+     */
+    public function getZamowienienr()
+    {
+        return $this->zamowienie_nr;
     }
     
 }

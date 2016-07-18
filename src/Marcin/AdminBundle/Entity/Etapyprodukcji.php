@@ -241,6 +241,12 @@ class Etapyprodukcji {
     private $m2;
     
     /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $rabaty;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -1075,5 +1081,28 @@ class Etapyprodukcji {
     public function getM2()
     {
         return $this->m2;
+    }
+    
+    /**
+     * Set rabaty
+     *
+     * @param integer $rabaty
+     *
+     * @return Etapyprodukcji
+     */
+    public function setRabaty($rabaty)
+    {
+        $this->rabaty = $rabaty;
+        return $this;
+    }
+    
+    /**
+     * Get rabaty
+     *
+     * @return integer
+     */
+    public function getRabaty()
+    {
+        return $this->rabaty;
     }
 }

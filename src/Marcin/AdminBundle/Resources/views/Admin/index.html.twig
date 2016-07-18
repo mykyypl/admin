@@ -72,6 +72,12 @@
 .notice-danger>strong {
     color: #d73814;
 }
+.cena-latajaca {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    margin-right: 30px;
+}
        </style>
 {% endblock %}
 {% block body %}
@@ -268,13 +274,13 @@
                                                        {% for prod in produkty if prod.idzam == article.id %}
                                                            {% set ilosc = ilosc + 1 %}
                                                            {% endfor %}
-                                                           <div class="row">
+                                                           <div class="row"> {% set sumacena = 0 %}
                                                                {% for etapy in etapyprodukcji if etapy.idzam == article.id %}
                                                                <div class="col-md-12">
                                                                    <div style="overflow-x: auto;">
                                                                    <div class="notice notice-{% if etapy.blad is null %}success{% else %}danger{% endif %}">
                                                                    {% if etapy.blad is null %}Dane poprawne<br>{% else %}Prawdopodobny błąd: <strong>{{ etapy.blad }}</strong><br>{% endif %}
-                                                                   <h4><b>{{ etapy.okno }}</b>, felc:<b>{{ etapy.felc }}</b>, ościeżnica: <b>{{ etapy.oscieznica }}</b>, skrzydło: <b>{{ etapy.skrzydlo }}</b>, kolorsiatki: <b>{{ etapy.kolorsiatki }}</b><br> m2: <b>{{ etapy.m2 }}</b>, cenna: <b><font color="red">{{ etapy.cenna }} zł</font></b></h4>
+                                                                   <h4><b>{{ etapy.okno }}</b>, felc:<b>{{ etapy.felc }}</b>, ościeżnica: <b>{{ etapy.oscieznica }}</b>, skrzydło: <b>{{ etapy.skrzydlo }}</b>, kolorsiatki: <b>{{ etapy.kolorsiatki }}</b><br> m2: <b>{{ etapy.m2 }}</b>, cenna kat: <b><font color="red">{{ etapy.cenna }} zł netto</font></b>, rabat: <b><font color="green">{{ etapy.rabaty }}%</font></b>, cena: <b><font color="red">{% set cenakat = etapy.cenna - (etapy.cenna * (etapy.rabaty/100)) %}{{ cenakat|number_format(2) }} zł netto</font></b>, cena: <b><font color="green">{% set cenakatb = cenakat + (cenakat * 0.23) %}{{ cenakatb|number_format(2) }}{% set sumacena = sumacena + cenakatb %} zł brutto</font></b></h4>
                                                                     <table class="table table-striped">
                                                                         <thead>
                                                                             <tr>
@@ -342,6 +348,7 @@
                                                            </div>
                                                           </div>
                                                           <div class="modal-footer">
+                                                              <div class="cena-latajaca"><h4>Suma: <b><font color="green">{{ sumacena|number_format(2) }}</font></b></h4></div>
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
                                                             {#<button type="button" class="btn btn-primary">Save changes</button>#}
                                                           </div>

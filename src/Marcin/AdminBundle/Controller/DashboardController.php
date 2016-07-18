@@ -289,6 +289,7 @@ class DashboardController extends Controller {
                // ->setParameter('wer', '')
                  ->getQuery()
                  ->getResult();
+      
         
         if (NULL == $zamowienia_query)
         {
@@ -335,6 +336,33 @@ class DashboardController extends Controller {
              $nruzytkownika = $zam->getNr_user_zam();
              $trasa = $zam->getTrasa();
              $weryfikacjaproduktu[0] = $zam->getWeryfikacjaprodukcji();
+             
+        $rabaty_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Rabaty', 'a')
+                ->where('a.user = :user')
+                ->setParameter('user', $uzytkownik)
+                ->andwhere('a.typ_zamowienia = :typ')
+                ->setParameter('typ', $zam->getZamowienienr())
+                 ->getQuery()
+                 ->getResult();
+        
+        if (NULL == $rabaty_query)
+        {
+            $this->addFlash('danger', 'Błąd bazy rabatów!');
+            //return new JsonResponse(false);
+            $rabaty = 0;
+        } else {
+            foreach ($rabaty_query as $rabat)
+            {
+                if ($rabat->getPlatnosc() == $zam->getPlatnosc())
+                {
+                 $rabaty = $rabat->getRabat();
+                } else {
+                  $rabaty = 0;
+                }
+            }
+        }
              
              $produkty_query = $em->createQueryBuilder('a')
                 ->select('a')
@@ -507,6 +535,7 @@ class DashboardController extends Controller {
                                     {
                                         $RepoZamowienia->setCenna($cenamoskitierki);
                                     }
+                                    $RepoZamowienia->setRabaty($rabaty);
                                     $RepoZamowienia->setM2($metrykwadratowe);
                          $em->persist($RepoZamowienia);
                      
@@ -595,6 +624,7 @@ class DashboardController extends Controller {
                                         $RepoZamowienia->setCenna($cenamoskitierki);
                                     }
                                     $RepoZamowienia->setM2($metrykwadratowe);
+                                    $RepoZamowienia->setRabaty($rabaty);
                                     $em->persist($RepoZamowienia);
 
                                      $em->flush();
@@ -642,6 +672,7 @@ class DashboardController extends Controller {
                                         $RepoZamowienia->setCenna($cenamoskitierki);
                                     }
                                     $RepoZamowienia->setM2($metrykwadratowe);
+                                    $RepoZamowienia->setRabaty($rabaty);
                          $em->persist($RepoZamowienia);
 
                          $em->flush();
@@ -690,6 +721,7 @@ class DashboardController extends Controller {
                                         $RepoZamowienia->setCenna($cenamoskitierki);
                                     }
                                     $RepoZamowienia->setM2($metrykwadratowe);
+                                    $RepoZamowienia->setRabaty($rabaty);
                          $em->persist($RepoZamowienia);
                          
                          $em->flush();
@@ -738,6 +770,7 @@ class DashboardController extends Controller {
                                         $RepoZamowienia->setCenna($cenamoskitierki);
                                     }
                                     $RepoZamowienia->setM2($metrykwadratowe);
+                                    $RepoZamowienia->setRabaty($rabaty);
                          $em->persist($RepoZamowienia);
                          
                          $em->flush();
@@ -1176,7 +1209,7 @@ class DashboardController extends Controller {
              $aa=0; $bb=0;$cc=0;$dd=0;$ee=0;$ff=0;
          $gg=0;$hh=0;$ii=0;$jj=0;$kk=0;$ll=0;$mm=0;$nn=0;$oo=0;$pp=0;
          $g1=0;$h1=0;$i1=0;$j1=0;$k1=0;$l1=0;$m1=0;$n1=0;$o1=0;
-         $z1=0;$y1=0;
+         $z1=0;$y1=0; $x1= 0;
          foreach ($etapyprodukcji_query as $etapy)
          {
              $produkcjaetap[$aa++]['id'] = $etapy->GetId();
@@ -1213,6 +1246,8 @@ class DashboardController extends Controller {
              
              $produkcjaetap[$z1++]['cenna'] = $etapy->GetCenna();
              $produkcjaetap[$y1++]['m2'] = $etapy->GetM2();
+             
+             $produkcjaetap[$x1++]['rabaty'] = $etapy->GetRabaty();
              
          }
          }
