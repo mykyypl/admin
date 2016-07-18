@@ -336,6 +336,7 @@ class DashboardController extends Controller {
              $nruzytkownika = $zam->getNr_user_zam();
              $trasa = $zam->getTrasa();
              $weryfikacjaproduktu[0] = $zam->getWeryfikacjaprodukcji();
+             $rabatki = $zam->getZamowienienr();
              
         $rabaty_query = $em->createQueryBuilder('a')
                 ->select('a')
@@ -343,25 +344,25 @@ class DashboardController extends Controller {
                 ->where('a.user = :user')
                 ->setParameter('user', $uzytkownik)
                 ->andwhere('a.typ_zamowienia = :typ')
-                ->setParameter('typ', $zam->getZamowienienr())
+                ->setParameter('typ', $rabatki)
+                ->andwhere('a.platnosc = :plat')
+                ->setParameter('plat', $zam->getPlatnosc())
                  ->getQuery()
                  ->getResult();
         
         if (NULL == $rabaty_query)
         {
-            $this->addFlash('danger', 'Błąd bazy rabatów!');
+            $this->addFlash('danger', 'Brak rabatów dla zamówienia! id: '.$idzamowienia.'.');
             //return new JsonResponse(false);
             $rabaty = 0;
         } else {
             foreach ($rabaty_query as $rabat)
             {
-                if ($rabat->getPlatnosc() == $zam->getPlatnosc())
-                {
+                
                  $rabaty = $rabat->getRabat();
-                } else {
-                  $rabaty = 0;
-                }
+                
             }
+            
         }
              
              $produkty_query = $em->createQueryBuilder('a')
