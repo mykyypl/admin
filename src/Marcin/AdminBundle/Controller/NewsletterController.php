@@ -79,6 +79,8 @@ class NewsletterController extends Controller {
             $qb_grupy = $em->createQueryBuilder()
                 ->select('b')
                 ->from('MarcinAdminBundle:Newsletter', 'b')
+                ->where('b.id = :id')
+                ->setParameter('id', $id)
                  ->setMaxResults(1)
                  ->getQuery()
                  ->getResult();
