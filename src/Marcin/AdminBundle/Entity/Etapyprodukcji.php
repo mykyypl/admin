@@ -247,6 +247,90 @@ class Etapyprodukcji {
     private $rabaty;
     
     /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $pilas;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $pilah;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $poziomo;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $pionowo;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $dowiercenia;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $po1;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $po2;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $po3;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $po4;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $pi1;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $pi2;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $pi3;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $pi4;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $pi5;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -1104,5 +1188,327 @@ class Etapyprodukcji {
     public function getRabaty()
     {
         return $this->rabaty;
+    }
+    
+    /**
+     * Set pilas
+     *
+     * @param integer $pilas
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPilas($pilas)
+    {
+        $this->pilas = $pilas;
+        return $this;
+    }
+    
+    /**
+     * Get pilas
+     *
+     * @return integer
+     */
+    public function getPilas()
+    {
+        return $this->pilas;
+    }
+    
+    /**
+     * Set pilah
+     *
+     * @param integer $pilah
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPilah($pilah)
+    {
+        $this->pilah = $pilah;
+        return $this;
+    }
+    
+    /**
+     * Get pilah
+     *
+     * @return integer
+     */
+    public function getPilah()
+    {
+        return $this->pilah;
+    }
+    
+    /**
+     * Set poziomo
+     *
+     * @param integer $poziomo
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPoziomo($poziomo)
+    {
+        $this->poziomo = $poziomo;
+        return $this;
+    }
+    
+    /**
+     * Get poziomo
+     *
+     * @return integer
+     */
+    public function getPoziomo()
+    {
+        return $this->poziomo;
+    }
+    
+    /**
+     * Set pionowo
+     *
+     * @param integer $pionowo
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPionowo($pionowo)
+    {
+        $this->pionowo = $pionowo;
+        return $this;
+    }
+    
+    /**
+     * Get pionowo
+     *
+     * @return integer
+     */
+    public function getPionowo()
+    {
+        return $this->pionowo;
+    }
+    
+    /**
+     * Set dowiercenia
+     *
+     * @param integer $dowiercenia
+     *
+     * @return Etapyprodukcji
+     */
+    public function setDowiercenia($dowiercenia)
+    {
+        $this->dowiercenia = $dowiercenia;
+        return $this;
+    }
+    
+    /**
+     * Get dowiercenia
+     *
+     * @return integer
+     */
+    public function getDowiercenia()
+    {
+        return $this->dowiercenia;
+    }
+    
+    /**
+     * Set po1
+     *
+     * @param integer $po1
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPo1($po1)
+    {
+        $this->po1 = $po1;
+        return $this;
+    }
+    
+    /**
+     * Get po1
+     *
+     * @return integer
+     */
+    public function getPo1()
+    {
+        return $this->po1;
+    }
+    
+    /**
+     * Set po2
+     *
+     * @param integer $po2
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPo2($po2)
+    {
+        $this->po2 = $po2;
+        return $this;
+    }
+    
+    /**
+     * Get po2
+     *
+     * @return integer
+     */
+    public function getPo2()
+    {
+        return $this->po2;
+    }
+    
+    /**
+     * Set po3
+     *
+     * @param integer $po3
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPo3($po3)
+    {
+        $this->po3 = $po3;
+        return $this;
+    }
+    
+    /**
+     * Get po3
+     *
+     * @return integer
+     */
+    public function getPo3()
+    {
+        return $this->po3;
+    }
+    
+    /**
+     * Set po4
+     *
+     * @param integer $po4
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPo4($po4)
+    {
+        $this->po4 = $po4;
+        return $this;
+    }
+    
+    /**
+     * Get po4
+     *
+     * @return integer
+     */
+    public function getPo4()
+    {
+        return $this->po4;
+    }
+    
+    /**
+     * Set pi1
+     *
+     * @param integer $pi1
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPi1($pi1)
+    {
+        $this->pi1 = $pi1;
+        return $this;
+    }
+    
+    /**
+     * Get pi1
+     *
+     * @return integer
+     */
+    public function getPi1()
+    {
+        return $this->pi1;
+    }
+    
+    /**
+     * Set pi2
+     *
+     * @param integer $pi2
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPi2($pi2)
+    {
+        $this->pi2 = $pi2;
+        return $this;
+    }
+    
+    /**
+     * Get pi2
+     *
+     * @return integer
+     */
+    public function getPi2()
+    {
+        return $this->pi2;
+    }
+    
+    /**
+     * Set pi3
+     *
+     * @param integer $pi3
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPi3($pi3)
+    {
+        $this->pi3 = $pi3;
+        return $this;
+    }
+    
+    /**
+     * Get pi3
+     *
+     * @return integer
+     */
+    public function getPi3()
+    {
+        return $this->pi3;
+    }
+    
+    /**
+     * Set pi4
+     *
+     * @param integer $pi4
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPi4($pi4)
+    {
+        $this->pi4 = $pi4;
+        return $this;
+    }
+    
+    /**
+     * Get pi4
+     *
+     * @return integer
+     */
+    public function getPi4()
+    {
+        return $this->pi4;
+    }
+    
+    /**
+     * Set pi5
+     *
+     * @param integer $pi5
+     *
+     * @return Etapyprodukcji
+     */
+    public function setPi5($pi5)
+    {
+        $this->pi5 = $pi5;
+        return $this;
+    }
+    
+    /**
+     * Get pi5
+     *
+     * @return integer
+     */
+    public function getPi5()
+    {
+        return $this->pi5;
     }
 }

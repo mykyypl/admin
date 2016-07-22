@@ -25,8 +25,89 @@
         a[href]:after {
             content: none !important;
             }
+            .table-bordered {
+                text-align: center;
+            }
+            
+            .czekol {
+                background-color: #3f2a29 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .zloty {
+                background-color: #a96632 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .orzech {
+                background-color: #2f2220 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .mahon {
+                background-color: #490014 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .antracyt {
+                background-color: #4e595f !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .win {
+                background-color: #b36d3c !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .ciemny {
+                background-color: #302513 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+            }
+            
 	
         }
+        .czekol {
+                background-color: #3f2a29;
+                color: white;
+            }
+            
+            .zloty {
+                background-color: #a96632;
+                color: white;
+            }
+            
+            .orzech {
+                background-color: #2f2220;
+                color: white;
+            }
+            
+            .mahon {
+                background-color: #490014;
+                color: white;
+            }
+            
+            .antracyt {
+                background-color: #4e595f;
+                color: white;
+            }
+            
+            .win {
+                background-color: #b36d3c;
+                color: white;
+            }
+            
+            .ciemny {
+                background-color: #302513;
+                color: white;
+            }
+        
         .widok-realizacja
         {
             visibility: hidden;
@@ -496,6 +577,138 @@
                                             <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
                                                 <span class="glyphicon glyphicon-edit"></span>
                                             </a>{% endif %}
+                                            {% if article.weryfikacjaprodukcji == '1' or article.weryfikacjaprodukcji == '0' %}
+                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#produkcja1{{ article.id }}"><i class="fa fa-print" aria-hidden="true"></i></button>
+                                            <!--- Drukowanie przycisk produkcja1  --->
+                                                <div class="modal fade" id="produkcja1{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                  <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">{{ article.nr_user_zam }} - {{ article.id }}</h4>
+                                                      </div>
+                                                      <div style="overflow-x: auto;text-align: center;">
+                                                      <div class="modal-body" id="printableArea{{ article.id }}">
+                                                          <h4><table class="table table-bordered">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>user</th>
+                                                                                <th>zam</th>
+                                                                                <th>poz</th>
+                                                                                <th>Kolor</th>
+                                                                                <th>typ</th>
+                                                                                <th>siat</th>
+                                                                                <th>rodz</th>
+                                                                                <th>typ ciec</th>
+                                                                                <th>S/O</th>
+                                                                                <th>"S"</th>
+                                                                                <th>"H"</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                             {% for etapy in etapyprodukcji if etapy.idzam == article.id %}
+                                                                            <tr>
+                                                                                <td>{{ article.user }}</td>
+                                                                                <td>{{ article.id }}</td>
+                                                                                <td>{{ etapy.ilosc }}</td>
+                                                                                <td><div class={% if etapy.kolor == 'Biały 9016' %}{% elseif etapy.kolor == 'Brąz czekol. 8017' %}"czekol"{% elseif etapy.kolor == 'Złoty Dąb 8003' %}"zloty"{% elseif etapy.kolor == 'Orzech brąz 8028' %}"orzech"{% elseif etapy.kolor == 'Mahoń 8015' %}"mahon"{% elseif etapy.kolor == 'Antracyt 7016' %}"antracyt"{% elseif etapy.kolor == 'Winchester' %}"win"{% elseif etapy.kolor == 'Ciemny Brąz 8022' %}"ciemny"{% else %}{% endif %}>{{ etapy.kolor }}</div></td>
+                                                                                <td>{% if etapy.typ == 'Standard' %}Stan{% elseif etapy.typ == 'Exclusive' %}Exclu{% else %}null{% endif %}</td>
+                                                                                <td>{% if etapy.kolorsiatki == 'Czarna' %}Czar{% elseif etapy.kolorsiatki == 'Popielata' %}Popiel{% else %}null{% endif %}</td>
+                                                                                <td>{{ etapy.rodzaj }}</td>
+                                                                                <td><center>{% if etapy.typ == 'Standard' %}|{% elseif etapy.typ == 'Exclusive' %}\/{% else %}null{% endif %}</center></td>
+                                                                                <td>{{ etapy.stronawiercenia }}</td>
+                                                                                <td>{{ etapy.pilas }}</td>
+                                                                                <td>{{ etapy.pilah }}</td>
+                                                                            </tr>
+                                                                            {% endfor %}
+                                                                        </tbody>
+                                                              </table></h4>
+                                                                                
+                                                      </div></div>
+                                                      <div class="modal-footer">
+                                                        
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="printDiv('printableArea{{ article.id }}', '{{ article.id }}')">Drukuj</button>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            <!---  koniec drukowania produkcja1  --->
+                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#produkcja2{{ article.id }}"><i class="fa fa-print" aria-hidden="true"></i></button>
+                                            <!--- Drukowanie przycisk produkcja2  --->
+                                                <div class="modal fade" id="produkcja2{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                  <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">{{ article.nr_user_zam }} - {{ article.id }}</h4>
+                                                      </div>
+                                                      <div style="overflow-x: auto;text-align: center;">
+                                                      <div class="modal-body" id="printableArea2{{ article.id }}">
+                                                          <h4><table class="table table-bordered">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>user</th>
+                                                                                <th>zam</th>
+                                                                                <th>poz</th>
+                                                                                <th>typ</th>
+                                                                                <th>kolor</th>
+                                                                                <th>rodz</th>
+                                                                                <th>S/O</th>
+                                                                                <th>"S"</th>
+                                                                                <th>dowier</th>
+                                                                                <th>POZI</th>
+                                                                                <th>I</th>
+                                                                                <th>II</th>
+                                                                                <th>III</th>
+                                                                                <th>IV</th>
+                                                                                <th>"H"</th>
+                                                                                <th>PION</th>
+                                                                                <th>I</th>
+                                                                                <th>II</th>
+                                                                                <th>III</th>
+                                                                                <th>IV</th>
+                                                                                <th>V</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                             {% for etapy in etapyprodukcji if etapy.idzam == article.id %}
+                                                                            <tr>
+                                                                                <td>{{ article.user }}</td>
+                                                                                <td>{{ article.id }}</td>
+                                                                                <td>{{ etapy.ilosc }}</td>
+                                                                                <td>{% if etapy.typ == 'Standard' %}STAN{% elseif etapy.typ == 'Exclusive' %}EXCLU{% else %}null{% endif %}</td>
+                                                                                <td><div class={% if etapy.kolor == 'Biały 9016' %}{% elseif etapy.kolor == 'Brąz czekol. 8017' %}"czekol"{% elseif etapy.kolor == 'Złoty Dąb 8003' %}"zloty"{% elseif etapy.kolor == 'Orzech brąz 8028' %}"orzech"{% elseif etapy.kolor == 'Mahoń 8015' %}"mahon"{% elseif etapy.kolor == 'Antracyt 7016' %}"antracyt"{% elseif etapy.kolor == 'Winchester' %}"win"{% elseif etapy.kolor == 'Ciemny Brąz 8022' %}"ciemny"{% else %}{% endif %}>{{ etapy.kolor }}</div></td>
+                                                                                <td>{{ etapy.rodzaj }}</td>
+                                                                                <td>{{ etapy.stronawiercenia }}</td>
+                                                                                <td>{{ etapy.pilas }}</td>
+                                                                                <td>{{ etapy.dowiercenia }}</td>
+                                                                                <td>{{ etapy.poziomo }}</td>
+                                                                                <td>{{ etapy.po1 }}</td>
+                                                                                <td>{{ etapy.po2 }}</td>
+                                                                                <td>{{ etapy.po3 }}</td>
+                                                                                <td>{{ etapy.po4 }}</td>
+                                                                                <td>{{ etapy.pilah }}</td>
+                                                                                <td>{{ etapy.pionowo }}</td>
+                                                                                <td>{{ etapy.pi1 }}</td>
+                                                                                <td>{{ etapy.pi2 }}</td>
+                                                                                <td>{{ etapy.pi3 }}</td>
+                                                                                <td>{{ etapy.pi4 }}</td>
+                                                                                <td>{{ etapy.pi5 }}</td>
+                                                                            </tr>
+                                                                            {% endfor %}
+                                                                        </tbody>
+                                                              </table></h4>
+                                                                                
+                                                      </div></div>
+                                                      <div class="modal-footer">
+                                                        
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="printDiv2('printableArea2{{ article.id }}', '{{ article.id }}')">Drukuj</button>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            <!---  koniec drukowania produkcja2  --->
+                                            {% endif %}
                                             <a  href="https://grupamagnum.eu/zamowienia/zamowienia/{{ article.nr_user_zam  }}.pdf" target="_blank" class="ajax-task-complete btn btn-primary">
                                                 <span class="glyphicon glyphicon-print"></span>
                                             </a>
@@ -1169,5 +1382,35 @@
   xLabels: 'day'
 });
     </script>
+    <script>
+                                                        function printDiv(divName, id) {
+                                                             var id = id;
+                                                             var printContents = document.getElementById(divName).innerHTML;
+                                                             var originalContents = document.body.innerHTML;
+                                                             
+                                                             
+                                                             
+                                                             document.body.innerHTML = printContents;
+
+                                                             window.print();
+                                                            // $('#produkcja1'+id).modal('hide');
+                                                             document.body.innerHTML = originalContents;
+                                                             window.location.reload(true);
+                                                        }
+                                                        function printDiv2(divName, id) {
+                                                             var id = id;
+                                                             var printContents = document.getElementById(divName).innerHTML;
+                                                             var originalContents = document.body.innerHTML;
+                                                             
+                                                             
+                                                             
+                                                             document.body.innerHTML = printContents;
+
+                                                             window.print();
+                                                            // $('#produkcja1'+id).modal('hide');
+                                                             document.body.innerHTML = originalContents;
+                                                             window.location.reload(true);
+                                                        }
+                                                        </script>
                     {% endblock %}
 

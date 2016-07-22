@@ -122,6 +122,13 @@ class Produkty {
     private $kolor_siatki;
     
     /**
+     * @ORM\Column(type="integer")
+     * 
+     * 
+     */
+    private $status;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -434,6 +441,29 @@ class Produkty {
     public function getKolorsiatki()
     {
         return $this->kolor_siatki;
+    }
+    
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Produkty
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+    
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
     
 }

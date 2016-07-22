@@ -493,6 +493,50 @@ class DashboardController extends Controller {
                      {
                          $cenamoskitierki = $cennik[6]['exclusive']; //"115.50";
                      }
+                 }
+                 elseif ($metrykwadratowe >= 2.01 && $metrykwadratowe <= 2.25) 
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[7]['standard']; //"108.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[7]['exclusive']; //"125.50";
+                     }
+                 } 
+                 elseif ($metrykwadratowe >= 2.26 && $metrykwadratowe <= 2.50) 
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[8]['standard']; //"118.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[8]['exclusive']; //"135.50";
+                     }
+                 }
+                 elseif ($metrykwadratowe >= 2.51 && $metrykwadratowe <= 2.75) 
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[9]['standard']; //"138.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[9]['exclusive']; //"155.50";
+                     }
+                 }
+                 elseif ($metrykwadratowe >= 2.76 && $metrykwadratowe <= 3.00) 
+                 {
+                     if ($typ == 'Standard')
+                     {
+                         $cenamoskitierki = $cennik[10]['standard']; //"158.00";
+                     }
+                        else
+                     {
+                         $cenamoskitierki = $cennik[10]['exclusive']; //"175.50";
+                     }
                  } 
                     else 
                  {
@@ -858,6 +902,8 @@ class DashboardController extends Controller {
             'id' => $Request->request->get('id')
         );
 
+        $em = $this->getDoctrine()->getManager();
+         
         $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
         $Zamowienie = $RepoZamowienia->find($result['id']);
 
@@ -865,7 +911,734 @@ class DashboardController extends Controller {
             return new JsonResponse(false);
         }
         
-            $em = $this->getDoctrine()->getManager();
+        $etapypro_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Etapyprodukcji', 'a')
+                ->where('a.nrzamowienia = :nrzam')
+                ->setParameter('nrzam', $result['id'])
+                 ->getQuery()
+                 ->getResult();
+        
+         foreach ($etapypro_query as $etapypro)
+         {
+               $szerokosc = $etapypro->getSzerokosc();
+               $wysokosc = $etapypro->getWysokosc();
+               $stalawysokosc = $etapypro->getStalawys();
+               $stalaszerokosc = $etapypro->getStalaszer();
+               
+               ///// PROFIL STANDARD ////////
+             if ($etapypro->getTyp() == 'Standard')
+             {
+                 /// OBLICZANIE SZEROKOSCI /// 
+                 $wynikstandardsz = ($szerokosc - $stalaszerokosc)/10;
+                 $wynikstandardw = ($wysokosc - $stalawysokosc)/10;
+                 
+                 /// OBLICZANIE POZIOMO /// DLA DREWNA /////
+                 if ($etapypro->getRodzaj() == "DRE")
+                 {
+                     if ($szerokosc <= 600)
+                     {
+                         $dowiercenia = 'góra';
+                         $iloscblasz = 2;
+                     }
+                     elseif ($szerokosc <= 1000 && $szerokosc >= 601)
+                     {
+                         $dowiercenia = 'góra';
+                         $iloscblasz = 3;
+                     }
+                     else
+                     {
+                         $iloscblasz = 4;
+                         $dowiercenia = 'góra';
+                     }
+                     
+                     if ($wysokosc <= 500)
+                     {
+                         $iloscblaszwy = 1;
+                     }
+                     elseif ($wysokosc <= 1000 && $wysokosc >= 501)
+                     {
+                          $iloscblaszwy = 2;
+                     }
+                     elseif ($wysokosc <= 1500 && $wysokosc >= 1001) 
+                    {
+                        $iloscblaszwy = 3;
+                    }
+                    elseif ($wysokosc <= 1800 && $wysokosc >= 1501) 
+                    {
+                       $iloscblaszwy = 4;
+                    }
+                    else {
+                         $iloscblaszwy = 5;
+                    }
+                 }
+                  else {    /// OBLICZANIE POZIOMO /// DLA PCV/ALU /////
+                      if ($szerokosc <= 600)
+                     {
+                          $iloscblasz = 2;
+                         $dowiercenia = 'góra+dół';
+                     }
+                     elseif ($szerokosc <= 1000 && $szerokosc >= 601)
+                     {
+                         $iloscblasz = 3;
+                         $dowiercenia = 'góra+dół';
+                     }
+                     else
+                     {
+                         $iloscblasz = 4;
+                         $dowiercenia = 'góra+dół';
+                     }
+                     
+                     if ($wysokosc <= 500)
+                     {
+                         $iloscblaszwy = 0;
+                     }
+                     elseif ($wysokosc <= 1000 && $wysokosc >= 501)
+                     {
+                          $iloscblaszwy = 1;
+                     }
+                     elseif ($wysokosc <= 1500 && $wysokosc >= 1001) 
+                    {
+                        $iloscblaszwy = 2;
+                    }
+                    elseif ($wysokosc <= 1800 && $wysokosc >= 1501) 
+                    {
+                       $iloscblaszwy = 3;
+                    }
+                    else {
+                         $iloscblaszwy = 4;
+                    }
+                      
+                  }
+                  
+                  ///// OBLICZANIE POZYCJI 1,2,3,4 POZIOMO ////////
+                  // $wierceniePoziomo1 
+                  // $wierceniePoziomo2 
+                  // $wierceniePoziomo3 
+                  // $wierceniePoziomo4 
+                  if ($etapypro->getStronawiercenia() == 'S')
+                  {
+                      $wierceniePoziomo1 = 6.5;
+                      if ($iloscblasz == 2)
+                      {
+                          $wierceniePoziomo2 = $wynikstandardsz - 5.5;
+                          $wierceniePoziomo3 = '-';
+                          $wierceniePoziomo4 = '-';
+                      }
+                      elseif ($iloscblasz == 3)
+                      {
+                          $wierceniePoziomo2 = number_format(($wynikstandardsz/2)+0.5,1);
+                          $wierceniePoziomo3 = number_format($wynikstandardsz - 5.5,1);
+                          $wierceniePoziomo4 = '-';
+                      }
+                      elseif ($iloscblasz == 4)
+                      {
+                          $wierceniePoziomo2 = number_format(($wynikstandardsz/3)+0.5,1);
+                          $wierceniePoziomo3 = number_format((($wynikstandardsz/3)*2)+0.5,1);
+                          if ($szerokosc < 1495)
+                          {
+                              $wierceniePoziomo4 = number_format($wynikstandardsz-5.5,1);
+                          }
+                          else 
+                          {
+                              $wierceniePoziomo4 = $wierceniePoziomo1;
+                          }
+                          
+                      }
+                      
+                  }
+                  else {
+                      $wierceniePoziomo1 = 'NAR';
+                      if ($iloscblasz == 2)
+                      {
+                          $wierceniePoziomo2 = 'NAR';
+                          $wierceniePoziomo3 = '-';
+                          $wierceniePoziomo4 = '-';
+                      }
+                      elseif ($iloscblasz == 3)
+                      {
+                          $wierceniePoziomo2 = number_format($wynikstandardsz/2,1);
+                          $wierceniePoziomo3 = 'NAR';
+                          $wierceniePoziomo4 = '-';
+                      }
+                      elseif ($iloscblasz == 4)
+                      {
+                          $wierceniePoziomo2 = number_format($wynikstandardsz/3,1);
+                          $wierceniePoziomo3 = number_format(($wynikstandardsz/3)*2,1);
+                          $wierceniePoziomo4 = 'NAR';
+                      }
+                      
+                  }
+                  
+                  ///// OBLICZANIE POZYCJI 1,2,3,4,5 PIONOWO ////////
+                  // $wierceniePionowo1 
+                  // $wierceniePionowo2 
+                  // $wierceniePionowo3 
+                  // $wierceniePionowo4
+                  // $wierceniePionowo5
+                  
+                  if ($etapypro->getStronawiercenia() == 'S')
+                  {
+                  if ($iloscblaszwy == 0)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = '-';
+                          $wierceniePionowo2 = '-';
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                          
+                      }
+                      else 
+                      {
+                          $wierceniePionowo1 = '-';
+                          $wierceniePionowo2 = '-';
+                          if ($wysokosc < 2350)
+                          {
+                              $wierceniePionowo3 = '-';
+                          }
+                          else 
+                          {
+                              $wierceniePionowo3 = $wierceniePionowo1;
+                          }
+                          if ($wysokosc < 1801)
+                          {
+                              $wierceniePionowo4 = '-';
+                          }
+                          else 
+                          {
+                              $wierceniePionowo4 = $wierceniePionowo1;
+                          }
+                          $wierceniePionowo5 = '-';
+                      }
+                  }
+                  elseif ($iloscblaszwy == 1)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 6.5;
+                          $wierceniePionowo2 = '-';
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                         
+                      }
+                      else 
+                      {
+                          $wierceniePionowo1 = number_format(($wynikstandardw/2)+0.5,1);
+                          $wierceniePionowo2 = '-';
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                      }
+                  }
+                  elseif ($iloscblaszwy == 2)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 6.5;
+                          $wierceniePionowo2 = number_format($wynikstandardw/2,1);
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                      }
+                      else 
+                      {
+                          $wierceniePionowo1 = number_format(($wynikstandardw/3)+0.5,1);
+                          $wierceniePionowo2 = number_format((($wierceniePionowo1-0.5)*2)+0.5,1);
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                      }
+                  }
+                  elseif ($iloscblaszwy == 3)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 6.5;
+                          $wierceniePionowo2 = number_format(($wynikstandardw/3)+0.5,1);
+                          $wierceniePionowo3 = number_format((($wynikstandardw/3)*2)+0.5,1);
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                      }
+                      else 
+                      {
+                          $wierceniePionowo1 = number_format(($wynikstandardw/4)+0.5,1);
+                          $wierceniePionowo2 = number_format((($wierceniePionowo1-0.5)*2)+0.5,1);
+                          $wierceniePionowo3 = number_format((($wierceniePionowo1-0.5)*3)+0.5,1);
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                      }
+                  }
+                  elseif ($iloscblaszwy == 4)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 6.5;
+                          $wierceniePionowo2 = number_format(($wynikstandardw/4)+0.5,1);
+                          $wierceniePionowo3 = number_format((($wynikstandardw/4)*2)+0.5,1);
+                          $wierceniePionowo4 = number_format((($wynikstandardw/4)*3)+0.5,1);
+                          $wierceniePionowo5 = '-';
+                      }
+                      else 
+                      {
+                          $wierceniePionowo1 = number_format(($wynikstandardw/5)+0.5,1);
+                          $wierceniePionowo2 = number_format((($wierceniePionowo1-0.5)*2)+0.5,1);
+                          if ($wysokosc < 2350)
+                          {
+                              $wierceniePionowo3 = number_format((($wierceniePionowo1-0.5)*3)+0.5,1);
+                          }
+                          else 
+                          {
+                              $wierceniePionowo3 = $wierceniePionowo2;
+                          }
+                          //$wierceniePionowo4 = number_format((($wierceniePionowo1-0.5)*4)+0.5,1);
+                          $wierceniePionowo4 = $wierceniePionowo1;
+                          $wierceniePionowo5 = '-';
+                      }
+                  }
+                  elseif ($iloscblaszwy == 5)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 6.5;
+                          $wierceniePionowo2 = number_format(($wynikstandardw/5)+0.5,1);
+                          $wierceniePionowo3 = number_format((($wynikstandardw/5)*2)+0.5,1);
+                          if ($wysokosc < 2350)
+                          {
+                              $wierceniePionowo4 = number_format((($wynikstandardw/5)*3)+0.5,1);
+                              //$wierceniePionowo5 = number_format((($wynikstandardw-0.5)*4)+0.5,1);
+                          }
+                          else 
+                          {
+                              $wierceniePionowo4 = $wierceniePionowo3;
+                              //$wierceniePionowo5 = $wierceniePionowo2;
+                          }
+                          $wierceniePionowo5 = $wierceniePionowo2;
+                      }
+                      else 
+                      {
+                          $wierceniePionowo1 = 'Błąd blaszka 5 PCV/ALU'; //number_format(($wynikstandardw/6)+0.5,2);
+                          $wierceniePionowo2 = 'Błąd blaszka 5 PCV/ALU'; //number_format((($wierceniePionowo1-0.5)*2)+0.5,2);
+                          if ($wysokosc < 2350)
+                          {
+                              $wierceniePionowo3 = 'Błąd blaszka 5 PCV/ALU'; //number_format((($wierceniePionowo1-0.5)*3)+0.5,2);
+                          }
+                          else 
+                          {
+                              $wierceniePionowo3 = 'Błąd blaszka 5 PCV/ALU'; //$wierceniePionowo1;
+                          }
+                          if ($wysokosc < 1801)
+                          {
+                              $wierceniePionowo4 = 'Błąd blaszka 5 PCV/ALU'; //number_format((($wierceniePionowo1-0.5)*5)+0.5,2);
+                          }
+                          else 
+                          {
+                              $wierceniePionowo4 = 'Błąd blaszka 5 PCV/ALU'; //$wierceniePionowo1;
+                          }
+                          $wierceniePionowo5 = 'Błąd blaszka 5 PCV/ALU'; //'-';
+                      }
+                  }
+                  }
+                  else
+                  {
+                      if ($iloscblaszwy == 0)
+                      {
+                              $wierceniePionowo1 = '-';
+                              $wierceniePionowo2 = '-';
+                              $wierceniePionowo3 = '-';
+                              $wierceniePionowo4 = "-";
+                              $wierceniePionowo5 = '-';
+                          
+                      }
+                      elseif ($iloscblaszwy == 1)
+                      {
+                          if ($etapypro->getRodzaj() == "DRE")
+                          {
+                              $wierceniePionowo1 = 'NAR';
+                              $wierceniePionowo2 = '-';
+                              $wierceniePionowo3 = '-';
+                              $wierceniePionowo4 = "-";
+                              $wierceniePionowo5 = '-';
+                          }
+                          else 
+                          {
+                              $wierceniePionowo1 = number_format($wynikstandardw/2,1);
+                              $wierceniePionowo2 = '-';
+                              $wierceniePionowo3 = '-';
+                              $wierceniePionowo4 = "-";
+                              $wierceniePionowo5 = '-';
+                          }
+                      }
+                      elseif ($iloscblaszwy == 2)
+                      {
+                          if ($etapypro->getRodzaj() == "DRE")
+                          {
+                              $wierceniePionowo1 = 'NAR';
+                              $wierceniePionowo2 = number_format($wynikstandardw/2,1);
+                              $wierceniePionowo3 = '-';
+                              $wierceniePionowo4 = "-";
+                              $wierceniePionowo5 = '-';
+                          }
+                          else 
+                          {
+                              $wierceniePionowo1 = number_format($wynikstandardw/3,1);
+                              $wierceniePionowo2 = number_format($wierceniePionowo1*2,1);
+                              $wierceniePionowo3 = '-';
+                              $wierceniePionowo4 = "-";
+                              $wierceniePionowo5 = '-';
+                          }
+                      }
+                      elseif ($iloscblaszwy == 3)
+                      {
+                          if ($etapypro->getRodzaj() == "DRE")
+                          {
+                              $wierceniePionowo1 = 'NAR';
+                              $wierceniePionowo2 = number_format($wynikstandardw/3,1);
+                              $wierceniePionowo3 = number_format(($wynikstandardw/3)*2,1);
+                              $wierceniePionowo4 = "-";
+                              $wierceniePionowo5 = '-';
+                          }
+                          else 
+                          {
+                              $wierceniePionowo1 = number_format($wynikstandardw/4,1);
+                              $wierceniePionowo2 = number_format($wierceniePionowo1*2,1);
+                              $wierceniePionowo3 = number_format($wierceniePionowo1*3,1);
+                              $wierceniePionowo4 = "-";
+                              $wierceniePionowo5 = '-';
+                          }
+                      }
+                      elseif ($iloscblaszwy == 4)
+                      {
+                          if ($etapypro->getRodzaj() == "DRE")
+                          {
+                              $wierceniePionowo1 = 'NAR';
+                              $wierceniePionowo2 = number_format($wynikstandardw/4,1);
+                              $wierceniePionowo3 = number_format(($wynikstandardw/4)*2,1);
+                              $wierceniePionowo4 = number_format(($wynikstandardw/4)*3,1);
+                              $wierceniePionowo5 = '-';
+                          }
+                          else 
+                          {
+                              $wierceniePionowo1 = number_format($wynikstandardw/5,1);
+                              $wierceniePionowo2 = number_format($wierceniePionowo1*2,1);
+                              $wierceniePionowo3 = number_format($wierceniePionowo1*3,1);
+                              $wierceniePionowo4 = number_format($wierceniePionowo1*4,1);
+                              $wierceniePionowo5 = '-';
+                          }
+                      }
+                      elseif ($iloscblaszwy == 5)
+                      {
+                          if ($etapypro->getRodzaj() == "DRE")
+                          {
+                              $wierceniePionowo1 = 'NAR';
+                              $wierceniePionowo2 = number_format($wynikstandardw/5,1);
+                              $wierceniePionowo3 = number_format(($wynikstandardw/5)*2,1);
+                              $wierceniePionowo4 = number_format(($wynikstandardw/5)*3,1);
+                              $wierceniePionowo5 = number_format(($wynikstandardw/5)*4,1);
+                          }
+                          else 
+                          {
+                              $wierceniePionowo1 = 'Błąd PCV blaszek 5';
+                              $wierceniePionowo2 = 'Błąd PCV blaszek 5';
+                              $wierceniePionowo3 = 'Błąd PCV blaszek 5';
+                              $wierceniePionowo4 = 'Błąd PCV blaszek 5';
+                              $wierceniePionowo5 = 'Błąd PCV blaszek 5';
+                          }
+                      }
+                  }
+                 
+                   //////// WPISANIE DANYCH DO BAZY JEŻELI STANDARD ///////
+                 $etapypro->setPilas($wynikstandardsz);
+                 $etapypro->setPilah($wynikstandardw);
+                 $etapypro->setPoziomo($iloscblasz);
+                 $etapypro->setPionowo($iloscblaszwy);
+                 $etapypro->setDowiercenia($dowiercenia);
+                 $etapypro->setPo1($wierceniePoziomo1);
+                 $etapypro->setPo2($wierceniePoziomo2);
+                 $etapypro->setPo3($wierceniePoziomo3);
+                 $etapypro->setPo4($wierceniePoziomo4);
+                 $etapypro->setPi1($wierceniePionowo1);
+                 $etapypro->setPi2($wierceniePionowo2);
+                 $etapypro->setPi3($wierceniePionowo3);
+                 $etapypro->setPi4($wierceniePionowo4);
+                 $etapypro->setPi5($wierceniePionowo5);
+                 $em->flush();
+                 
+             }   ///// PROFIL EXCLUSIVE ///////////
+             elseif ($etapypro->getTyp() == 'Exclusive')
+             {
+                 /// OBLICZANIE WYSOKOSCI ///
+                 $wynikstandardszy = (($szerokosc - $stalaszerokosc) - 6)/10;
+                 $wynikstandardwy = (($wysokosc - $stalawysokosc) - 6)/10;
+                 
+                 /// OBLICZANIE PIONOWO /// DLA DREWNA /////
+                 if ($etapypro->getRodzaj() == "DRE")
+                 {
+                     if ($szerokosc <= 600)
+                     {
+                         $dowiercenia = 'góra';
+                         $iloscblasz = 2;
+                     }
+                     elseif ($szerokosc <= 1000 && $szerokosc >= 601)
+                     {
+                         $dowiercenia = 'góra';
+                         $iloscblasz = 3;
+                     }
+                     else
+                     {
+                         $iloscblasz = 4;
+                         $dowiercenia = 'góra';
+                     }
+                     
+                     if ($wysokosc <= 500)
+                     {
+                         $iloscblaszwy = 1;
+                     }
+                     elseif ($wysokosc <= 1000 && $wysokosc >= 501)
+                     {
+                          $iloscblaszwy = 2;
+                     }
+                     elseif ($wysokosc <= 1500 && $wysokosc >= 1001) 
+                    {
+                        $iloscblaszwy = 3;
+                    }
+                    elseif ($wysokosc <= 1800 && $wysokosc >= 1501) 
+                    {
+                       $iloscblaszwy = 4;
+                    }
+                    else {
+                         $iloscblaszwy = 5;
+                    }
+                 }
+                  else {    /// OBLICZANIE PIONOWO /// DLA PCV/ALU /////
+                      if ($szerokosc <= 600)
+                     {
+                          $iloscblasz = 2;
+                         $dowiercenia = 'góra+dół';
+                     }
+                     elseif ($szerokosc <= 1000 && $szerokosc >= 601)
+                     {
+                         $iloscblasz = 3;
+                         $dowiercenia = 'góra+dół';
+                     }
+                     else
+                     {
+                         $iloscblasz = 4;
+                         $dowiercenia = 'góra+dół';
+                     }
+                     
+                     if ($wysokosc <= 500)
+                     {
+                         $iloscblaszwy = 0;
+                     }
+                     elseif ($wysokosc <= 1000 && $wysokosc >= 501)
+                     {
+                          $iloscblaszwy = 1;
+                     }
+                     elseif ($wysokosc <= 1500 && $wysokosc >= 1001) 
+                    {
+                        $iloscblaszwy = 2;
+                    }
+                    elseif ($wysokosc <= 1800 && $wysokosc >= 1501) 
+                    {
+                       $iloscblaszwy = 3;
+                    }
+                    else {
+                         $iloscblaszwy = 4;
+                    }
+                      
+                  }
+                  
+                  ///// OBLICZANIE POZYCJI 1,2,3,4 POZIOMO ////////
+                  // $wierceniePoziomo1 
+                  // $wierceniePoziomo2 
+                  // $wierceniePoziomo3 
+                  // $wierceniePoziomo4
+                
+                  if ($iloscblasz == 2)
+                  {
+                      $wierceniePoziomo1 = 'NAR';
+                      $wierceniePoziomo2 = 'NAR';
+                      $wierceniePoziomo3 = '-';
+                      $wierceniePoziomo4 = '-';
+                  }
+                  elseif ($iloscblasz == 3)
+                  {
+                      $wierceniePoziomo1 = 'NAR';
+                      $wierceniePoziomo2 = number_format(($wynikstandardszy+7.8)/($iloscblasz - 1),1);
+                      $wierceniePoziomo3 = 'NAR';
+                      $wierceniePoziomo4 = '-';
+                  }
+                  elseif ($iloscblasz == 4)
+                  {
+                      $wierceniePoziomo1 = 'NAR';
+                      $wierceniePoziomo2 = number_format(($wynikstandardszy+7.8)/($iloscblasz - 1),1);
+                      $wierceniePoziomo3 = number_format((($wynikstandardszy+7.8)/3)*2,1);
+                      $wierceniePoziomo4 = 'NAR';
+                  }
+                  
+                  ///// OBLICZANIE POZYCJI 1,2,3,4,5 PIONOWO ////////
+                  // $wierceniePionowo1 
+                  // $wierceniePionowo2 
+                  // $wierceniePionowo3 
+                  // $wierceniePionowo4
+                  // $wierceniePionowo5
+                  
+                  if ($iloscblaszwy == 0)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 'NAR';
+                          $wierceniePionowo2 = '-';
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                          
+                      }
+                      else 
+                      {
+                          $wierceniePionowo1 = '-';
+                          $wierceniePionowo2 = '-';
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                          
+                      }
+                  }
+                  elseif ($iloscblaszwy == 1)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 'NAR';
+                          $wierceniePionowo2 = '-';
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                          
+                      }
+                      else 
+                      {
+                          $wierceniePionowo1 = number_format(($wynikstandardwy+7.8)/2,1);
+                          $wierceniePionowo2 = '-';
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                          
+                      }
+                  }
+                  elseif ($iloscblaszwy == 2)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 'NAR';
+                          $wierceniePionowo2 = number_format(($wynikstandardwy+7.8)/2,1);
+                          $wierceniePionowo3 = '-';
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                          
+                      }
+                      else 
+                      {
+                           $wierceniePionowo1 = number_format(($wynikstandardwy+7.8)/3,1);
+                           $wierceniePionowo2 = number_format($wierceniePionowo1*2,1);
+                           $wierceniePionowo3 = '-';
+                           $wierceniePionowo4 = '-';
+                           $wierceniePionowo5 = '-';
+                           
+                      }
+                  }
+                  elseif ($iloscblaszwy == 3)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 'NAR';
+                          $wierceniePionowo2 = number_format(($wynikstandardwy+7.8)/3,1);
+                          $wierceniePionowo3 = number_format((($wynikstandardwy+7.8)/3)*2,1);
+                          $wierceniePionowo4 = '-';
+                          $wierceniePionowo5 = '-';
+                          
+                      }
+                      else 
+                      {
+                           $wierceniePionowo1 = number_format(($wynikstandardwy+7.8)/4,1);
+                           $wierceniePionowo2 = number_format($wierceniePionowo1*2,1);
+                           $wierceniePionowo3 = number_format($wierceniePionowo1*3,1);
+                           $wierceniePionowo4 = '-';
+                           $wierceniePionowo5 = '-';
+                           
+                      }
+                  }
+                  elseif ($iloscblaszwy == 4)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 'NAR';
+                          $wierceniePionowo2 = number_format(($wynikstandardwy+7.8)/4,1);
+                          $wierceniePionowo3 = number_format((($wynikstandardwy+7.8)/4)*2,1);
+                          $wierceniePionowo4 = number_format((($wynikstandardwy+7.8)/4)*3,1);
+                          $wierceniePionowo5 = '-';
+                          
+                      }
+                      else 
+                      {
+                           $wierceniePionowo1 = number_format(($wynikstandardwy+7.8)/5,1);
+                           $wierceniePionowo2 = number_format($wierceniePionowo1*2,1);
+                           $wierceniePionowo3 = number_format($wierceniePionowo1*3,1);
+                           $wierceniePionowo4 = number_format($wierceniePionowo1*4,1);
+                           $wierceniePionowo5 = '-';
+                           
+                      }
+                  }
+                  elseif ($iloscblaszwy == 5)
+                  {
+                      if ($etapypro->getRodzaj() == "DRE")
+                      {
+                          $wierceniePionowo1 = 'NAR';
+                          $wierceniePionowo2 = number_format(($wynikstandardwy+7.8)/5,1);
+                          $wierceniePionowo3 = number_format((($wynikstandardwy+7.8)/5)*2,1);
+                          $wierceniePionowo4 = number_format((($wynikstandardwy+7.8)/5)*3,1);
+                          $wierceniePionowo5 = number_format((($wynikstandardwy+7.8)/5)*4,1);
+                          
+                      }
+                      else 
+                      {
+                           $wierceniePionowo1 = number_format(($wynikstandardwy+7.8)/6,1);
+                           $wierceniePionowo2 = number_format($wierceniePionowo1*2,1);
+                           $wierceniePionowo3 = number_format($wierceniePionowo1*3,1);
+                           $wierceniePionowo4 = number_format($wierceniePionowo1*5,1);
+                           $wierceniePionowo5 = '-';
+                           
+                      }
+                  }
+                 
+                  //////// WPISANIE DANYCH DO BAZY JEŻELI EXCLUSIVE ///////
+                 $etapypro->setPilas($wynikstandardszy);
+                 $etapypro->setPilah($wynikstandardwy);
+                 $etapypro->setPoziomo($iloscblasz);
+                 $etapypro->setPionowo($iloscblaszwy);
+                 $etapypro->setDowiercenia($dowiercenia);
+                 $etapypro->setPo1($wierceniePoziomo1);
+                 $etapypro->setPo2($wierceniePoziomo2);
+                 $etapypro->setPo3($wierceniePoziomo3);
+                 $etapypro->setPo4($wierceniePoziomo4);
+                 $etapypro->setPi1($wierceniePionowo1);
+                 $etapypro->setPi2($wierceniePionowo2);
+                 $etapypro->setPi3($wierceniePionowo3);
+                 $etapypro->setPi4($wierceniePionowo4);
+                 $etapypro->setPi5($wierceniePionowo5);
+                 $em->flush();
+             }
+             else {
+                 //// JEZELI BLAD TO ZWROCENIE BELEDU!
+                  return new JsonResponse(false);
+             }
+         }
+        
+        
+        // ***************** ZAMIANA STATUSU *************************//
+        
             $Zamowienie->setStatus('w realizacji');
             $em->flush();
         
@@ -974,6 +1747,21 @@ class DashboardController extends Controller {
             $Zamowienie->setZakonczone(null);
             $em->persist($Zamowienie);
             $em->flush();
+            
+            $produkty_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Produkty', 'a')
+                 ->where('a.id_zam = :idzam')
+                 ->setParameter('idzam', $result['id'])
+                 //->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+             foreach ($produkty_query as $prod)
+             {
+                 $prod->setStatus('0');
+                 $em->persist($Zamowienie);
+                 $em->flush();
+             }
         }
         elseif ($result['locknew'] == "unlock")
         {
@@ -982,6 +1770,20 @@ class DashboardController extends Controller {
             $Zamowienie->setZakonczone('1');
             $em->persist($Zamowienie);
             $em->flush();
+            $produkty_query = $em->createQueryBuilder('a')
+                ->select('a')
+                ->from('MarcinAdminBundle:Produkty', 'a')
+                 ->where('a.id_zam = :idzam')
+                 ->setParameter('idzam', $result['id'])
+                 //->setMaxResults(1)
+                 ->getQuery()
+                 ->getResult();
+             foreach ($produkty_query as $prod)
+             {
+                 $prod->setStatus('1');
+                 $em->persist($Zamowienie);
+                 $em->flush();
+             }
         }
         
         return new JsonResponse(true);
@@ -1180,7 +1982,7 @@ class DashboardController extends Controller {
          $etapyprodukcji_query = $em->createQueryBuilder('a')
                 ->select('a')
                 ->from('MarcinAdminBundle:Etapyprodukcji', 'a')
-                ->addOrderBy('a.id', 'DESC')
+                ->addOrderBy('a.id', 'ASC')
                 ->setMaxResults(800) //USTAWIENIE OPTYMALIZSUJE WYŚWIETLANIE ZAMOWIENIEŃ NA STRONIE GŁÓWNEJ PANELU!
                  ->getQuery()
                  ->getResult();  
@@ -1210,7 +2012,8 @@ class DashboardController extends Controller {
              $aa=0; $bb=0;$cc=0;$dd=0;$ee=0;$ff=0;
          $gg=0;$hh=0;$ii=0;$jj=0;$kk=0;$ll=0;$mm=0;$nn=0;$oo=0;$pp=0;
          $g1=0;$h1=0;$i1=0;$j1=0;$k1=0;$l1=0;$m1=0;$n1=0;$o1=0;
-         $z1=0;$y1=0; $x1= 0;
+         $z1=0;$y1=0; $x1= 0; $uu1=0;$uu2=0;$uu3=0;$uu4=0;$uu5=0;
+         $xxx1=0; $xxx2=0; $xxx3=0; $xxx4=0; $xxx5=0; $xxx6=0; $xxx7=0; $xxx8=0; $xxx9=0;
          foreach ($etapyprodukcji_query as $etapy)
          {
              $produkcjaetap[$aa++]['id'] = $etapy->GetId();
@@ -1249,6 +2052,23 @@ class DashboardController extends Controller {
              $produkcjaetap[$y1++]['m2'] = $etapy->GetM2();
              
              $produkcjaetap[$x1++]['rabaty'] = $etapy->GetRabaty();
+             
+             $produkcjaetap[$uu1++]['pilas'] = $etapy->GetPilas();
+             $produkcjaetap[$uu2++]['pilah'] = $etapy->GetPilah();
+             
+             $produkcjaetap[$uu3++]['poziomo'] = $etapy->GetPoziomo();
+             $produkcjaetap[$uu4++]['pionowo'] = $etapy->GetPionowo();
+             $produkcjaetap[$uu5++]['dowiercenia'] = $etapy->GetDowiercenia();
+             
+             $produkcjaetap[$xxx1++]['po1'] = $etapy->GetPo1();
+             $produkcjaetap[$xxx2++]['po2'] = $etapy->GetPo2();
+             $produkcjaetap[$xxx3++]['po3'] = $etapy->GetPo3();
+             $produkcjaetap[$xxx4++]['po4'] = $etapy->GetPo4();
+             $produkcjaetap[$xxx5++]['pi1'] = $etapy->GetPi1();
+             $produkcjaetap[$xxx6++]['pi2'] = $etapy->GetPi2();
+             $produkcjaetap[$xxx7++]['pi3'] = $etapy->GetPi3();
+             $produkcjaetap[$xxx8++]['pi4'] = $etapy->GetPi4();
+             $produkcjaetap[$xxx9++]['pi5'] = $etapy->GetPi5();
              
          }
          }
