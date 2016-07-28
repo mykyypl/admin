@@ -34,6 +34,11 @@
                 -webkit-print-color-adjust: exact;
                 
             }
+            .ooo {
+                 background-color: #db1515 !important;
+                 color: white !important;
+                -webkit-print-color-adjust: exact;
+            }
             
             .czcionka {
                 font-size: 10px;
@@ -52,13 +57,13 @@
             }
             
             .orzech {
-                background-color: #7f5432 !important;
+                background-color: #52361f !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact;
             }
             
             .mahon {
-                background-color: #8f0e32 !important;
+                background-color: #ffff9d !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact;
             }
@@ -94,12 +99,12 @@
             }
             
             .orzech {
-                background-color: #7f5432;
+                background-color: #52361f;
                 color: white;
             }
             
             .mahon {
-                background-color: #8f0e32;
+                background-color: #ffff9d;
                 color: white;
             }
             
@@ -635,7 +640,7 @@
                                                                                 <td>{% if etapy.kolorsiatki == 'Czarna' %}<div class="exclu">Czar</div>{% elseif etapy.kolorsiatki == 'Popielata' %}Popiel{% else %}null{% endif %}</td>
                                                                                 <td>{% if etapy.rodzaj == 'DRE'  %}<div class="exclu">{{ etapy.rodzaj }}</div>{% else %}{{ etapy.rodzaj }}{% endif %}</td>
                                                                                 <td><center>{% if etapy.typ == 'Standard' %}|{% elseif etapy.typ == 'Exclusive' %}\/{% else %}null{% endif %}</center></td>
-                                                                                <td>{% if etapy.stronawiercenia == 'O' %}<div class="exclu">{{ etapy.stronawiercenia }}</div>{% else %}{{ etapy.stronawiercenia }}{% endif %}</td>
+                                                                                <td>{% if etapy.stronawiercenia == 'O' %}<div class="ooo">{{ etapy.stronawiercenia }}</div>{% else %}{{ etapy.stronawiercenia }}{% endif %}</td>
                                                                                 <td>{{ etapy.pilas }}</td>
                                                                                 <td>{{ etapy.pilah }}</td>
                                                                             </tr>
@@ -698,7 +703,7 @@
                                                                                 <td>{% if etapy.typ == 'Standard' %}<b>S</b>{% elseif etapy.typ == 'Exclusive' %}<b><div class="exclu">E</div></b>{% else %}null{% endif %}</td>
                                                                                 <td class="czcionka"><div class={% if etapy.kolor == 'Biały 9016' %}{% elseif etapy.kolor == 'Brąz czekol. 8017' %}"czekol"{% elseif etapy.kolor == 'Złoty Dąb 8003' %}"zloty"{% elseif etapy.kolor == 'Orzech brąz 8028' %}"orzech"{% elseif etapy.kolor == 'Mahoń 8015' %}"mahon"{% elseif etapy.kolor == 'Antracyt 7016' %}"antracyt"{% elseif etapy.kolor == 'Winchester' %}"win"{% elseif etapy.kolor == 'Ciemny Brąz 8022' %}"ciemny"{% else %}{% endif %}>{{ etapy.kolor }}</div></td>
                                                                                 <td>{% if etapy.rodzaj == 'DRE'  %}<div class="exclu">{{ etapy.rodzaj }}</div>{% else %}{{ etapy.rodzaj }}{% endif %}</td>
-                                                                                <td>{% if etapy.stronawiercenia == 'O' %}<div class="exclu">{{ etapy.stronawiercenia }}</div>{% else %}{{ etapy.stronawiercenia }}{% endif %}</td>
+                                                                                <td>{% if etapy.stronawiercenia == 'O' %}<div class="ooo">{{ etapy.stronawiercenia }}</div>{% else %}{{ etapy.stronawiercenia }}{% endif %}</td>
                                                                                 <td>{{ etapy.pilas }}</td>
                                                                                 <td>{{ etapy.dowiercenia }}</td>
                                                                                 <td>{{ etapy.poziomo }}</td>

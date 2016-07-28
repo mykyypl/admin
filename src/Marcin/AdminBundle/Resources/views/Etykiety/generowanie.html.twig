@@ -76,7 +76,9 @@
                                 {% set a = 0 %}
                                 {% for drukowanie in etykiety %}
                                 <tr>
-                                    <td>Nr prod: <b><span class="czerwony">{{ drukowanie.nrzamowienia }}</span></b><br>poz: <b><span class="czerwony">{{ drukowanie.ilosc }}</span></b></td><td><center><b>{{ drukowanie.user }}</b><br> Nr zam: <b>{{ drukowanie.nruserzam }}</b>, typ: <b>{{ drukowanie.typ }}</b>, <b>{{ drukowanie.rodzaj }}</b><br>str. wier: <b>{{ drukowanie.stronawiercenia }}</b>, kolor: <b>{{ drukowanie.kolor }}</b>, szer: <b>{{ drukowanie.szerokosc }}</b>, wys: <b>{{ drukowanie.wysokosc }}</b>, blaszka: <b>{% if drukowanie.typ == 'Standard' %}{{ drukowanie.blaszkast }}{% else %}{{ drukowanie.blaszkaex }}{% endif %}</b>, m2: <b>{{ drukowanie.m2 }}</b>, <b>{{ drukowanie.stalaszer }}/{{ drukowanie.stalawys }}</b></center></td>
+                                    <td>Nr prod: <b><span class="czerwony">{{ drukowanie.nrzamowienia }}</span></b><br>poz: <b><span class="czerwony">{{ drukowanie.ilosc }}</span></b></td>
+                                    <td>typ: <b><span class="czerwony">{{ drukowanie.typ }}</span></b>, <b><span class="czerwony">{{ drukowanie.rodzaj }}</span></b>, <b>{{ drukowanie.stalaszer }}/{{ drukowanie.stalawys }}</b><br>szer: <b><span class="czerwony">{{ drukowanie.szerokosc }}</span></b>, wys: <b><span class="czerwony">{{ drukowanie.wysokosc }}</span></b>, blaszka: <b><span class="czerwony">{% if drukowanie.typ == 'Standard' %}{{ drukowanie.blaszkast }}{% else %}{{ drukowanie.blaszkaex }}{% endif %}</span></b></td>
+                                    <td><center><b><span class="czerwony">{{ drukowanie.user }}</span></b><br> Nr zam: <b>{{ drukowanie.nruserzam }}</b><br>str. wier: <b>{{ drukowanie.stronawiercenia }}</b>, kolor: <b>{{ drukowanie.kolor }}</b>, m2: <b>{{ drukowanie.m2 }}</b></center></td>
                                 </tr>
                                 {% endfor %}
                             </table>
