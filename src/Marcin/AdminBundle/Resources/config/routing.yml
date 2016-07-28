@@ -86,7 +86,12 @@ marcin_admin_roletkinazwa:
     resource: "@MarcinAdminBundle/Controller/RoletkinazwaController.php"
     type: annotation
     prefix: /r/roletki/nazwa
-
+    
+marcin_admin_etykiety:
+    resource: "@MarcinAdminBundle/Controller/EtykietyController.php"
+    type: annotation
+    prefix: /e/tykietki/druk
+    
 #marcin_admin_username_form:
 #    resource: "@MarcinAdminBundle/Controller/UsernameController.php"
 #    prefix: /u/user/form/{id}

@@ -1,0 +1,125 @@
+{% extends 'MarcinAdminBundle::base.html.twig' %}
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/marcinadmin/own/style.css') }}" />
+    <style>
+        .table-bordered>tbody>tr>td {
+            border: 1px solid #000000;
+                margin: 0;
+                padding: 0;
+        }
+        .table-bordered {
+            border: 1px solid #000000;
+        }
+        @media print
+            {
+                .table-bordered {
+                    page-break-inside:auto;
+                }
+                .table-bordered>tbody>tr>td {
+                    border: 1px solid #000000 !important;
+                    -webkit-print-color-adjust: exact;
+                        margin: 0;
+                        padding: 0;
+                }
+                .czerwony {
+                    color: red !important;
+                    -webkit-print-color-adjust: exact;
+                }
+                .table-bordered {
+                    border: 1px solid #000000 !important;
+                    -webkit-print-color-adjust: exact;
+                }
+                .table-bordered tr:nth-child(16n+0) {
+                    page-break-inside: avoid; 
+                    page-break-after: always;
+                }
+                /*.table-bordered tr {
+                    page-break-inside: avoid; 
+                    page-break-after: auto;
+                }*/
+                
+            }
+            .table td {
+                margin:0;
+                padding:0;
+            }
+            .table-bordered tr:nth-child(16n+0) {
+                 color:red;
+                }
+                
+    </style>
+{% endblock %}
+{% block body %} 
+ <section class="content-header">
+          <h1>
+            Pulpit
+            <small>zarządzania GM</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Pulpit</a></li>
+            <li class="active">tutaj</li>
+          </ol>
+        </section>
+                    {% include 'MarcinAdminBundle:Template:flashMsg.html.twig' %}
+        <!-- Main content -->
+        <section class="content">
+            <div class="box box-default color-palette-box">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-tag"></i> Etykiety Drukowanie</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="drukowanie" class="drukowanie">
+                            <table class="table table-bordered">
+                                {% set a = 0 %}
+                                {% for drukowanie in etykiety %}
+                                <tr>
+                                    <td>Nr prod: <b><span class="czerwony">{{ drukowanie.nrzamowienia }}</span></b><br>poz: <b><span class="czerwony">{{ drukowanie.ilosc }}</span></b></td><td><center><b>{{ drukowanie.user }}</b><br> Nr zam: <b>{{ drukowanie.nruserzam }}</b>, typ: <b>{{ drukowanie.typ }}</b>, <b>{{ drukowanie.rodzaj }}</b><br>str. wier: <b>{{ drukowanie.stronawiercenia }}</b>, kolor: <b>{{ drukowanie.kolor }}</b>, szer: <b>{{ drukowanie.szerokosc }}</b>, wys: <b>{{ drukowanie.wysokosc }}</b>, blaszka: <b>{% if drukowanie.typ == 'Standard' %}{{ drukowanie.blaszkast }}{% else %}{{ drukowanie.blaszkaex }}{% endif %}</b>, m2: <b>{{ drukowanie.m2 }}</b>, <b>{{ drukowanie.stalaszer }}/{{ drukowanie.stalawys }}</b></center></td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <INPUT TYPE="button" class="btn btn-warning btn-lg btn-block" onClick="printDiv('drukowanie')" value="WYDRUKUJ LUB ZAPISZ DO PDF">
+                    </div>
+                </div>
+                
+            </div><!-- /.box-body -->
+            
+          </div>
+
+</section>
+{% endblock %}
+    {% block javascripts %}
+        {{parent()}}
+        <script>
+function printDiv(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+     sendPrintAction();
+     document.body.innerHTML = originalContents;
+}
+
+function sendPrintAction() {
+                                var wiadomosc = 1;
+                                var url = '{{ path('marcin_admin_etykiety_print') }}';
+
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        wiadomosc: wiadomosc
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                                console.log('Odpowiedź: sukces');
+                                                
+                                    }
+                                });
+}
+</script>
+        {% endblock %}

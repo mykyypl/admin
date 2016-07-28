@@ -216,6 +216,72 @@ class DashboardController extends Controller {
     }
     
     /**
+     * @Route("/form/update-complete/wydrukowano1", 
+     *       name="marcin_admin_dashboard_wydrukowano1",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function wydrukowano1Action(Request $Request) {
+
+        $result = array(
+            'wiadomosc' => $Request->request->get('wiadomosc')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['wiadomosc']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+        
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setWydrukowano1('1');
+            $em->flush();
+       
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
+     * @Route("/form/update-complete/wydrukowano2", 
+     *       name="marcin_admin_dashboard_wydrukowano2",
+     *       requirements={
+     *          "_format": "json",
+     *          "methods": "POST"
+     *      }
+     * )
+     * @Security("has_role('ROLE_PROD')")
+     *
+     */
+    public function wydrukowano2Action(Request $Request) {
+
+        $result = array(
+            'wiadomosc' => $Request->request->get('wiadomosc')
+        );
+
+        $RepoZamowienia = $this->getDoctrine()->getRepository('MarcinAdminBundle:Zamowienia');
+        $Zamowienie = $RepoZamowienia->find($result['wiadomosc']);
+
+        if (NULL === $Zamowienie) {
+            return new JsonResponse(false);
+        }
+        
+        
+            $em = $this->getDoctrine()->getManager();
+            $Zamowienie->setWydrukowano2('1');
+            $em->flush();
+       
+        
+        return new JsonResponse(true);
+    }
+    
+    /**
      * @Route("/form/update-complete/moskitiery/etapy", 
      *       name="marcin_admin_dashboard_moskitiery_edit_ajax",
      *       requirements={
@@ -571,6 +637,7 @@ class DashboardController extends Controller {
                                     $RepoZamowienia->setSkrzydlo($oknoskrzydlo);
                                     $RepoZamowienia->setFelc($oknofelc);
                                     $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    $RepoZamowienia->setZaznaczono('0');
                                     if ($kolorsiatki == 'Czarna')
                                     {
                                        $wyliczaniesitka = $cenamoskitierki * 0.05;
@@ -595,7 +662,12 @@ class DashboardController extends Controller {
                      {
                          $blaszkast = $okienka->getBlaszka();
                          $blaszkaex = $okienka->getBlaszkaex();
-                         $stronawiercenia = $okienka->getStronawiercenia();
+                         if ($typ == 'Exclusive')
+                         {
+                             $stronawiercenia = 'S';
+                         } else {
+                            $stronawiercenia = $okienka->getStronawiercenia();
+                         }
                          $stalaszer = $okienka->getStalaszer();
                          $stalawyst = $okienka->getStalawys();
                          $rodzaj = $okienka->getRodzaj();
@@ -659,6 +731,7 @@ class DashboardController extends Controller {
                                     $RepoZamowienia->setOscieznicastala($porownanieOscieznica);
                                     $RepoZamowienia->setSkrzydlostala($porownanieSkrzydlo);
                                     $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    $RepoZamowienia->setZaznaczono('0');
                                     if ($kolorsiatki == 'Czarna')
                                     {
                                        $wyliczaniesitka = $cenamoskitierki * 0.05;
@@ -707,6 +780,7 @@ class DashboardController extends Controller {
                                     $RepoZamowienia->setOscieznicastala($porownanieOscieznica);
                                     $RepoZamowienia->setSkrzydlostala($porownanieSkrzydlo);
                                     $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    $RepoZamowienia->setZaznaczono('0');
                                     if ($kolorsiatki == 'Czarna')
                                     {
                                        $wyliczaniesitka = $cenamoskitierki * 0.05;
@@ -756,6 +830,7 @@ class DashboardController extends Controller {
                                     $RepoZamowienia->setOscieznicastala($porownanieOscieznica);
                                     $RepoZamowienia->setSkrzydlostala($porownanieSkrzydlo);
                                     $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    $RepoZamowienia->setZaznaczono('0');
                                     if ($kolorsiatki == 'Czarna')
                                     {
                                        $wyliczaniesitka = $cenamoskitierki * 0.05;
@@ -805,6 +880,7 @@ class DashboardController extends Controller {
                                     $RepoZamowienia->setOscieznicastala($porownanieOscieznica);
                                     $RepoZamowienia->setSkrzydlostala($porownanieSkrzydlo);
                                     $RepoZamowienia->setKolorsiatki($kolorsiatki);
+                                    $RepoZamowienia->setZaznaczono('0');
                                     if ($kolorsiatki == 'Czarna')
                                     {
                                        $wyliczaniesitka = $cenamoskitierki * 0.05;
@@ -899,7 +975,9 @@ class DashboardController extends Controller {
     public function updateRealizacjaAction(Request $Request) {
 
         $result = array(
-            'id' => $Request->request->get('id')
+            'id' => $Request->request->get('id'),
+            'cena' => $Request->request->get('cena'),
+            'info' => $Request->request->get('info')
         );
 
         $em = $this->getDoctrine()->getManager();
@@ -911,6 +989,8 @@ class DashboardController extends Controller {
             return new JsonResponse(false);
         }
         
+        if ($result['info'] == 'tak')
+        {
         $etapypro_query = $em->createQueryBuilder('a')
                 ->select('a')
                 ->from('MarcinAdminBundle:Etapyprodukcji', 'a')
@@ -921,6 +1001,7 @@ class DashboardController extends Controller {
         
          foreach ($etapypro_query as $etapypro)
          {
+                $id = $etapypro->getNrzamowienia();
                $szerokosc = $etapypro->getSzerokosc();
                $wysokosc = $etapypro->getWysokosc();
                $stalawysokosc = $etapypro->getStalawys();
@@ -1364,6 +1445,8 @@ class DashboardController extends Controller {
                  $etapypro->setPi3($wierceniePionowo3);
                  $etapypro->setPi4($wierceniePionowo4);
                  $etapypro->setPi5($wierceniePionowo5);
+                 $etapypro->setOnline('1');
+                 $etapypro->setSendDate(new \DateTime());
                  $em->flush();
                  
              }   ///// PROFIL EXCLUSIVE ///////////
@@ -1628,6 +1711,8 @@ class DashboardController extends Controller {
                  $etapypro->setPi3($wierceniePionowo3);
                  $etapypro->setPi4($wierceniePionowo4);
                  $etapypro->setPi5($wierceniePionowo5);
+                 $etapypro->setOnline('1');
+                 $etapypro->setSendDate(new \DateTime());
                  $em->flush();
              }
              else {
@@ -1636,10 +1721,15 @@ class DashboardController extends Controller {
              }
          }
         
+        }
         
         // ***************** ZAMIANA STATUSU *************************//
         
             $Zamowienie->setStatus('w realizacji');
+            if ($result['info'] == 'tak') {
+            $Zamowienie->setDozaplaty($result['cena']);
+            $Zamowienie->setNrprodukcji($id);
+            }
             $em->flush();
         
         return new JsonResponse(true);

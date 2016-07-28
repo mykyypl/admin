@@ -331,6 +331,18 @@ class Etapyprodukcji {
     private $pi5;
     
     /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $wydrukowane;
+    
+    /**
+     * @ORM\Column(type="integer")
+     *
+     */
+    private $zaznaczono;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -1510,5 +1522,51 @@ class Etapyprodukcji {
     public function getPi5()
     {
         return $this->pi5;
+    }
+    
+    /**
+     * Set wydrukowane
+     *
+     * @param integer $wydrukowane
+     *
+     * @return Etapyprodukcji
+     */
+    public function setWydrukowane($wydrukowane)
+    {
+        $this->wydrukowane = $wydrukowane;
+        return $this;
+    }
+    
+    /**
+     * Get wydrukowane
+     *
+     * @return integer
+     */
+    public function getWydrukowane()
+    {
+        return $this->wydrukowane;
+    }
+    
+    /**
+     * Set zaznaczono
+     *
+     * @param integer $zaznaczono
+     *
+     * @return Etapyprodukcji
+     */
+    public function setZaznaczono($zaznaczono)
+    {
+        $this->zaznaczono = $zaznaczono;
+        return $this;
+    }
+    
+    /**
+     * Get zaznaczono
+     *
+     * @return integer
+     */
+    public function getZaznaczono()
+    {
+        return $this->zaznaczono;
     }
 }

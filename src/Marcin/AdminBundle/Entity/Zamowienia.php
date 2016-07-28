@@ -161,6 +161,20 @@ class Zamowienia {
      *
      */
     private $zamowienie_nr;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $wydrukowano1;
+    
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * 
+     */
+    private $wydrukowano2;
 
     /**
      * Get id
@@ -611,6 +625,52 @@ class Zamowienia {
     public function getZamowienienr()
     {
         return $this->zamowienie_nr;
+    }
+    
+    /**
+     * Set wydrukowano1
+     *
+     * @param integer $wydrukowano1
+     *
+     * @return Zamowienia
+     */
+    public function setWydrukowano1($wydrukowano1)
+    {
+        $this->wydrukowano1 = $wydrukowano1;
+        return $this;
+    }
+    
+    /**
+     * Get wydrukowano1
+     *
+     * @return integer
+     */
+    public function getWydrukowano1()
+    {
+        return $this->wydrukowano1;
+    }
+    
+    /**
+     * Set wydrukowano2
+     *
+     * @param integer $wydrukowano2
+     *
+     * @return Zamowienia
+     */
+    public function setWydrukowano2($wydrukowano2)
+    {
+        $this->wydrukowano2 = $wydrukowano2;
+        return $this;
+    }
+    
+    /**
+     * Get wydrukowano2
+     *
+     * @return integer
+     */
+    public function getWydrukowano2()
+    {
+        return $this->wydrukowano2;
     }
     
 }

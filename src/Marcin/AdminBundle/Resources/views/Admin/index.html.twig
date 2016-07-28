@@ -29,8 +29,18 @@
                 text-align: center;
             }
             
+            .exclu {
+                background-color: #cacaca !important;
+                -webkit-print-color-adjust: exact;
+                
+            }
+            
+            .czcionka {
+                font-size: 10px;
+            }
+            
             .czekol {
-                background-color: #3f2a29 !important;
+                background-color: #925a4b !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact;
             }
@@ -42,13 +52,13 @@
             }
             
             .orzech {
-                background-color: #2f2220 !important;
+                background-color: #7f5432 !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact;
             }
             
             .mahon {
-                background-color: #490014 !important;
+                background-color: #8f0e32 !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact;
             }
@@ -60,13 +70,13 @@
             }
             
             .win {
-                background-color: #b36d3c !important;
-                color: white !important;
+                background-color: #e7c95f !important;
+                color: black !important;
                 -webkit-print-color-adjust: exact;
             }
             
             .ciemny {
-                background-color: #302513 !important;
+                background-color: #000000 !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact;
             }
@@ -74,7 +84,7 @@
 	
         }
         .czekol {
-                background-color: #3f2a29;
+                background-color: #925a4b;
                 color: white;
             }
             
@@ -84,12 +94,12 @@
             }
             
             .orzech {
-                background-color: #2f2220;
+                background-color: #7f5432;
                 color: white;
             }
             
             .mahon {
-                background-color: #490014;
+                background-color: #8f0e32;
                 color: white;
             }
             
@@ -99,12 +109,12 @@
             }
             
             .win {
-                background-color: #b36d3c;
-                color: white;
+                background-color: #e7c95f;
+                color: black;
             }
             
             .ciemny {
-                background-color: #302513;
+                background-color: #000000;
                 color: white;
             }
         
@@ -154,10 +164,15 @@
     color: #d73814;
 }
 .cena-latajaca {
-    position: absolute;
+    /*position: absolute;
     top: 10px;
     right: 0;
-    margin-right: 30px;
+    margin-right: 30px;*/
+    float: left;
+}
+.cena-latajaca:after {
+    clear: both;
+    display: block;
 }
        </style>
 {% endblock %}
@@ -421,7 +436,8 @@
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                            <textarea class="form-control" disabled>{{ etapy.uwagi }}</textarea>
+                                                                   <textarea class="form-control" disabled>{{ etapy.uwagi }}</textarea><br>
+                                                                   <div id="uwagaa{{ etapy.id }}"></div>
                                                                    </div></div>
                                                                    <button id="zapismoskitier{{ etapy.id }}" onclick="Zapismoskitier('{{ etapy.id }}', event)" class="btn btn-{% if etapy.blad is null %}success{% else %}danger{% endif %} btn-block">ZAPISZ ZMIANY</button><br>
                                                                </div>
@@ -429,8 +445,10 @@
                                                            </div>
                                                           </div>
                                                           <div class="modal-footer">
-                                                              <div class="cena-latajaca"><h4>Suma: <b><font color="green">{{ sumacena|number_format(2) }}</font></b></h4></div>
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                                                              <div class="cena-latajaca"><h4>Suma: <b><font color="green"><input type="text" id="cenamo{{ article.id }}" value="{{ sumacena|number_format(2) }}" /></font></b></h4> </div>
+                                                               {% if currStatus == 'przeslane' %}<span id="realizacja{{ article.id }}">
+                                            <button type="button" data-dismiss="modal" class="btn btn-success" onclick="changeButtonRealizacja('{{ article.id }}', event)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button> <button type="button" data-dismiss="modal" id="potwierdzenie-realizacja" class="potwierdzenie-realizacja btn btn-danger" onclick="changeButtonRealizacjadel('{{ article.id }}', event)"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                        </span>  {% endif %}<button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
                                                             {#<button type="button" class="btn btn-primary">Save changes</button>#}
                                                           </div>
                                                         </div>
@@ -569,16 +587,17 @@
                                     {% if is_granted('ROLE_MAGNUM') %}<th id="wynik{{ article.id }}"><div class="btn-group">{% if article.zaplacono == '0' %} <h4>{% if article.dozaplaty == '0' %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-warning" onclick="changeOrderText('{{ article.id }}', event)"><i class="fa fa-exclamation-circle"></i> do wyceny </span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"> <div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value=""></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% else %}<div id="dozaplaty{{ article.id }}" onclick="changeOrderText('{{ article.id }}', event)"><span class="label label-danger" onclick="changeOrderText('{{ article.id }}', event)">{{ article.dozaplaty  }} zł</span></div><div id="dozaplaty_edit{{ article.id }}" style="display:none;"><div class="form-inline"><div class="input-group"><input class="form-control" id="" onchange="changeOrderPrice('{{ article.id }}', '{{ article.user }}', event)" type="text" value="{{ article.dozaplaty }}"></div><button class="btn btn-success" onclick="changeButton('{{ article.id }}', event)"><span class="glyphicon glyphicon-ok"></span></button></div></div>{% endif %}</h4> {% else %} <h4><span class="label label-success">zapłacono</span></h4> {% endif %}</div></th>
                                      {% endif %}{% if currStatus == 'przeslane' %}
                                         <th id="realizacja{{ article.id }}">
-                                            <button type="button" class="btn btn-success" onclick="changeButtonRealizacja('{{ article.id }}', event)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button> <button type="button" id="potwierdzenie-realizacja" class="potwierdzenie-realizacja btn btn-danger" onclick="changeButtonRealizacjadel('{{ article.id }}', event)"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                            {% if article.jakie_zam == 'zamówienie moskitier' %}{% else %}<button type="button" class="btn btn-success" onclick="changeButtonRealizacjav1('{{ article.id }}', 'brak', event)"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button>{% endif %}
+                                            <button type="button" id="potwierdzenie-realizacja" class="potwierdzenie-realizacja btn btn-danger" onclick="changeButtonRealizacjadel('{{ article.id }}', event)"><i class="fa fa-ban" aria-hidden="true"></i></button>
                                         </th>
                                     {% endif %}
                                     <th id="wynik_b{{ article.id }}">
-                                        {% if is_granted('ROLE_MAGNUM') %}<div class="btn-group">
+                                        {% if is_granted('ROLE_ADMIN') %}<div class="btn-group">
                                             <a href="{{ path('marcin_admin_dashboard_form', {'id': article.id}) }}" class="btn btn-primary">
                                                 <span class="glyphicon glyphicon-edit"></span>
                                             </a>{% endif %}
                                             {% if article.weryfikacjaprodukcji == '1' or article.weryfikacjaprodukcji == '0' %}
-                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#produkcja1{{ article.id }}"><i class="fa fa-print" aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-{% if article.wydrukowano1 == '1' %}default{% else %}info{% endif %}" data-toggle="modal" data-target="#produkcja1{{ article.id }}"><i class="fa fa-print" aria-hidden="true"></i></button>
                                             <!--- Drukowanie przycisk produkcja1  --->
                                                 <div class="modal fade" id="produkcja1{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                                   <div class="modal-dialog modal-lg" role="document">
@@ -612,11 +631,11 @@
                                                                                 <td>{{ article.id }}</td>
                                                                                 <td>{{ etapy.ilosc }}</td>
                                                                                 <td><div class={% if etapy.kolor == 'Biały 9016' %}{% elseif etapy.kolor == 'Brąz czekol. 8017' %}"czekol"{% elseif etapy.kolor == 'Złoty Dąb 8003' %}"zloty"{% elseif etapy.kolor == 'Orzech brąz 8028' %}"orzech"{% elseif etapy.kolor == 'Mahoń 8015' %}"mahon"{% elseif etapy.kolor == 'Antracyt 7016' %}"antracyt"{% elseif etapy.kolor == 'Winchester' %}"win"{% elseif etapy.kolor == 'Ciemny Brąz 8022' %}"ciemny"{% else %}{% endif %}>{{ etapy.kolor }}</div></td>
-                                                                                <td>{% if etapy.typ == 'Standard' %}Stan{% elseif etapy.typ == 'Exclusive' %}Exclu{% else %}null{% endif %}</td>
-                                                                                <td>{% if etapy.kolorsiatki == 'Czarna' %}Czar{% elseif etapy.kolorsiatki == 'Popielata' %}Popiel{% else %}null{% endif %}</td>
-                                                                                <td>{{ etapy.rodzaj }}</td>
+                                                                                <td>{% if etapy.typ == 'Standard' %}<b>S</b>{% elseif etapy.typ == 'Exclusive' %}<b><div class="exclu">E</div></b>{% else %}null{% endif %}</td>
+                                                                                <td>{% if etapy.kolorsiatki == 'Czarna' %}<div class="exclu">Czar</div>{% elseif etapy.kolorsiatki == 'Popielata' %}Popiel{% else %}null{% endif %}</td>
+                                                                                <td>{% if etapy.rodzaj == 'DRE'  %}<div class="exclu">{{ etapy.rodzaj }}</div>{% else %}{{ etapy.rodzaj }}{% endif %}</td>
                                                                                 <td><center>{% if etapy.typ == 'Standard' %}|{% elseif etapy.typ == 'Exclusive' %}\/{% else %}null{% endif %}</center></td>
-                                                                                <td>{{ etapy.stronawiercenia }}</td>
+                                                                                <td>{% if etapy.stronawiercenia == 'O' %}<div class="exclu">{{ etapy.stronawiercenia }}</div>{% else %}{{ etapy.stronawiercenia }}{% endif %}</td>
                                                                                 <td>{{ etapy.pilas }}</td>
                                                                                 <td>{{ etapy.pilah }}</td>
                                                                             </tr>
@@ -633,7 +652,7 @@
                                                   </div>
                                                 </div>
                                             <!---  koniec drukowania produkcja1  --->
-                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#produkcja2{{ article.id }}"><i class="fa fa-print" aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-{% if article.wydrukowano2 == '1' %}default{% else %}warning{% endif %}" data-toggle="modal" data-target="#produkcja2{{ article.id }}"><i class="fa fa-print" aria-hidden="true"></i></button>
                                             <!--- Drukowanie przycisk produkcja2  --->
                                                 <div class="modal fade" id="produkcja2{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                                   <div class="modal-dialog modal-lg" role="document">
@@ -676,10 +695,10 @@
                                                                                 <td>{{ article.user }}</td>
                                                                                 <td>{{ article.id }}</td>
                                                                                 <td>{{ etapy.ilosc }}</td>
-                                                                                <td>{% if etapy.typ == 'Standard' %}STAN{% elseif etapy.typ == 'Exclusive' %}EXCLU{% else %}null{% endif %}</td>
-                                                                                <td><div class={% if etapy.kolor == 'Biały 9016' %}{% elseif etapy.kolor == 'Brąz czekol. 8017' %}"czekol"{% elseif etapy.kolor == 'Złoty Dąb 8003' %}"zloty"{% elseif etapy.kolor == 'Orzech brąz 8028' %}"orzech"{% elseif etapy.kolor == 'Mahoń 8015' %}"mahon"{% elseif etapy.kolor == 'Antracyt 7016' %}"antracyt"{% elseif etapy.kolor == 'Winchester' %}"win"{% elseif etapy.kolor == 'Ciemny Brąz 8022' %}"ciemny"{% else %}{% endif %}>{{ etapy.kolor }}</div></td>
-                                                                                <td>{{ etapy.rodzaj }}</td>
-                                                                                <td>{{ etapy.stronawiercenia }}</td>
+                                                                                <td>{% if etapy.typ == 'Standard' %}<b>S</b>{% elseif etapy.typ == 'Exclusive' %}<b><div class="exclu">E</div></b>{% else %}null{% endif %}</td>
+                                                                                <td class="czcionka"><div class={% if etapy.kolor == 'Biały 9016' %}{% elseif etapy.kolor == 'Brąz czekol. 8017' %}"czekol"{% elseif etapy.kolor == 'Złoty Dąb 8003' %}"zloty"{% elseif etapy.kolor == 'Orzech brąz 8028' %}"orzech"{% elseif etapy.kolor == 'Mahoń 8015' %}"mahon"{% elseif etapy.kolor == 'Antracyt 7016' %}"antracyt"{% elseif etapy.kolor == 'Winchester' %}"win"{% elseif etapy.kolor == 'Ciemny Brąz 8022' %}"ciemny"{% else %}{% endif %}>{{ etapy.kolor }}</div></td>
+                                                                                <td>{% if etapy.rodzaj == 'DRE'  %}<div class="exclu">{{ etapy.rodzaj }}</div>{% else %}{{ etapy.rodzaj }}{% endif %}</td>
+                                                                                <td>{% if etapy.stronawiercenia == 'O' %}<div class="exclu">{{ etapy.stronawiercenia }}</div>{% else %}{{ etapy.stronawiercenia }}{% endif %}</td>
                                                                                 <td>{{ etapy.pilas }}</td>
                                                                                 <td>{{ etapy.dowiercenia }}</td>
                                                                                 <td>{{ etapy.poziomo }}</td>
@@ -935,7 +954,11 @@
                             }
                             function changeButtonRealizacja(id, event) {
                                 var button_id = id;
-
+                                var info = 'tak';
+                                //var kwota = $('#cenamo'+button_id).val();
+                                var price = parseFloat($('#cenamo'+button_id).val().replace(',', '.'));
+                                var kwota = price.toFixed(2);
+                                
                                 document.getElementById("ladowanie-realizacja").className = "overlay";
                                 document.getElementById("ladowanie-animacja-realizacja").className = "fa fa-refresh fa-spin";
                                 
@@ -947,7 +970,9 @@
                                 $.ajax({
                                     url: url,
                                     data: {
-                                        id: button_id
+                                        id: button_id,
+                                        cena: kwota,
+                                        info: info
                                     },
                                     method: 'POST',
                                     success: function (data) {
@@ -959,6 +984,39 @@
                                 });
                                
                             }
+                            
+                            function changeButtonRealizacjav1(id, test, event) {
+                                var button_id = id;
+                                var info = test;
+                                //var kwota = $('#cenamo'+button_id).val();
+                                //var price = parseFloat($('#cenamo'+button_id).val().replace(',', '.'));
+                                //var kwota = price.toFixed(2);
+                                
+                                document.getElementById("ladowanie-realizacja").className = "overlay";
+                                document.getElementById("ladowanie-animacja-realizacja").className = "fa fa-refresh fa-spin";
+                                
+                                //var element = event.currentTarget;
+                                //var clicked = event.target;
+                                //var produkcja = $(element).val();
+                                var url = '{{ path('marcin_admin_dashboard_update_realizacja') }}';
+                                
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        id: button_id,
+                                        info: info
+                                    },
+                                    method: 'POST',
+                                    success: function (data) {
+                                         document.getElementById("gm-panel"+button_id).className = "widok-realizacja";
+                                         $('#gm-panel'+button_id).load(document.URL +  ' #gm-panel'+button_id);
+                                         document.getElementById("ladowanie-realizacja").className = "overlay-none";
+                                         document.getElementById("ladowanie-animacja-realizacja").className = "";      
+                                    }
+                                });
+                               
+                            }
+                            
                             function changeButtonRealizacjadel(id, event) {
                                 var button_id = id;
                                 if (window.confirm('Czy napewno chcesz anulować zamówienie?'))
@@ -1200,6 +1258,7 @@
                                     },
                                     method: 'POST',
                                     success: function (data) {
+                                        $("#uwagaa"+moid).append('<div class="alert alert-success" role="alert"><b>Zapisano!</b></div>');
                                          //document.getElementById("gm-panel"+order_id).className = "widok-realizacja";
                                          
                                          //document.getElementById("ladowanie-realizacja").className = "overlay-none";
@@ -1395,6 +1454,7 @@
                                                              window.print();
                                                             // $('#produkcja1'+id).modal('hide');
                                                              document.body.innerHTML = originalContents;
+                                                             wydrukowano1(id);
                                                              window.location.reload(true);
                                                         }
                                                         function printDiv2(divName, id) {
@@ -1409,8 +1469,43 @@
                                                              window.print();
                                                             // $('#produkcja1'+id).modal('hide');
                                                              document.body.innerHTML = originalContents;
+                                                             wydrukowano2(id);
                                                              window.location.reload(true);
                                                         }
+                                                        
+                                                        function wydrukowano1 (id){
+                                                            var wiadomosc = id;
+                                                            var url = '{{ path('marcin_admin_dashboard_wydrukowano1') }}';
+
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    wiadomosc: wiadomosc
+                                                                },
+                                                                method: 'POST',
+                                                                success: function (data) {
+                                                                            console.log('Odpowiedź: sukces');
+
+                                                                }
+                                                            });
+                                                        }
+                                                        
+                                                        function wydrukowano2 (id){
+                                                            var wiadomosc = id;
+                                                            var url = '{{ path('marcin_admin_dashboard_wydrukowano2') }}';
+
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    wiadomosc: wiadomosc
+                                                                },
+                                                                method: 'POST',
+                                                                success: function (data) {
+                                                                            console.log('Odpowiedź: sukces');
+
+                                                                }
+                                                            });
+                                                                                    }
                                                         </script>
                     {% endblock %}
 
