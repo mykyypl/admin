@@ -33,6 +33,12 @@
                 .table-bordered tr:nth-child(16n+0) {
                     page-break-inside: avoid; 
                     page-break-after: always;
+                    /*display: none !important;
+                    visibility: hidden !important;*/
+                }
+                .table-bordered tr:nth-of-type(1n+17) {
+                    display: none !important;
+                    visibility: hidden !important;
                 }
                 /*.table-bordered tr {
                     page-break-inside: avoid; 
@@ -71,13 +77,16 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
+                        <a href="{{ path('marcin_admin_etykiety') }}" class="btn btn-info">Wstecz</a>
+                        <br>
                         <div id="drukowanie" class="drukowanie">
                             <table class="table table-bordered">
                                 {% set a = 0 %}
+                                {% set b = 0 %}
                                 {% for drukowanie in etykiety %}
                                 <tr>
                                     <td>Nr prod: <b><span class="czerwony">{{ drukowanie.nrzamowienia }}</span></b><br>poz: <b><span class="czerwony">{{ drukowanie.ilosc }}</span></b></td>
-                                    <td>typ: <b><span class="czerwony">{{ drukowanie.typ }}</span></b>, <b><span class="czerwony">{{ drukowanie.rodzaj }}</span></b>, <b>{{ drukowanie.stalaszer }}/{{ drukowanie.stalawys }}</b><br>szer: <b><span class="czerwony">{{ drukowanie.szerokosc }}</span></b>, wys: <b><span class="czerwony">{{ drukowanie.wysokosc }}</span></b>, blaszka: <b><span class="czerwony">{% if drukowanie.typ == 'Standard' %}{{ drukowanie.blaszkast }}{% else %}{{ drukowanie.blaszkaex }}{% endif %}</span></b></td>
+                                    <td>typ: <b><span class="czerwony">{{ drukowanie.typ }}</span></b>, <b><span class="czerwony">{{ drukowanie.rodzaj }}</span></b>, <b>{% if drukowanie.stalaszer == '40' %}{{ drukowanie.stalaszer }}{% elseif  drukowanie.stalaszer < '40' %}{% set a = 40- drukowanie.stalaszer %}{{ a }}{% elseif  drukowanie.stalaszer > '40' %}{% set a = drukowanie.stalaszer-40 %}-{{ a }}{% endif %}/{% if drukowanie.stalawys == '40' %}{{ drukowanie.stalawys }}{% elseif  drukowanie.stalawys < '40' %}{% set b = 40- drukowanie.stalawys %}{{ b }}{% elseif  drukowanie.stalawys > '40' %}{% set b = drukowanie.stalawys-40 %}-{{ b }}{% endif %}</b><br>szer: <b><span class="czerwony">{{ drukowanie.szerokosc }}</span></b>, wys: <b><span class="czerwony">{{ drukowanie.wysokosc }}</span></b>, blaszka: <b><span class="czerwony">{% if drukowanie.typ == 'Standard' %}{{ drukowanie.blaszkast }}{% else %}{{ drukowanie.blaszkaex }}{% endif %}</span></b></td>
                                     <td><center><b><span class="czerwony">{{ drukowanie.user }}</span></b><br> Nr zam: <b>{{ drukowanie.nruserzam }}</b><br>str. wier: <b>{{ drukowanie.stronawiercenia }}</b>, kolor: <b>{{ drukowanie.kolor }}</b>, m2: <b>{{ drukowanie.m2 }}</b></center></td>
                                 </tr>
                                 {% endfor %}
@@ -105,6 +114,7 @@ function printDiv(divName) {
      window.print();
      sendPrintAction();
      document.body.innerHTML = originalContents;
+     window.location.reload(true);
 }
 
 function sendPrintAction() {

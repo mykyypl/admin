@@ -90,7 +90,7 @@ class EtykietyController extends Controller {
                  //->andWhere('a.wydrukowane is NULL')
                  ->andWhere('a.online = :online')
                  ->setParameter('online', '1')
-                 //->setMaxResults(1)
+                 ->setMaxResults(16)
                  ->getQuery()
                  ->getResult();
             

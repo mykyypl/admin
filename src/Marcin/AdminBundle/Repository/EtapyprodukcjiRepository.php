@@ -25,7 +25,7 @@ class EtapyprodukcjiRepository extends EntityRepository
                 ->select('s')
                 ->where('s.online = :online')
                 ->setParameter('online', '1')
-              ->addOrderBy('s.id', 'ASC');
+              ->addOrderBy('s.id', 'DESC');
         
         if(!empty($params['status'])){
             if('nowe' == $params['status']){
